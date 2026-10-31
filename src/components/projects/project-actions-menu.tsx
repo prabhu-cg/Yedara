@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { Archive, ArchiveRestore, Ellipsis, Pencil, Trash2 } from "lucide-react";
+import { Archive, ArchiveRestore, EllipsisVertical, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   archiveProjectAction,
@@ -78,7 +78,7 @@ export function ProjectActionsMenu({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" aria-label={`Actions for ${projectName}`} disabled={pending}>
-            <Ellipsis />
+            <EllipsisVertical />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

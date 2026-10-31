@@ -1,4 +1,5 @@
 import {
+  Clock,
   CreditCard,
   FolderKanban,
   LayoutDashboard,
@@ -26,6 +27,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
       { label: "My Projects", href: "/projects", icon: FolderKanban, matchPrefix: true },
+      { label: "Recent", href: "/recent", icon: Clock },
     ],
   },
   {

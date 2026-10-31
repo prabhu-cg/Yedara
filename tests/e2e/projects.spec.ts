@@ -59,12 +59,12 @@ test.describe("projects", () => {
     await page.getByLabel("Search projects").fill("alpha");
     await expect(page).toHaveURL(/q=alpha/);
     await expect(page.getByRole("heading", { level: 3 })).toHaveCount(1);
-    await expect(page.getByRole("link", { name: "Alpha onboarding" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("link", { name: "Alpha onboarding" })).toBeVisible();
 
     // Search also matches the client name.
     await page.getByLabel("Search projects").fill("globex");
-    await expect(page.getByRole("link", { name: "Alpha onboarding" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Beta pricing" })).toHaveCount(0);
+    await expect(page.getByRole("main").getByRole("link", { name: "Alpha onboarding" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("link", { name: "Beta pricing" })).toHaveCount(0);
 
     await page.getByLabel("Search projects").fill("no-such-project");
     await expect(page.getByText("No projects match your filters")).toBeVisible();
@@ -74,8 +74,8 @@ test.describe("projects", () => {
     await expect(page.getByLabel("Search projects")).toHaveValue("");
     await page.getByLabel("Filter by status").selectOption("completed");
     await expect(page).toHaveURL(/status=completed/);
-    await expect(page.getByRole("link", { name: "Beta pricing" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Alpha onboarding" })).toHaveCount(0);
+    await expect(page.getByRole("main").getByRole("link", { name: "Beta pricing" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("link", { name: "Alpha onboarding" })).toHaveCount(0);
   });
 
   test("treats search input as plain text, not filter syntax", async ({ page }) => {
@@ -147,17 +147,18 @@ test.describe("projects", () => {
     await page.goto("/dashboard");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Welcome back, Grace");
     await expect(page.getByText("You don't have any projects yet")).toHaveCount(0);
-    await expect(page.getByRole("heading", { name: "Recent projects" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Dashboard project" }).first()).toBeVisible();
-    // Nothing has been edited yet, so the "Recently edited" list stays hidden.
-    await expect(page.getByRole("heading", { name: "Recently edited" })).toHaveCount(0);
+    // Recent work lives on its own page now, not on the dashboard.
+    await expect(page.getByRole("heading", { name: "Recent projects" })).toHaveCount(0);
+    await page.goto("/recent");
+    await expect(page.getByRole("main").getByRole("link", { name: "Dashboard project" })).toBeVisible();
 
     await page.goto(`/projects/${id}/edit`);
     await page.getByLabel("Project name").fill("Dashboard project (edited)");
     await page.getByRole("button", { name: "Save changes" }).click();
     await expect(page).toHaveURL(new RegExp(`/projects/${id}$`));
+    await page.goto("/recent");
+    await expect(page.getByRole("main").getByRole("link", { name: "Dashboard project (edited)" })).toBeVisible();
     await page.goto("/dashboard");
-    await expect(page.getByRole("heading", { name: "Recently edited" })).toBeVisible();
     // Real counts: one planning project, none elsewhere.
     await expect(page.getByRole("link", { name: /Planning\s*1/ })).toBeVisible();
     await expect(page.getByRole("link", { name: /Completed\s*0/ })).toBeVisible();

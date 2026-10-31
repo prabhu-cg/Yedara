@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { CancelButton } from "@/components/layout/route-drawer";
 import { FormAlert, SelectField, SubmitButton, TextField } from "@/components/forms/fields";
 import { PersonaTypePicker } from "@/components/personas/persona-type-picker";
 import { createPersonaAction } from "@/lib/personas/actions";
@@ -49,7 +48,7 @@ export function NewPersonaForm({ projects, defaultProjectId }: { projects: { id:
       </SelectField>
       <PersonaTypePicker value={type} onChange={setType} />
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-        <Button asChild variant="outline"><Link href="/tools/persona-builder">Cancel</Link></Button>
+        <CancelButton href="/tools/persona-builder" />
         <SubmitButton pending={pending} pendingLabel="Creating…">Start building</SubmitButton>
       </div>
     </form>

@@ -169,3 +169,9 @@ export async function createAnalysis(page: Page, options: { title: string; proje
   await expect(page.getByRole("heading", { level: 2, name: "Market context" })).toBeVisible();
   return page.url().split("/").pop()!.split("?")[0];
 }
+
+/** The main navigation: always on screen from `lg`, inside the slide-over drawer below it. */
+export async function openNav(page: Page) {
+  if (isCompactViewport(page)) await page.getByRole("button", { name: "Open navigation menu" }).click();
+  return page.getByRole("navigation", { name: "Main" });
+}

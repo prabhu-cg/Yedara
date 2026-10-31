@@ -5,9 +5,12 @@ import { ArrowDown, ArrowUp, ExternalLink, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SelectField, SubmitButton, TextareaField, TextField } from "@/components/forms/fields";
+import { UrlField, isValidUrl } from "@/components/forms/url-field";
 import { CompetitorTypeBadge } from "@/components/competitors/competitor-type";
 import { COMPETITOR_TYPES, COMPETITOR_TYPE_INFO, ORIGIN_LABELS, SOURCE_TYPES, SOURCE_TYPE_LABELS, UNNAMED_COMPETITOR } from "@/lib/competitors/constants";
 import type { CompetitorRow, SourceInput, SourceRow } from "@/lib/competitors/schemas";
+
+const INVALID_ADDRESS = "Enter the address without spaces, for example acme.com";
 
 const today = () => new Date().toISOString().slice(0, 10);
 const BLANK_SOURCE: SourceInput = { url: "", title: "", source_type: "website", retrieved_on: "", notes: "" };
@@ -60,7 +63,7 @@ function AddSourceForm({ onAdd }: { onAdd: (input: SourceInput) => Promise<{ ok:
 
   return (
     <div role="group" aria-label="New source" className="space-y-4 rounded-xl border border-border bg-secondary/50 p-4">
-      <TextField label="Source link" placeholder="https://" inputMode="url" error={errors.url} value={draft.url} onChange={(e) => set({ url: e.target.value })} />
+      <UrlField label="Source link" error={errors.url} value={draft.url} onChange={(url) => set({ url })} />
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField label="Source title" optional placeholder="e.g. Pricing page" value={draft.title} onChange={(e) => set({ title: e.target.value })} />
         <SelectField label="Source type" value={draft.source_type} onChange={(e) => set({ source_type: e.target.value as SourceInput["source_type"] })}>
@@ -141,7 +144,7 @@ export function CompetitorsManager({
 
             <div className="grid gap-5 sm:grid-cols-2">
               <TextField label="Name" maxLength={160} value={c.name} onChange={(e) => onChange(c.id, { name: e.target.value })} error={!c.name.trim() ? "A competitor needs a name" : undefined} />
-              <TextField label="Website" optional placeholder="https://" inputMode="url" value={c.website_url} onChange={(e) => onChange(c.id, { website_url: e.target.value })} error={c.website_url && !/^https?:\/\/\S+$/i.test(c.website_url) ? "Use a link starting with http:// or https://" : undefined} />
+              <UrlField label="Website" optional value={c.website_url} onChange={(website_url) => onChange(c.id, { website_url })} error={isValidUrl(c.website_url) ? undefined : INVALID_ADDRESS} />
             </div>
             <SelectField label="Type" hint={COMPETITOR_TYPE_INFO[c.competitor_type].help} value={c.competitor_type} onChange={(e) => onChange(c.id, { competitor_type: e.target.value as CompetitorRow["competitor_type"] })}>
               {COMPETITOR_TYPES.map((t) => <option key={t} value={t}>{COMPETITOR_TYPE_INFO[t].label}</option>)}
@@ -172,7 +175,7 @@ export function CompetitorsManager({
                       <RemoveButton label={`Remove source ${s.title.trim() || s.url}`} onConfirm={() => onRemoveSource(s.id)} />
                     </div>
                     <div className="grid gap-3 sm:grid-cols-2">
-                      <TextField label="Source link" inputMode="url" value={s.url} onChange={(e) => onChangeSource(s.id, { url: e.target.value })} error={!/^https?:\/\/\S+$/i.test(s.url) ? "Use a link starting with http:// or https://" : undefined} />
+                      <UrlField label="Source link" value={s.url} onChange={(url) => onChangeSource(s.id, { url })} error={s.url === "" ? "Add the link to your source" : isValidUrl(s.url) ? undefined : INVALID_ADDRESS} />
                       <TextField label="Source title" optional value={s.title} onChange={(e) => onChangeSource(s.id, { title: e.target.value })} />
                       <SelectField label="Source type" value={s.source_type} onChange={(e) => onChangeSource(s.id, { source_type: e.target.value as SourceRow["source_type"] })}>
                         {SOURCE_TYPES.map((t) => <option key={t} value={t}>{SOURCE_TYPE_LABELS[t]}</option>)}

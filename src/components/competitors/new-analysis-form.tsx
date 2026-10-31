@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { CancelButton } from "@/components/layout/route-drawer";
 import { FormAlert, SelectField, SubmitButton, TextField } from "@/components/forms/fields";
 import { createAnalysisAction } from "@/lib/competitors/actions";
 
@@ -45,7 +44,7 @@ export function NewAnalysisForm({ projects, defaultProjectId }: { projects: { id
         {projects.map((p) => <option key={p.id} value={p.id}>{p.name}{p.client ? ` (${p.client})` : ""}</option>)}
       </SelectField>
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-        <Button asChild variant="outline"><Link href="/tools/competitor-analyzer">Cancel</Link></Button>
+        <CancelButton href="/tools/competitor-analyzer" />
         <SubmitButton pending={pending} pendingLabel="Creating…">Start analysis</SubmitButton>
       </div>
     </form>

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { CancelButton, useRouteDrawer } from "@/components/layout/route-drawer";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -22,7 +22,6 @@ import {
   TextareaField,
   TextField,
 } from "@/components/forms/fields";
-import { Button } from "@/components/ui/button";
 
 const EMPTY: ProjectFormValues = {
   name: "",
@@ -42,6 +41,7 @@ type Props =
 
 export function ProjectForm({ mode, defaultValues, projectId, archived }: Props) {
   const router = useRouter();
+  const drawer = useRouteDrawer();
   const [formError, setFormError] = useState<string | null>(null);
   const {
     register,
@@ -68,6 +68,11 @@ export function ProjectForm({ mode, defaultValues, projectId, archived }: Props)
       return;
     }
     toast.success(mode === "create" ? "Project created" : "Changes saved");
+    if (drawer && mode === "edit") {
+      // Back to whatever page opened the drawer, refreshed so it shows the saved changes.
+      drawer.close(() => router.refresh());
+      return;
+    }
     router.push(`/projects/${result.data.id}`);
     router.refresh();
   });
@@ -176,9 +181,7 @@ export function ProjectForm({ mode, defaultValues, projectId, archived }: Props)
       </div>
 
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-        <Button asChild variant="outline">
-          <Link href={cancelHref}>Cancel</Link>
-        </Button>
+        <CancelButton href={cancelHref} />
         <SubmitButton
           pending={isSubmitting}
           pendingLabel={mode === "create" ? "Creating…" : "Saving…"}

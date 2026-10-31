@@ -140,7 +140,7 @@ test.describe("competitor analyzer: building an analysis", () => {
 
     const section = await addCompetitor(page, 1, { name: "Acme" });
     await section.getByLabel("Website", { exact: true }).fill("not a link");
-    await expect(section.getByText("Use a link starting with http:// or https://")).toBeVisible();
+    await expect(section.getByText("Enter the address without spaces, for example acme.com")).toBeVisible();
     await section.getByRole("button", { name: "Add source" }).click();
     await section.getByRole("group", { name: "New source" }).getByRole("button", { name: "Add this source" }).click();
     await expect(section.getByText("Add the link to your source")).toBeVisible();
@@ -224,7 +224,7 @@ test.describe("competitor analyzer: building an analysis", () => {
     await expect(card.getByText("Draft")).toBeVisible();
     await expect(card.getByText("Step 2 of 6")).toBeVisible();
     await expect(card.getByText("1 competitor")).toBeVisible();
-    await page.getByRole("link", { name: "Resumable" }).click();
+    await page.getByRole("main").getByRole("link", { name: "Resumable" }).click();
     await step(page, "Competitors");
     await expect(competitor(page, 1).getByLabel("Name", { exact: true })).toHaveValue("Half-done Co");
   });
@@ -291,19 +291,24 @@ test.describe("competitor analyzer: dashboard and project integration", () => {
     await createAnalysis(page, { title: "Hub analysis", projectName: "Hub project" });
 
     await page.goto(`/projects/${projectId}`);
-    await expect(page.getByRole("heading", { name: "Competitor analyses" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Hub analysis" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Personas" })).toBeVisible();
-    await expect(page.getByText("No personas for this project yet.")).toBeVisible();
-    await expect(page.getByText("A hub")).toBeVisible();
-    await page.getByRole("link", { name: "New analysis" }).click();
+    const main = page.getByRole("main");
+    await expect(main.getByRole("heading", { name: "Research" })).toBeVisible();
+    await expect(main.getByRole("link", { name: "Hub analysis" })).toBeVisible();
+    await expect(main.locator("li[data-kind=analysis]")).toContainText("Competitor analysis");
+    // The brief is tucked away until asked for.
+    await expect(main.getByText("A hub")).toBeHidden();
+    await main.getByText("Project brief").click();
+    await expect(main.getByText("A hub")).toBeVisible();
+    await main.getByRole("button", { name: "New" }).click();
+    await page.getByRole("menuitem", { name: "Competitor analysis" }).click();
     await expect(page.getByRole("combobox", { name: "Project" })).toHaveValue(projectId);
 
-    await page.goto("/dashboard");
-    const recent = page.getByRole("region", { name: "Recent personas and analyses" }).or(page.locator("section[aria-labelledby=research-heading]"));
-    await expect(recent.getByRole("link", { name: /Hub analysis/ })).toBeVisible();
-    await expect(recent).toContainText("Competitor analysis");
-    await page.getByRole("link", { name: /Hub analysis/ }).click();
+    await page.goto("/recent");
+    // The Recent page names the tool and the project for each item.
+    const row = page.getByRole("main").locator("tr[data-kind=analysis]").filter({ hasText: "Hub analysis" });
+    await expect(row).toContainText("Competitor analysis");
+    await expect(row).toContainText("Hub project");
+    await row.getByRole("link", { name: /Hub analysis/ }).click();
     await step(page, "Market context");
 
     await page.goto("/tools/competitor-analyzer");

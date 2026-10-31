@@ -29,6 +29,7 @@ const NOT_FOUND = "Research plan not found.";
 const asJson = (value: unknown) => value as Json;
 
 function revalidatePlans(planId?: string, projectId?: string) {
+  revalidatePath("/recent");
   revalidatePath("/tools/research-planner");
   if (planId) revalidatePath(`/tools/research-planner/${planId}`);
   if (projectId) revalidatePath(`/projects/${projectId}`);

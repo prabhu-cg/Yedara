@@ -28,6 +28,7 @@ const NOT_FOUND = "Persona not found.";
 const asJson = (v: unknown) => v as Json;
 
 function revalidatePersonas(personaId?: string, projectId?: string) {
+  revalidatePath("/recent");
   revalidatePath("/tools/persona-builder");
   revalidatePath("/dashboard");
   if (personaId) revalidatePath(`/tools/persona-builder/${personaId}`);

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowRight, FolderPlus, LayoutTemplate, Plus, Wrench } from "lucide-react";
 import { EmptyState } from "@/components/layout/empty-state";
 import { PageHeader } from "@/components/layout/page-header";
-import { ProjectCard } from "@/components/projects/project-card";
 import { StatusBadge } from "@/components/projects/status-badge";
 import { ToolCard } from "@/components/tools/tool-card";
 import { Button } from "@/components/ui/button";
@@ -11,11 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { researchTools } from "@/config/tools";
 import { siteConfig } from "@/config/site";
 import { displayName, getProfile, requireUser } from "@/lib/auth/dal";
-import { formatRelativeTime } from "@/lib/format";
 import { PROJECT_STATUSES } from "@/lib/projects/constants";
 import { getDashboardData } from "@/lib/projects/queries";
-import { listPersonas } from "@/lib/personas/queries";
-import { listAnalyses } from "@/lib/competitors/queries";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
@@ -45,18 +41,7 @@ const ONBOARDING_STEPS = [
 
 export default async function DashboardPage() {
   const user = await requireUser();
-  const [profile, { recent, recentlyEdited, statusCounts, total }, personas, analyses] = await Promise.all([
-    getProfile(),
-    getDashboardData(),
-    listPersonas(),
-    listAnalyses(),
-  ]);
-  const recentResearch = [
-    ...personas.map((p) => ({ id: p.id, kind: "Persona", title: p.name, href: `/tools/persona-builder/${p.id}`, project: p.project_name, updated: p.updated_at })),
-    ...analyses.map((a) => ({ id: a.id, kind: "Competitor analysis", title: a.title, href: `/tools/competitor-analyzer/${a.id}`, project: a.project_name, updated: a.updated_at })),
-  ]
-    .sort((a, b) => b.updated.localeCompare(a.updated))
-    .slice(0, 5);
+  const [profile, { statusCounts, total }] = await Promise.all([getProfile(), getDashboardData()]);
   const firstName = displayName(profile, user.email).split(" ")[0];
   const isNewUser = total === 0;
 
@@ -144,89 +129,7 @@ export default async function DashboardPage() {
               ))}
             </ul>
           </section>
-
-          <section aria-labelledby="recent-heading" className="mb-10">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 id="recent-heading" className="text-base font-bold">
-                Recent projects
-              </h2>
-              <Link href="/projects" className="text-sm font-semibold text-primary-text hover:underline">
-                View all
-              </Link>
-            </div>
-            {recent.length ? (
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {recent.slice(0, 3).map((project) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                icon={FolderPlus}
-                title="No active projects"
-                description="Everything is archived. Create a new project or restore an archived one."
-                action={
-                  <Button asChild variant="outline">
-                    <Link href="/projects?status=archived">View archived</Link>
-                  </Button>
-                }
-              />
-            )}
-          </section>
-
-          {recentlyEdited.length > 0 && (
-            <section aria-labelledby="edited-heading" className="mb-10">
-              <h2 id="edited-heading" className="mb-3 text-base font-bold">
-                Recently edited
-              </h2>
-              <ul className="divide-y divide-border rounded-card border border-border bg-card shadow-card">
-                {recentlyEdited.map((project) => (
-                  <li key={project.id}>
-                    <Link
-                      href={`/projects/${project.id}`}
-                      className="flex items-center justify-between gap-4 px-4 py-3 outline-none first:rounded-t-xl last:rounded-b-xl hover:bg-secondary focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                    >
-                      <span className="min-w-0 truncate font-semibold">{project.name}</span>
-                      <span className="flex shrink-0 items-center gap-3">
-                        <StatusBadge status={project.status} className="hidden sm:inline-flex" />
-                        <span className="text-xs text-muted-foreground">
-                          {formatRelativeTime(project.updated_at)}
-                        </span>
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
         </>
-      )}
-
-      {recentResearch.length > 0 && (
-        <section aria-labelledby="research-heading" className="mb-10">
-          <h2 id="research-heading" className="mb-3 text-base font-bold">
-            Recent personas and analyses
-          </h2>
-          <ul className="divide-y divide-border rounded-card border border-border bg-card shadow-card">
-            {recentResearch.map((item) => (
-              <li key={`${item.kind}-${item.id}`}>
-                <Link
-                  href={item.href}
-                  className="flex items-center justify-between gap-4 px-4 py-3 outline-none first:rounded-t-xl last:rounded-b-xl hover:bg-secondary focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                >
-                  <span className="min-w-0">
-                    <span className="block truncate font-semibold">{item.title}</span>
-                    <span className="block truncate text-xs text-muted-foreground">
-                      {item.kind}
-                      {item.project ? ` · ${item.project}` : ""}
-                    </span>
-                  </span>
-                  <span className="shrink-0 text-xs text-muted-foreground">{formatRelativeTime(item.updated)}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
       )}
 
       <section aria-labelledby="tools-heading">

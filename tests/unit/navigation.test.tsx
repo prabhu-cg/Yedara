@@ -22,7 +22,7 @@ describe("navigation structure", () => {
   it("has the required groups and items in order", () => {
     expect(navGroups.map((g) => g.label)).toEqual(["Workspace", "Research tools", "Resources", "Account"]);
     expect(navGroups.map((g) => g.items.map((i) => i.label))).toEqual([
-      ["Dashboard", "My Projects"],
+      ["Dashboard", "My Projects", "Recent"],
       [
         "Research Planner",
         "Persona Builder",
@@ -52,7 +52,7 @@ describe("SidebarNav", () => {
     for (const label of ["Workspace", "Research tools", "Resources", "Account"]) {
       expect(within(nav).getByText(label)).toBeInTheDocument();
     }
-    expect(within(nav).getAllByRole("link")).toHaveLength(10); // every item except the disabled Billing
+    expect(within(nav).getAllByRole("link")).toHaveLength(11); // every item except the disabled Billing
   });
 
   it("marks only the current page as active", () => {

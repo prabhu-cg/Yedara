@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { CancelButton } from "@/components/layout/route-drawer";
 import { applyFieldErrors, FormAlert, SelectField, SubmitButton, TextField } from "@/components/forms/fields";
 import { createPlanAction } from "@/lib/research-planner/actions";
 
@@ -72,9 +71,7 @@ export function NewPlanForm({
         ))}
       </SelectField>
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-        <Button asChild variant="outline">
-          <Link href="/tools/research-planner">Cancel</Link>
-        </Button>
+        <CancelButton href="/tools/research-planner" />
         <SubmitButton pending={isSubmitting} pendingLabel="Creating…">
           Start planning
         </SubmitButton>

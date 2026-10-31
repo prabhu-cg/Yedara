@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { Download, Ellipsis, FolderOpen, Trash2 } from "lucide-react";
+import { Download, EllipsisVertical, FolderOpen, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export function AnalysisActionsMenu({ analysisId, title }: { analysisId: string;
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" aria-label={`Actions for ${title}`} disabled={pending}><Ellipsis /></Button>
+          <Button variant="ghost" size="icon" aria-label={`Actions for ${title}`} disabled={pending}><EllipsisVertical /></Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild><Link href={`/tools/competitor-analyzer/${analysisId}`}><FolderOpen /> Open</Link></DropdownMenuItem>

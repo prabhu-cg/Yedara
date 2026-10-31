@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { Copy, Download, Ellipsis, FolderOpen, GitCompareArrows, Trash2 } from "lucide-react";
+import { Copy, Download, EllipsisVertical, FolderOpen, GitCompareArrows, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,7 @@ export function PersonaActionsMenu({ personaId, name }: { personaId: string; nam
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" aria-label={`Actions for ${name}`} disabled={pending}><Ellipsis /></Button>
+          <Button variant="ghost" size="icon" aria-label={`Actions for ${name}`} disabled={pending}><EllipsisVertical /></Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild><Link href={`/tools/persona-builder/${personaId}`}><FolderOpen /> Open</Link></DropdownMenuItem>

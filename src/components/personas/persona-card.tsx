@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Clock, FolderKanban, Quote } from "lucide-react";
+import { WorkKindTag } from "@/components/projects/work-kind-tag";
 import { Badge } from "@/components/ui/badge";
 import { PersonaActionsMenu } from "@/components/personas/persona-actions-menu";
 import { PersonaTypeBadge } from "@/components/personas/persona-type";
@@ -7,12 +8,13 @@ import { PERSONA_TOTAL_STEPS } from "@/lib/personas/constants";
 import type { PersonaListItem } from "@/lib/personas/queries";
 import { formatRelativeTime } from "@/lib/format";
 
-export function PersonaCard({ persona }: { persona: PersonaListItem }) {
+export function PersonaCard({ persona, showTool }: { persona: PersonaListItem; showTool?: boolean }) {
   const completed = persona.status === "completed";
   return (
-    <article className="relative flex flex-col rounded-card border border-border bg-card shadow-card transition-[border-color,box-shadow] focus-within:border-primary focus-within:shadow-raised focus-within:ring-[3px] focus-within:ring-ring/50 hover:border-primary hover:shadow-raised">
+    <article className="relative flex h-full w-full flex-col rounded-card border border-border bg-card shadow-card transition-[border-color,box-shadow] focus-within:border-primary focus-within:shadow-raised focus-within:ring-[3px] focus-within:ring-ring/50 hover:border-primary hover:shadow-raised">
       <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex flex-wrap items-center gap-2 pr-10">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pr-10">
+          {showTool && <WorkKindTag kind="persona" />}
           <PersonaTypeBadge type={persona.persona_type} />
           <Badge variant={completed ? "default" : "secondary"}>{completed ? "Completed" : "Draft"}</Badge>
         </div>

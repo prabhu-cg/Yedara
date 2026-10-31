@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { Copy, Download, Ellipsis, FolderOpen, Trash2 } from "lucide-react";
+import { Copy, Download, EllipsisVertical, FolderOpen, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -52,7 +52,7 @@ export function PlanActionsMenu({ planId, title }: { planId: string; title: stri
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" aria-label={`Actions for ${title}`} disabled={pending}>
-            <Ellipsis />
+            <EllipsisVertical />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

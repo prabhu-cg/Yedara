@@ -169,7 +169,7 @@ test.describe("persona builder: building a persona", () => {
     const card = page.getByRole("article").filter({ hasText: "Resumable Rhea" });
     await expect(card.getByText("Draft")).toBeVisible();
     await expect(card.getByText("Step 2 of 6")).toBeVisible();
-    await page.getByRole("link", { name: "Resumable Rhea" }).click();
+    await page.getByRole("main").getByRole("link", { name: "Resumable Rhea" }).click();
     await step(page, "User profile");
     await expect(page.getByLabel("Background")).toHaveValue("Half-finished background");
   });

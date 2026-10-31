@@ -31,6 +31,7 @@ const asJson = (v: unknown) => v as Json;
 const orNull = (v: string) => (v === "" ? null : v);
 
 function revalidateAnalyses(analysisId?: string, projectId?: string) {
+  revalidatePath("/recent");
   revalidatePath("/tools/competitor-analyzer");
   revalidatePath("/dashboard");
   if (analysisId) revalidatePath(`/tools/competitor-analyzer/${analysisId}`);

@@ -17,7 +17,7 @@ async function download(page: Page, format: "pdf" | "docx" | "md") {
       if (!(await item.isVisible())) await trigger.click();
       await expect(item).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 10_000 });
-    await item.click();
+    await item.click({ timeout: 5000 }).catch(() => {});
     const file = await pending;
     if (file) return file;
   }
@@ -79,7 +79,7 @@ test.describe("research planner: creating plans", () => {
     await page.goto("/tools/research-planner");
     const card = page.getByRole("article").filter({ hasText: "Onboarding research" });
     await expect(card.getByText("Completed")).toBeVisible();
-    await expect(page.getByRole("link", { name: "Onboarding research" })).toHaveAttribute("href", `/tools/research-planner/${planId}`);
+    await expect(page.getByRole("main").getByRole("link", { name: "Onboarding research" })).toHaveAttribute("href", `/tools/research-planner/${planId}`);
   });
 
   test("required steps block progress with clear messages, optional fields do not", async ({ page }) => {
@@ -242,7 +242,7 @@ test.describe("research planner: saving and restoring", () => {
     await expect(card.getByText("Draft")).toBeVisible();
     await expect(card.getByText("Step 2 of 7")).toBeVisible();
 
-    await page.getByRole("link", { name: "Autosave plan" }).click();
+    await page.getByRole("main").getByRole("link", { name: "Autosave plan" }).click();
     await expect(page).toHaveURL(new RegExp(`/tools/research-planner/${planId}`));
     await expect(page.getByRole("heading", { level: 2, name: "Research goals" })).toBeVisible();
     await expect(page.getByLabel("Primary research goal")).toHaveValue("Half-written goal");
@@ -309,13 +309,13 @@ test.describe("research planner: saving and restoring", () => {
     await expect(page.getByLabel("Product or service")).toHaveValue("Copy me");
 
     await page.goto("/tools/research-planner");
-    await expect(page.getByRole("link", { name: "Original plan (copy)" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("link", { name: "Original plan (copy)" })).toBeVisible();
     await page.getByRole("button", { name: "Actions for Original plan (copy)" }).click();
     await page.getByRole("menuitem", { name: "Delete plan" }).click();
     await expect(page.getByRole("alertdialog")).toContainText("permanently deleted");
     await page.getByRole("alertdialog").getByRole("button", { name: "Delete plan" }).click();
-    await expect(page.getByRole("link", { name: "Original plan (copy)" })).toHaveCount(0);
-    await expect(page.getByRole("link", { name: "Original plan", exact: true })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("link", { name: "Original plan (copy)" })).toHaveCount(0);
+    await expect(page.getByRole("main").getByRole("link", { name: "Original plan", exact: true })).toBeVisible();
   });
 });
 
@@ -324,15 +324,16 @@ test.describe("research planner: projects and isolation", () => {
     await signUp(page);
     const projectId = await createProject(page, { name: "Linked project" });
     await page.goto(`/projects/${projectId}`);
-    await expect(page.getByText("No research plans for this project yet.")).toBeVisible();
-    await page.getByRole("link", { name: "New plan" }).click();
+    await expect(page.getByText("No research in this project yet")).toBeVisible();
+    await page.getByRole("main").getByRole("button", { name: "New" }).click();
+    await page.getByRole("menuitem", { name: "Research plan" }).click();
     await expect(page.getByRole("combobox", { name: "Project" })).toHaveValue(projectId);
     await expect(page.getByLabel("Research title")).toHaveValue("Research plan for Linked project");
     await page.getByRole("button", { name: "Start planning" }).click();
     await expect(page).toHaveURL(/\/tools\/research-planner\/[0-9a-f-]{36}$/);
 
     await page.goto(`/projects/${projectId}`);
-    await expect(page.getByRole("link", { name: "Research plan for Linked project" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("link", { name: "Research plan for Linked project" })).toBeVisible();
   });
 
   test("deleting a project removes its plans", async ({ page }) => {
@@ -346,7 +347,7 @@ test.describe("research planner: projects and isolation", () => {
       if (!(await item.isVisible())) await trigger.click();
       await expect(item).toBeVisible({ timeout: 1000 });
     }).toPass();
-    await item.click();
+    await item.click({ timeout: 5000 }).catch(() => {});
     await page.getByRole("alertdialog").getByRole("button", { name: "Delete project" }).click();
     await expect(page).toHaveURL(/\/projects$/);
     await page.goto("/tools/research-planner");

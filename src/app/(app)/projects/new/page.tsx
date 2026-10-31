@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import { NewProjectPanel } from "@/components/forms/form-panels";
 import { PageHeader } from "@/components/layout/page-header";
-import { ProjectForm } from "@/components/projects/project-form";
 import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = { title: "New project" };
@@ -16,7 +16,7 @@ export default function NewProjectPage() {
       />
       <Card className="max-w-2xl">
         <CardContent className="pt-5 sm:pt-6">
-          <ProjectForm mode="create" />
+          <NewProjectPanel />
         </CardContent>
       </Card>
     </>

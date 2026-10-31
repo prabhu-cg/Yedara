@@ -11,6 +11,7 @@ import {
 } from "@/lib/projects/schemas";
 
 function revalidateProjects(projectId?: string) {
+  revalidatePath("/recent");
   revalidatePath("/dashboard");
   revalidatePath("/projects");
   if (projectId) revalidatePath(`/projects/${projectId}`);

@@ -1,17 +1,19 @@
 import Link from "next/link";
 import { Clock, FolderKanban, Users } from "lucide-react";
+import { WorkKindTag } from "@/components/projects/work-kind-tag";
 import { Badge } from "@/components/ui/badge";
 import { AnalysisActionsMenu } from "@/components/competitors/analysis-actions-menu";
 import { COMPETITOR_TOTAL_STEPS } from "@/lib/competitors/constants";
 import type { AnalysisListItem } from "@/lib/competitors/queries";
 import { formatRelativeTime } from "@/lib/format";
 
-export function AnalysisCard({ analysis }: { analysis: AnalysisListItem }) {
+export function AnalysisCard({ analysis, showTool }: { analysis: AnalysisListItem; showTool?: boolean }) {
   const completed = analysis.status === "completed";
   return (
-    <article className="relative flex flex-col rounded-card border border-border bg-card shadow-card transition-[border-color,box-shadow] focus-within:border-primary focus-within:shadow-raised focus-within:ring-[3px] focus-within:ring-ring/50 hover:border-primary hover:shadow-raised">
+    <article className="relative flex h-full w-full flex-col rounded-card border border-border bg-card shadow-card transition-[border-color,box-shadow] focus-within:border-primary focus-within:shadow-raised focus-within:ring-[3px] focus-within:ring-ring/50 hover:border-primary hover:shadow-raised">
       <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex flex-wrap items-center gap-2 pr-10">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pr-10">
+          {showTool && <WorkKindTag kind="analysis" />}
           <Badge variant={completed ? "default" : "secondary"}>{completed ? "Completed" : "Draft"}</Badge>
         </div>
         <h3 className="text-base font-semibold [overflow-wrap:anywhere]">
