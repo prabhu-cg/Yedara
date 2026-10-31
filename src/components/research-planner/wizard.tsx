@@ -482,7 +482,7 @@ export function PlannerWizard(props: PlannerWizardProps) {
         </div>
       </div>
 
-      <Stepper current={step} reached={reached} done={done} onSelect={goTo} />
+      <Stepper steps={PLAN_STEPS} current={step} reached={reached} done={done} onSelect={goTo} />
 
       <div className={step === REVIEW_STEP ? "" : "grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem]"}>
         <Card>

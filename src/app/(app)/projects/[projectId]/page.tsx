@@ -13,6 +13,10 @@ import { projectTypeLabel } from "@/lib/projects/constants";
 import { getProject } from "@/lib/projects/queries";
 import { listPlans } from "@/lib/research-planner/queries";
 import { PlanCard } from "@/components/research-planner/plan-card";
+import { AnalysisCard } from "@/components/competitors/analysis-card";
+import { PersonaCard } from "@/components/personas/persona-card";
+import { listAnalyses } from "@/lib/competitors/queries";
+import { listPersonas } from "@/lib/personas/queries";
 import { Plus } from "lucide-react";
 
 export async function generateMetadata({ params }: PageProps<"/projects/[projectId]">): Promise<Metadata> {
@@ -25,7 +29,16 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[proj
   const { projectId } = await params;
   const project = await getProject(projectId);
   const archived = project.status === "archived";
-  const plans = await listPlans({ projectId: project.id });
+  const [plans, personas, analyses] = await Promise.all([
+    listPlans({ projectId: project.id }),
+    listPersonas({ projectId: project.id }),
+    listAnalyses({ projectId: project.id }),
+  ]);
+  const brief = [
+    { label: "Product or service", value: project.product_service },
+    { label: "Target audience", value: project.target_audience },
+    { label: "Research objectives", value: project.research_objectives },
+  ].filter((b) => b.value);
 
   const details = [
     { icon: Shapes, label: "Project type", value: projectTypeLabel(project.project_type) },
@@ -88,6 +101,16 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[proj
                 </Link>
               </p>
             )}
+            {brief.length > 0 && (
+              <dl className="mt-5 space-y-3 border-t border-border pt-4">
+                {brief.map((b) => (
+                  <div key={b.label}>
+                    <dt className="text-xs text-muted-foreground">{b.label}</dt>
+                    <dd className="text-sm whitespace-pre-wrap [overflow-wrap:anywhere]">{b.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
           </CardContent>
         </Card>
 
@@ -137,12 +160,64 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[proj
         )}
       </section>
 
+      <section aria-labelledby="project-personas" className="mt-10">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h2 id="project-personas" className="text-base font-bold">
+            Personas
+          </h2>
+          {!archived && (
+            <Button asChild size="sm" variant="outline">
+              <Link href={`/tools/persona-builder/new?project=${project.id}`}>
+                <Plus /> New persona
+              </Link>
+            </Button>
+          )}
+        </div>
+        {personas.length ? (
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {personas.map((item) => (
+              <PersonaCard key={item.id} persona={item} />
+            ))}
+          </div>
+        ) : (
+          <p className="rounded-xl border border-dashed border-input bg-secondary px-5 py-6 text-sm text-muted-foreground">
+            No personas for this project yet.
+          </p>
+        )}
+      </section>
+
+      <section aria-labelledby="project-analyses" className="mt-10">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h2 id="project-analyses" className="text-base font-bold">
+            Competitor analyses
+          </h2>
+          {!archived && (
+            <Button asChild size="sm" variant="outline">
+              <Link href={`/tools/competitor-analyzer/new?project=${project.id}`}>
+                <Plus /> New analysis
+              </Link>
+            </Button>
+          )}
+        </div>
+        {analyses.length ? (
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {analyses.map((item) => (
+              <AnalysisCard key={item.id} analysis={item} />
+            ))}
+          </div>
+        ) : (
+          <p className="rounded-xl border border-dashed border-input bg-secondary px-5 py-6 text-sm text-muted-foreground">
+            No competitor analyses for this project yet.
+          </p>
+        )}
+      </section>
+
       <section aria-labelledby="project-tools" className="mt-10">
         <h2 id="project-tools" className="mb-1 text-base font-bold">
           Research tools
         </h2>
         <p className="mb-4 text-sm text-muted-foreground">
-          Tools will attach their work to this project as they launch.
+          Open a tool to add work to this project.
         </p>
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {researchTools.map((tool) => (

@@ -68,7 +68,7 @@ export async function createPlan(page: Page, options: { projectName: string; tit
   return page.url().split("/").pop()!.split("?")[0];
 }
 
-export const nextStep = (page: Page) => page.getByRole("button", { name: /^(Next|Review plan)$/ }).click();
+export const nextStep = (page: Page) => page.getByRole("button", { name: /^(Next|Review plan|Review)$/ }).click();
 
 export async function waitForSaved(page: Page) {
   await expect(page.locator("[data-save-status]")).toHaveAttribute("data-save-status", /^(saved|idle)$/, { timeout: 10_000 });
@@ -109,4 +109,63 @@ export async function fillPlanToReview(page: Page, options: { methods?: string[]
   await page.getByLabel("Research duration").fill("4 weeks");
   await nextStep(page);
   await expect(page.getByRole("heading", { level: 2, name: "Review and export" })).toBeVisible();
+}
+
+/* ---------------- Phase 3: shared project brief, personas ---------------- */
+
+export async function createProjectWithBrief(
+  page: Page,
+  fields: { name: string; industry?: string; product?: string; audience?: string; objectives?: string },
+) {
+  await page.goto("/projects/new");
+  await page.getByLabel("Project name").fill(fields.name);
+  if (fields.industry) await page.getByLabel("Industry").fill(fields.industry);
+  if (fields.product) await page.getByLabel("Product or service").fill(fields.product);
+  if (fields.audience) await page.getByLabel("Target audience").fill(fields.audience);
+  if (fields.objectives) await page.getByLabel("Research objectives").fill(fields.objectives);
+  await page.getByRole("button", { name: "Create project" }).click();
+  await expect(page).toHaveURL(/\/projects\/[0-9a-f-]{36}$/);
+  return page.url().split("/").pop()!;
+}
+
+export async function createPersona(
+  page: Page,
+  options: { name: string; projectName: string; type?: "Research-backed" | "Hypothesis" | "Proto-persona" },
+) {
+  await page.goto("/tools/persona-builder/new");
+  await page.getByLabel("Persona name or identifier").fill(options.name);
+  await page.getByRole("combobox", { name: "Project" }).selectOption({ label: options.projectName });
+  if (options.type) await page.getByRole("radio", { name: new RegExp(`^${options.type}`) }).check();
+  await page.getByRole("button", { name: "Start building" }).click();
+  await expect(page).toHaveURL(/\/tools\/persona-builder\/[0-9a-f-]{36}$/);
+  await expect(page.getByRole("heading", { level: 2, name: "Persona context" })).toBeVisible();
+  return page.url().split("/").pop()!.split("?")[0];
+}
+
+export async function download(page: Page, format: "pdf" | "docx" | "md") {
+  const label = { pdf: "PDF document", docx: "Word document (.docx)", md: "Markdown (.md)" }[format];
+  const trigger = page.getByRole("button", { name: "Export" });
+  const item = page.getByRole("menuitem", { name: label });
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const pending = page.waitForEvent("download", { timeout: 10_000 }).catch(() => null);
+    await expect(async () => {
+      if (!(await item.isVisible())) await trigger.click();
+      await expect(item).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 10_000 });
+    // The menu can close under the pointer on slower runs; a short click timeout lets the next attempt reopen it.
+    await item.click({ timeout: 5000 }).catch(() => {});
+    const file = await pending;
+    if (file) return file;
+  }
+  throw new Error(`The ${format} export never started a download`);
+}
+
+export async function createAnalysis(page: Page, options: { title: string; projectName: string }) {
+  await page.goto("/tools/competitor-analyzer/new");
+  await page.getByLabel("Analysis title").fill(options.title);
+  await page.getByRole("combobox", { name: "Project" }).selectOption({ label: options.projectName });
+  await page.getByRole("button", { name: "Start analysis" }).click();
+  await expect(page).toHaveURL(/\/tools\/competitor-analyzer\/[0-9a-f-]{36}$/);
+  await expect(page.getByRole("heading", { level: 2, name: "Market context" })).toBeVisible();
+  return page.url().split("/").pop()!.split("?")[0];
 }

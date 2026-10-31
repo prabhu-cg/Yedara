@@ -46,7 +46,8 @@ export function pdfSafe(value: string) {
     .join("");
 }
 
-function columnWeights(headers: string[]) {
+function columnWeights(headers: string[], explicit?: number[]) {
+  if (explicit && explicit.length === headers.length) return explicit;
   if (headers.length === 2) return [3, 7];
   if (headers.length === 3) return [2.2, 4.3, 3.5];
   if (headers[0] === "#") return [0.6, 3.4, 3, 3];
@@ -96,7 +97,7 @@ function BlockView({ block }: { block: Block }) {
       </View>
     );
   }
-  const w = columnWeights(block.headers);
+  const w = columnWeights(block.headers, block.widths);
   return (
     <View style={s.table}>
       <View style={[s.tr, { borderTopWidth: 0 }]} wrap={false}>

@@ -29,6 +29,9 @@ const EMPTY: ProjectFormValues = {
   description: "",
   client: "",
   industry: "",
+  product_service: "",
+  target_audience: "",
+  research_objectives: "",
   project_type: "ux_research",
   status: "planning",
 };
@@ -116,6 +119,38 @@ export function ProjectForm({ mode, defaultValues, projectId, archived }: Props)
           </datalist>
         </div>
       </div>
+
+      <fieldset className="space-y-5 rounded-xl border border-border bg-secondary/50 p-4 sm:p-5">
+        <legend className="px-1 text-sm font-semibold">Project brief</legend>
+        <p className="-mt-1 text-sm text-muted-foreground">
+          Optional. Research tools such as the Persona Builder and Competitor Analyzer reuse this so you only write it
+          once. Each tool can override it without changing what you enter here.
+        </p>
+        <TextareaField
+          label="Product or service"
+          optional
+          rows={3}
+          placeholder="What is being designed or researched?"
+          error={errors.product_service?.message}
+          {...register("product_service")}
+        />
+        <TextareaField
+          label="Target audience"
+          optional
+          rows={3}
+          placeholder="Who is it for?"
+          error={errors.target_audience?.message}
+          {...register("target_audience")}
+        />
+        <TextareaField
+          label="Research objectives"
+          optional
+          rows={3}
+          placeholder="What do you need to learn?"
+          error={errors.research_objectives?.message}
+          {...register("research_objectives")}
+        />
+      </fieldset>
 
       <div className="grid gap-6 sm:grid-cols-2">
         <SelectField label="Project type" error={errors.project_type?.message} {...register("project_type")}>

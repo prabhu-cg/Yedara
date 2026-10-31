@@ -42,7 +42,7 @@ export const researchTools: ResearchTool[] = [
     name: "Persona Builder",
     summary: "Turn what you know about users into evidence-based personas.",
     icon: UserRound,
-    status: "coming-soon",
+    status: "available",
     plannedCapabilities: [
       "Capture goals, needs and pain points",
       "Link personas to research evidence",
@@ -54,7 +54,7 @@ export const researchTools: ResearchTool[] = [
     name: "Competitor Analyzer",
     summary: "Compare competitors side by side and spot gaps in the market.",
     icon: Target,
-    status: "coming-soon",
+    status: "available",
     plannedCapabilities: [
       "Build structured competitor profiles",
       "Compare features and experiences",

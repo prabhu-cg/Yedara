@@ -71,12 +71,15 @@ describe("SidebarNav", () => {
 
   it("flags only the unfinished research tools as coming soon", () => {
     render(<SidebarNav />);
-    expect(screen.getAllByText("Soon")).toHaveLength(5);
-    // The Research Planner is live, so it carries no badge.
+    expect(screen.getAllByText("Soon")).toHaveLength(3);
+    // Live tools carry no badge.
     const planner = screen.getByRole("link", { name: "Research Planner" });
     expect(planner).toHaveAttribute("href", "/tools/research-planner");
     expect(within(planner).queryByText("Soon")).toBeNull();
-    expect(within(screen.getByRole("link", { name: /Persona Builder/ })).getByText("Soon")).toBeInTheDocument();
+    for (const name of [/Persona Builder/, /Competitor Analyzer/]) {
+      expect(within(screen.getByRole("link", { name })).queryByText("Soon")).toBeNull();
+    }
+    expect(within(screen.getByRole("link", { name: /Journey Mapper/ })).getByText("Soon")).toBeInTheDocument();
   });
 });
 

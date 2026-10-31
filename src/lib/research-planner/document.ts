@@ -24,7 +24,7 @@ export type Block =
   | { type: "heading"; text: string }
   | { type: "paragraph"; text: string }
   | { type: "list"; ordered: boolean; items: ListItem[] }
-  | { type: "table"; headers: string[]; rows: string[][] };
+  | { type: "table"; headers: string[]; rows: string[][]; widths?: number[] };
 
 export type DocSection = { key: string; title: string; blocks: Block[] };
 

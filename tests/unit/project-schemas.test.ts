@@ -7,6 +7,9 @@ const valid = {
   description: "",
   client: "",
   industry: "",
+  product_service: "",
+  target_audience: "",
+  research_objectives: "",
   project_type: "ux_research",
   status: "planning",
 } as const;
@@ -26,6 +29,9 @@ describe("project form validation", () => {
     ["description", 2001],
     ["client", 121],
     ["industry", 81],
+    ["product_service", 2001],
+    ["target_audience", 2001],
+    ["research_objectives", 2001],
   ])("limits %s to a maximum length", (field, length) => {
     expect(projectFormSchema.safeParse({ ...valid, [field]: "x".repeat(length) }).success).toBe(false);
     expect(projectFormSchema.safeParse({ ...valid, [field]: "x".repeat(length - 1) }).success).toBe(true);
@@ -59,6 +65,9 @@ describe("toProjectColumns", () => {
       description: null,
       client: null,
       industry: null,
+      product_service: null,
+      target_audience: null,
+      research_objectives: null,
       project_type: "ux_research",
       status: "planning",
       previous_status: null,

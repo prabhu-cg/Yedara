@@ -10,6 +10,10 @@ export const projectFormSchema = z.object({
   description: z.string().trim().max(2000, "Use 2,000 characters or fewer"),
   client: z.string().trim().max(120, "Use 120 characters or fewer"),
   industry: z.string().trim().max(80, "Use 80 characters or fewer"),
+  // The shared brief: research tools inherit these and may override them locally.
+  product_service: z.string().trim().max(2000, "Use 2,000 characters or fewer"),
+  target_audience: z.string().trim().max(2000, "Use 2,000 characters or fewer"),
+  research_objectives: z.string().trim().max(2000, "Use 2,000 characters or fewer"),
   project_type: z.enum(PROJECT_TYPE_VALUES, { error: "Choose a project type" }),
   status: z.enum(EDITABLE_STATUSES, { error: "Choose a status" }),
 });
@@ -25,6 +29,9 @@ export function toProjectColumns(values: ProjectFormValues) {
     description: values.description || null,
     client: values.client || null,
     industry: values.industry || null,
+    product_service: values.product_service || null,
+    target_audience: values.target_audience || null,
+    research_objectives: values.research_objectives || null,
     project_type: values.project_type,
     status: values.status,
     previous_status: null,

@@ -54,6 +54,9 @@ const valid = {
   description: "",
   client: "",
   industry: "",
+  product_service: "",
+  target_audience: "",
+  research_objectives: "",
   project_type: "ux_research",
   status: "planning",
 };

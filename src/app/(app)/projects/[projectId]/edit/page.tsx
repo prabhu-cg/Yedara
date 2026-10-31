@@ -18,6 +18,9 @@ export default async function EditProjectPage({ params }: PageProps<"/projects/[
     description: project.description ?? "",
     client: project.client ?? "",
     industry: project.industry ?? "",
+    product_service: project.product_service ?? "",
+    target_audience: project.target_audience ?? "",
+    research_objectives: project.research_objectives ?? "",
     project_type: (PROJECT_TYPE_VALUES as readonly string[]).includes(project.project_type)
       ? (project.project_type as ProjectFormValues["project_type"])
       : "other",

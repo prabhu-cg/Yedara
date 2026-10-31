@@ -2,13 +2,13 @@
 
 Next.js 16 (App Router) · React 19 · TypeScript (strict) · Tailwind CSS 4 · shadcn/ui-style components (Radix) · Supabase (Postgres, Auth) · React Hook Form + Zod · Vitest · Playwright.
 
-Phase 1 delivers auth, project management and the app shell. Phase 2 adds the **Research Planner** (`/tools/research-planner`). The other five research tools are still coming-soon pages.
+Phase 1 delivers auth, project management and the app shell. Phase 2 adds the **Research Planner** (`/tools/research-planner`). Phase 3 adds the **Persona Builder** (`/tools/persona-builder`) and the **Competitor Analyzer** (`/tools/competitor-analyzer`). The other three research tools are still coming-soon pages.
 
 ## Setup
 
 1. `npm install`
 2. Create a Supabase project. In **Authentication → URL Configuration** add `http://localhost:3000/auth/callback` (and your production URL) to the redirect allow-list.
-3. Apply the migrations in `supabase/migrations/` (in order, three files): `supabase link --project-ref <ref> && supabase db push`, or paste each file's *contents* into the SQL editor. Phase 2 adds `20260101000200_research_planner.sql`.
+3. Apply the migrations in `supabase/migrations/` (in order, four files): `supabase link --project-ref <ref> && supabase db push`, or paste each file's *contents* into the SQL editor. Phase 2 adds `20260101000200_research_planner.sql`; Phase 3 adds `20260101000300_personas_competitors.sql` (new project-brief columns, personas, competitor analyses, RLS and RPCs).
 4. `cp .env.example .env.local` and fill in `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 5. `npm run dev` → http://localhost:3000
 
@@ -55,6 +55,37 @@ A 7-step guided workflow (context, goals, methods, participants, materials, logi
 - Method guidance is English keyword matching, not language understanding.
 - Section order is changed with up/down buttons, not drag and drop.
 - Starter usability tasks are placeholders: the planner can't know what your users should do.
+
+## Persona Builder and Competitor Analyzer (Phase 3)
+
+Both tools share the same chrome (`src/components/shared`): a step wizard with autosave, resume, validation per step and PDF / Word / Markdown export through the one document model used by the planner.
+
+### Shared project context
+
+A project now carries a short brief (description, industry, product or service, target audience, research objectives). Personas and analyses **read** it and may **override** any field for themselves. The override is stored in the module's own JSON (`overrides`; an absent key means "inherit") and the project is never written to. Reset removes the key. See `src/lib/shared-context.ts`.
+
+### Persona Builder
+
+- **Steps:** Context, Profile, Behaviour, Needs, Evidence, Output. Several personas per project; duplicate (`duplicate_persona` RPC), compare up to four side by side, edit any time.
+- **Honesty rules:** every persona is *research-backed*, *hypothesis* or *proto-persona* and says so on screen and in every export. A research-backed persona needs a research source plus an observation or quote. Every quote needs a source. Demographics are only shown or exported with a recorded justification. Nothing is generated: there are no invented quotes, interviews or demographics, and no stock photos (initials stand in).
+- **Data:** `personas`, `persona_sections` (one validated JSONB row per step), `persona_evidence` (typed rows with source, confidence, validation status and `origin` manual/ai).
+- **AI readiness:** `src/lib/ai/persona-ai.ts` is disabled. A future provider may only propose assumptions or hypotheses, stored with `origin: 'ai'` and labelled "AI-generated assumption. Not validated with users."
+
+### Competitor Analyzer
+
+- **Steps:** Market context, Competitors, Criteria, Comparison matrix, Analysis, Report. Competitor types: direct, indirect, substitute, emerging. All research is entered by hand and works with no external service.
+- **Matrix:** competitors are columns and criteria rows. Each cell is *known* (with a value), *unknown* (not yet researched), *not publicly available* (looked, not found) or *not applicable*, with optional notes and a source. Missing information is reported as a gap to research, never as a weakness.
+- **Sources:** every source records its URL and the date it was retrieved; the report cites them as S1, S2... and lists them at the end. Strengths, weaknesses and opportunities are labelled as the researcher's interpretation, not as recorded fact.
+- **Data:** `competitor_analyses` (with `market_context` and `analysis` JSON), `competitors`, `competitor_criteria`, `competitor_sources`, `competitor_comparisons`. Composite foreign keys make it impossible for a cell to reference a competitor, criterion or source from another analysis, and a unique `(competitor, criterion)` pair gives one cell per intersection.
+- **Research adapter (future):** `src/lib/competitors/research-adapter.ts` defines the server-side interface for automated website research and ships it **disabled**. It encodes the rules a real adapter must follow: no unrestricted scraping, `validateResearchUrl` (SSRF guard) and `isAllowedByRobots` (robots.txt) must pass first, every finding records source URL and retrieval date, verified facts and AI interpretation are different types, and pricing or features are never invented.
+
+### Known limitations (Phase 3)
+
+- No AI generation and no automated website research yet; both are interfaces only.
+- Matrix cells are edited one at a time in a panel under the table, not inline or with spreadsheet paste.
+- Competitors and criteria are reordered with up/down buttons, not drag and drop.
+- Comparison supports four personas at a time. Two tabs editing the same item: last save wins.
+- PDF uses Helvetica, so characters outside Latin text print as `?`. A very wide matrix (many competitors) gets narrow columns in PDF and Word.
 
 ## Design system
 

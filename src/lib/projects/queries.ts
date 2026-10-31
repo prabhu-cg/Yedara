@@ -14,7 +14,7 @@ import type { Database, ProjectStatus } from "@/lib/supabase/database.types";
 export type Project = Database["public"]["Tables"]["projects"]["Row"];
 
 const PROJECT_COLUMNS =
-  "id, owner_id, name, description, client, industry, project_type, status, previous_status, archived_at, created_at, updated_at";
+  "id, owner_id, name, description, client, industry, project_type, product_service, target_audience, research_objectives, status, previous_status, archived_at, created_at, updated_at";
 
 /**
  * Makes user text safe inside a PostgREST `or()` filter and an ILIKE pattern:

@@ -2,29 +2,32 @@
 
 import { Check } from "lucide-react";
 import { NativeSelect } from "@/components/ui/native-select";
-import { PLAN_STEPS } from "@/lib/research-planner/constants";
 import { cn } from "@/lib/utils";
 
+export type StepperStep = { readonly id: number; readonly title: string; readonly short: string };
+
 export function Stepper({
+  steps,
   current,
   reached,
   done,
   onSelect,
 }: {
+  steps: readonly StepperStep[];
   current: number;
   /** Furthest step the user has reached; only steps up to here can show as complete. */
   reached: number;
   done: ReadonlySet<number>;
   onSelect: (step: number) => void;
 }) {
-  const step = PLAN_STEPS[current - 1];
+  const step = steps[current - 1];
   return (
     <div className="mb-6">
       {/* Compact version for phones and small tablets */}
       <div className="md:hidden">
         <div className="mb-2 flex items-baseline justify-between gap-3">
           <p className="text-sm font-semibold">
-            Step {current} of {PLAN_STEPS.length}
+            Step {current} of {steps.length}
             <span className="font-normal text-muted-foreground"> · {step.title}</span>
           </p>
         </div>
@@ -32,15 +35,15 @@ export function Stepper({
           role="progressbar"
           aria-label="Plan progress"
           aria-valuemin={1}
-          aria-valuemax={PLAN_STEPS.length}
+          aria-valuemax={steps.length}
           aria-valuenow={current}
-          aria-valuetext={`Step ${current} of ${PLAN_STEPS.length}: ${step.title}`}
+          aria-valuetext={`Step ${current} of ${steps.length}: ${step.title}`}
           className="mb-3 h-1.5 overflow-hidden rounded-full bg-border"
         >
-          <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${(current / PLAN_STEPS.length) * 100}%` }} />
+          <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${(current / steps.length) * 100}%` }} />
         </div>
         <NativeSelect aria-label="Jump to step" value={current} onChange={(e) => onSelect(Number(e.target.value))}>
-          {PLAN_STEPS.map((s) => (
+          {steps.map((s) => (
             <option key={s.id} value={s.id}>
               {s.id}. {s.title}
               {done.has(s.id) ? " ✓" : ""}
@@ -52,7 +55,7 @@ export function Stepper({
       {/* Full stepper from md up */}
       <nav aria-label="Plan steps" className="hidden md:block">
         <ol className="flex items-start">
-          {PLAN_STEPS.map((s, i) => {
+          {steps.map((s, i) => {
             const active = s.id === current;
             const complete = done.has(s.id);
             return (

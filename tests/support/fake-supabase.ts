@@ -162,7 +162,7 @@ function buildWhere(url: URL, params: unknown[]) {
     if (op === "ilike") return `"${column}" ilike ${bind(value)}`;
     if (op === "in") {
       const list = value.replace(/^\(|\)$/g, "").split(",").map((v) => v.replace(/^"|"$/g, ""));
-      return `"${column}" = any(${bind(list)}::text[])`;
+      return `"${column}"::text = any(${bind(list)}::text[])`;
     }
     throw new Error(`unsupported operator ${op}`);
   };
@@ -201,6 +201,9 @@ async function handleRpc(req: IncomingMessage, res: ServerResponse, url: URL) {
   const args = await readJson(req);
   const calls: Record<string, { sql: string; params: unknown[]; scalar?: boolean }> = {
     duplicate_research_plan: { sql: "select public.duplicate_research_plan($1::uuid) as r", params: [args.p_plan_id], scalar: true },
+    duplicate_persona: { sql: "select public.duplicate_persona($1::uuid) as r", params: [args.p_persona_id], scalar: true },
+    reorder_competitors: { sql: "select public.reorder_competitors($1::uuid, $2::uuid[])", params: [args.p_analysis_id, args.p_ids] },
+    reorder_competitor_criteria: { sql: "select public.reorder_competitor_criteria($1::uuid, $2::uuid[])", params: [args.p_analysis_id, args.p_ids] },
     reorder_research_plan_sections: {
       sql: "select public.reorder_research_plan_sections($1::uuid, $2::text[])",
       params: [args.p_plan_id, args.p_keys],
@@ -223,7 +226,7 @@ async function handleRpc(req: IncomingMessage, res: ServerResponse, url: URL) {
 async function handleRest(req: IncomingMessage, res: ServerResponse, url: URL) {
   if (url.pathname.startsWith("/rest/v1/rpc/")) return handleRpc(req, res, url);
   const table = url.pathname.replace("/rest/v1/", "");
-  if (!["profiles", "projects", "project_members", "project_settings", "research_plans", "research_plan_sections"].includes(table)) {
+  if (!["profiles", "projects", "project_members", "project_settings", "research_plans", "research_plan_sections", "personas", "persona_sections", "persona_evidence", "competitor_analyses", "competitors", "competitor_criteria", "competitor_sources", "competitor_comparisons"].includes(table)) {
     return send(res, 404, { message: "not found" });
   }
   const user = userFromBearer(req);
@@ -251,7 +254,13 @@ async function handleRest(req: IncomingMessage, res: ServerResponse, url: URL) {
         const rows = Array.isArray(body) ? body : [body];
         const columns = Object.keys(rows[0]).filter((c) => COLUMN.test(c));
         const values = rows.map((row) => `(${columns.map((c) => { params.push(jsonParam(row[c])); return `$${params.length}`; }).join(", ")})`);
-        sql = `insert into public.${table} (${columns.map((c) => `"${c}"`).join(", ")}) values ${values.join(", ")} returning *`;
+        sql = `insert into public.${table} (${columns.map((c) => `"${c}"`).join(", ")}) values ${values.join(", ")}`;
+        const conflict = (url.searchParams.get("on_conflict") ?? "").split(",").filter((c) => COLUMN.test(c));
+        if (conflict.length && prefer.includes("resolution=merge-duplicates")) {
+          const updates = columns.filter((c) => !conflict.includes(c)).map((c) => `"${c}" = excluded."${c}"`);
+          sql += ` on conflict (${conflict.map((c) => `"${c}"`).join(", ")}) do ${updates.length ? `update set ${updates.join(", ")}` : "nothing"}`;
+        }
+        sql += " returning *";
       } else if (req.method === "PATCH") {
         const body = await readJson(req);
         const sets = Object.keys(body).filter((c) => COLUMN.test(c)).map((c) => { params.push(jsonParam(body[c])); return `"${c}" = $${params.length}`; });

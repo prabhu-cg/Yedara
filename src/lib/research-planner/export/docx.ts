@@ -36,7 +36,8 @@ function runs(value: string, options: { bold?: boolean; size?: number; color?: s
   );
 }
 
-function weights(headers: string[]) {
+function weights(headers: string[], explicit?: number[]) {
+  if (explicit && explicit.length === headers.length) return explicit;
   if (headers.length === 2) return [30, 70];
   if (headers.length === 3) return [22, 43, 35];
   if (headers[0] === "#") return [6, 34, 30, 30];
@@ -46,8 +47,8 @@ function weights(headers: string[]) {
 const thin = { style: BorderStyle.SINGLE, size: 4, color: BORDER } as const;
 const cellBorders = { top: thin, bottom: thin, left: thin, right: thin };
 
-function tableBlock(headers: string[], rows: string[][]) {
-  const w = weights(headers);
+function tableBlock(headers: string[], rows: string[][], explicit?: number[]) {
+  const w = weights(headers, explicit);
   const widths = w.map((p) => Math.round((CONTENT_WIDTH * p) / 100));
   const mk = (value: string, i: number, header: boolean) =>
     new TableCell({
@@ -91,7 +92,7 @@ function buildBlocks(blocks: Block[], nextNumbering: () => number) {
       });
       out.push(new Paragraph({ children: [], spacing: { after: 80 } }));
     } else {
-      out.push(tableBlock(b.headers, b.rows));
+      out.push(tableBlock(b.headers, b.rows, b.widths));
       out.push(new Paragraph({ children: [], spacing: { after: 160 } }));
     }
   }

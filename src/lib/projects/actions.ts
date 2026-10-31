@@ -54,7 +54,8 @@ export async function updateProjectAction(
   const user = await requireUser();
   const supabase = await createClient();
 
-  const { name, description, client, industry, project_type } = toProjectColumns(parsed.data);
+  const { name, description, client, industry, project_type, product_service, target_audience, research_objectives } =
+    toProjectColumns(parsed.data);
   // Editing an archived project must not silently un-archive it.
   const { data: existing } = await supabase
     .from("projects")
@@ -66,8 +67,8 @@ export async function updateProjectAction(
 
   const update =
     existing.status === "archived"
-      ? { name, description, client, industry, project_type }
-      : { name, description, client, industry, project_type, status: parsed.data.status };
+      ? { name, description, client, industry, project_type, product_service, target_audience, research_objectives }
+      : { name, description, client, industry, project_type, product_service, target_audience, research_objectives, status: parsed.data.status };
 
   const { data, error } = await supabase
     .from("projects")
