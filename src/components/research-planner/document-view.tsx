@@ -74,10 +74,10 @@ export function BlocksView({ blocks }: { blocks: Block[] }) {
 /** On-screen preview of the exported document (same model as the PDF/DOCX/Markdown). */
 export function DocumentView({ doc }: { doc: PlanDocument }) {
   return (
-    <article aria-label="Document preview" className="mx-auto max-w-3xl rounded-xl border border-border bg-background p-6 shadow-sm sm:p-10">
+    <article aria-label="Document preview" className="mx-auto max-w-3xl rounded-card border border-border bg-background p-6 sm:p-10 shadow-card">
       <header className="mb-8 border-b border-border pb-8">
-        <p className="text-xs font-bold tracking-[0.15em] text-primary uppercase">{doc.kicker}</p>
-        <h2 className="mt-3 text-3xl font-bold [overflow-wrap:anywhere]">{doc.title}</h2>
+        <p className="text-xs font-semibold text-primary-text">{doc.kicker}</p>
+        <h2 className="mt-3 text-[28px] leading-tight font-bold [overflow-wrap:anywhere]">{doc.title}</h2>
         {doc.meta.length > 0 && (
           <dl className="mt-6 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-[8rem_1fr]">
             {doc.meta.map((m) => (
@@ -95,7 +95,7 @@ export function DocumentView({ doc }: { doc: PlanDocument }) {
         <div className="space-y-10">
           {doc.sections.map((section) => (
             <section key={section.key} aria-labelledby={`preview-${section.key}`}>
-              <h3 id={`preview-${section.key}`} className="mb-3 border-b border-border pb-2 text-xl font-bold text-primary">
+              <h3 id={`preview-${section.key}`} className="mb-3 border-b border-border pb-2 text-base font-bold text-primary-text">
                 {section.title}
               </h3>
               <BlocksView blocks={section.blocks} />

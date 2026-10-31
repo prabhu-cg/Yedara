@@ -63,7 +63,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[proj
       {archived && (
         <div
           role="status"
-          className="mb-6 flex items-center gap-2.5 rounded-lg border border-border bg-status-archived px-4 py-3 text-sm text-status-archived-foreground"
+          className="mb-6 flex items-center gap-2.5 rounded-lg border border-border bg-muted px-4 py-3 text-sm text-muted-foreground"
         >
           <Archive aria-hidden className="size-4 shrink-0" />
           This project is archived. Restore it from the actions menu to continue working on it.
@@ -83,7 +83,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[proj
             ) : (
               <p className="text-muted-foreground">
                 No description yet.{" "}
-                <Link href={`/projects/${project.id}/edit`} className="font-semibold text-primary hover:underline">
+                <Link href={`/projects/${project.id}/edit`} className="font-semibold text-primary-text hover:underline">
                   Add one
                 </Link>
               </p>
@@ -113,7 +113,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[proj
 
       <section aria-labelledby="project-plans" className="mt-10">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <h2 id="project-plans" className="text-lg font-semibold">
+          <h2 id="project-plans" className="text-base font-bold">
             Research plans
           </h2>
           {!archived && (
@@ -138,7 +138,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[proj
       </section>
 
       <section aria-labelledby="project-tools" className="mt-10">
-        <h2 id="project-tools" className="mb-1 text-lg font-semibold">
+        <h2 id="project-tools" className="mb-1 text-base font-bold">
           Research tools
         </h2>
         <p className="mb-4 text-sm text-muted-foreground">

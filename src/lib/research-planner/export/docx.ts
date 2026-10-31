@@ -4,6 +4,7 @@ import {
   Document,
   Footer,
   HeadingLevel,
+  ImageRun,
   LevelFormat,
   Packer,
   PageNumber,
@@ -17,13 +18,14 @@ import {
   type ParagraphChild,
 } from "docx";
 import type { Block, ListItem, PlanDocument } from "@/lib/research-planner/document";
+import { LOGO_PNG_BASE64 } from "@/lib/research-planner/export/logo-png";
 
 const FONT = "Calibri";
 const PRIMARY = "C74504";
-const TEXT = "444444";
-const MUTED = "777777";
-const BORDER = "D9D9D6";
-const HEAD_FILL = "F8F8F7";
+const TEXT = "1C1917";
+const MUTED = "6F6963";
+const BORDER = "E8DDC8";
+const HEAD_FILL = "F4F2EA";
 /** A4 with 2.54cm margins leaves 9026 twips of content width. */
 const CONTENT_WIDTH = 9026;
 
@@ -135,7 +137,18 @@ export async function renderDocx(doc: PlanDocument): Promise<Buffer> {
     : [];
 
   const children: (Paragraph | Table)[] = [
-    new Paragraph({ spacing: { before: 2400, after: 160 }, children: runs(doc.kicker.toUpperCase(), { color: PRIMARY, bold: true, size: 22 }) }),
+    new Paragraph({
+      spacing: { before: 1800, after: 360 },
+      children: [
+        new ImageRun({
+          type: "png",
+          data: Buffer.from(LOGO_PNG_BASE64, "base64"),
+          transformation: { width: 56, height: 56 },
+          altText: { name: "Yedara logo", title: "Yedara", description: "The Yedara logo" },
+        }),
+      ],
+    }),
+    new Paragraph({ spacing: { after: 160 }, children: runs(doc.kicker, { color: PRIMARY, bold: true, size: 24 }) }),
     new Paragraph({ heading: HeadingLevel.TITLE, spacing: { after: 480 }, children: runs(doc.title) }),
     ...coverMeta,
   ];

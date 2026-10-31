@@ -155,6 +155,10 @@ describe("DOCX export", () => {
     expect(buf.subarray(0, 2).toString()).toBe("PK");
     const zip = await JSZip.loadAsync(buf);
     expect(Object.keys(zip.files)).toEqual(expect.arrayContaining(["word/document.xml", "word/styles.xml", "word/numbering.xml"]));
+    // The cover carries the logo.
+    const media = Object.keys(zip.files).filter((f) => f.startsWith("word/media/"));
+    expect(media).toHaveLength(1);
+    expect((await zip.file(media[0])!.async("nodebuffer")).subarray(1, 4).toString()).toBe("PNG");
 
     const xml = await zip.file("word/document.xml")!.async("string");
     expect(xml).toContain('w:val="Title"');

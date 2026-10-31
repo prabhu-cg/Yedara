@@ -22,8 +22,8 @@ function MethodCard({ method, selected, onToggle }: { method: MethodInfo; select
   return (
     <li
       className={cn(
-        "flex flex-col rounded-xl border bg-card transition-colors",
-        selected ? "border-primary ring-1 ring-primary" : "border-border hover:border-input",
+        "flex flex-col rounded-xl border bg-card shadow-card transition-[border-color,box-shadow]",
+        selected ? "border-primary ring-1 ring-primary" : "border-border hover:border-primary hover:shadow-raised",
       )}
     >
       <label htmlFor={id} className="flex cursor-pointer items-start gap-3 p-4">
@@ -101,7 +101,7 @@ export function MethodsEditor({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
             <h3 id="suggestions-heading" className="flex items-center gap-2 font-semibold">
-              <Lightbulb aria-hidden className="size-4 text-primary" /> Method suggestions
+              <Lightbulb aria-hidden className="size-4 text-primary-text" /> Method suggestions
               <Badge variant="secondary">Optional</Badge>
             </h3>
             <p className="max-w-xl text-sm text-muted-foreground">
@@ -200,7 +200,7 @@ export function MethodsEditor({
       )}
 
       {notes.length > 0 && (
-        <section aria-labelledby="considerations-heading" className="rounded-xl border border-border p-4 sm:p-5">
+        <section aria-labelledby="considerations-heading" className="rounded-card border border-border p-4 sm:p-5">
           <h3 id="considerations-heading" className="mb-2 font-semibold">
             Things to consider
           </h3>

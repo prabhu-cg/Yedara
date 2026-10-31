@@ -31,7 +31,7 @@ export default async function ResearchPlannerPage() {
           title="No research plans yet"
           description="A plan covers your goals, methods, participants, materials and logistics, and exports to PDF, Word or Markdown. You don't need research experience to start."
           action={
-            <Button asChild>
+            <Button asChild variant="outline">
               <Link href="/tools/research-planner/new">
                 <Plus /> Create your first plan
               </Link>

@@ -35,7 +35,7 @@ export function Stepper({
           aria-valuemax={PLAN_STEPS.length}
           aria-valuenow={current}
           aria-valuetext={`Step ${current} of ${PLAN_STEPS.length}: ${step.title}`}
-          className="mb-3 h-1.5 overflow-hidden rounded-full bg-accent"
+          className="mb-3 h-1.5 overflow-hidden rounded-full bg-border"
         >
           <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${(current / PLAN_STEPS.length) * 100}%` }} />
         </div>
@@ -73,8 +73,8 @@ export function Stepper({
                     className={cn(
                       "flex size-8 items-center justify-center rounded-full border-2 text-sm font-bold transition-colors",
                       active && "border-primary bg-primary text-primary-foreground",
-                      !active && complete && "border-primary bg-primary-soft text-primary",
-                      !active && !complete && "border-border bg-background text-muted-foreground group-hover:border-input",
+                      !active && complete && "border-primary bg-primary-soft text-primary-text",
+                      !active && !complete && "border-border bg-background text-muted-foreground group-hover:border-border-strong",
                     )}
                   >
                     {complete && !active ? <Check aria-hidden className="size-4" /> : s.id}

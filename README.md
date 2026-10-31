@@ -55,3 +55,12 @@ A 7-step guided workflow (context, goals, methods, participants, materials, logi
 - Method guidance is English keyword matching, not language understanding.
 - Section order is changed with up/down buttons, not drag and drop.
 - Starter usability tasks are placeholders: the planner can't know what your users should do.
+
+## Design system
+
+The app and landing page share the "Working Ledger" tokens from Doxa's `DESIGN.md`: warm white and Oat grounds, parchment hairlines, warm ink, and a single terracotta accent, in Manrope throughout. Tokens live in `src/app/globals.css` (light and dark); components must use the semantic names (`bg-primary`, `text-primary-text`, `bg-muted`, `border-border`) and never raw hex.
+
+- **Themes:** Light / Dark / System via the sun/moon menu in every header. The saved choice is applied before first paint.
+- **Rules applied:** one filled primary per view; the accent as text is always `primary-text`; hovers are Oat washes; the sidebar marks the current page with a quiet wash, never an accent tint; sentence-case labels; tabular numerals for counts; flat at rest (only menus, dialogs and the drawer cast a shadow); 36px controls at 6px radius, 16px cards.
+- **Guarded by tests:** `tests/unit/design-tokens.test.ts` checks WCAG AA contrast for every text/background pair in both themes, light/dark token parity, and that components contain no hard-coded hex.
+- **Not applied:** Doxa's board-specific patterns (data-grid tables, vote chip, `?item=` drawer, roadmap) and its photographic auth panel, since they belong to that product's features.

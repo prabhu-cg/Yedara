@@ -42,10 +42,10 @@ export function SignupForm() {
   if (confirmEmail) {
     return (
       <div role="status" className="space-y-3 text-center">
-        <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-primary-soft text-primary">
+        <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-primary-soft text-primary-text">
           <MailCheck aria-hidden className="size-6" />
         </span>
-        <h2 className="text-lg font-semibold">Check your email</h2>
+        <h2 className="text-base font-bold">Check your email</h2>
         <p className="text-sm text-muted-foreground">
           We sent a confirmation link to <strong className="text-foreground">{confirmEmail}</strong>.
           Open it to activate your account.

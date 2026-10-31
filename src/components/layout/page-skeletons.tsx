@@ -13,7 +13,7 @@ export function CardGridSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" role="status" aria-label="Loading projects">
       {Array.from({ length: count }, (_, i) => (
-        <Skeleton key={i} className="h-36 rounded-xl" />
+        <Skeleton key={i} className="h-36 rounded-card" />
       ))}
     </div>
   );

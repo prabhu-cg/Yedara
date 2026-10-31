@@ -100,6 +100,7 @@ test.describe("responsive navigation", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Research Planner" })).toBeVisible();
     await expect(page.getByText("is on its way")).toHaveCount(0);
     await page.goto("/tools/not-a-tool");
-    await expect(page.getByText("Page not found")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "This page didn't get a reply." })).toBeVisible();
+    await expect(page.getByText("/tools/not-a-tool")).toBeVisible();
   });
 });

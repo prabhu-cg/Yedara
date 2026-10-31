@@ -293,6 +293,13 @@ async function main() {
   db = await createDatabase();
   const server = createServer(async (req, res) => {
     const url = new URL(req.url ?? "/", `http://${req.headers.host}`);
+    // Watchdog: say so loudly if a request is still unanswered after 8s, instead of hanging silently.
+    const startedAt = Date.now();
+    const watchdog = setTimeout(
+      () => console.error(`[fake-supabase] HUNG after ${Date.now() - startedAt}ms: ${req.method} ${url.pathname}${url.search.slice(0, 80)}`),
+      8000,
+    );
+    res.on("close", () => clearTimeout(watchdog));
     try {
       if (req.method === "OPTIONS") return send(res, 204, undefined, { "access-control-allow-origin": "*" });
       if (url.pathname === "/__health") return send(res, 200, { ok: true });

@@ -1,14 +1,16 @@
-import { Document, Font, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer";
+import { Document, Font, Page, Path, StyleSheet, Svg, Text, View, renderToBuffer } from "@react-pdf/renderer";
+import { LOGO_ACCENT_HEX, LOGO_INK_HEX, LOGO_VIEWBOX, LOGO_WING_ACCENT, LOGO_WING_INK } from "@/components/brand/logo-paths";
 import type { Block, ListItem, PlanDocument } from "@/lib/research-planner/document";
 
-const C = { primary: "#C74504", text: "#444444", muted: "#777777", border: "#E8E8E6", fill: "#F8F8F7" };
+// Same palette as the app (light theme): accent, warm ink, Stone, parchment hairline, Oat.
+const C = { primary: "#C74504", text: "#1C1917", muted: "#6F6963", border: "#E8DDC8", fill: "#F4F2EA" };
 
 // Avoid mid-word hyphenation; it makes technical text harder to read.
 Font.registerHyphenationCallback((word) => [word]);
 
 const s = StyleSheet.create({
   page: { paddingTop: 56, paddingBottom: 64, paddingHorizontal: 56, fontFamily: "Helvetica", fontSize: 10.5, color: C.text },
-  coverKicker: { fontSize: 11, fontFamily: "Helvetica-Bold", color: C.primary, letterSpacing: 1.5, marginBottom: 12 },
+  coverKicker: { fontSize: 12, fontFamily: "Helvetica-Bold", color: C.primary, marginBottom: 12 },
   coverTitle: { fontSize: 30, fontFamily: "Helvetica-Bold", marginBottom: 32 },
   metaRow: { flexDirection: "row", paddingVertical: 8, borderTopWidth: 0.75, borderTopColor: C.border },
   metaLabel: { width: 120, color: C.muted },
@@ -117,8 +119,12 @@ export function PlanPdf({ doc }: { doc: PlanDocument }) {
   return (
     <Document title={doc.title} author="Yedara" subject={doc.kicker}>
       <Page size="A4" style={s.page}>
-        <View style={{ marginTop: 150 }}>
-          <Text style={s.coverKicker}>{pdfSafe(doc.kicker.toUpperCase())}</Text>
+        <View style={{ marginTop: 130 }}>
+          <Svg viewBox={LOGO_VIEWBOX} style={{ width: 52, height: 52, marginBottom: 28 }}>
+            <Path d={LOGO_WING_INK} fill={LOGO_INK_HEX} />
+            <Path d={LOGO_WING_ACCENT} fill={LOGO_ACCENT_HEX} />
+          </Svg>
+          <Text style={s.coverKicker}>{pdfSafe(doc.kicker)}</Text>
           <Text style={s.coverTitle}>{pdfSafe(doc.title)}</Text>
           {doc.meta.map((m) => (
             <View key={m.label} style={s.metaRow}>

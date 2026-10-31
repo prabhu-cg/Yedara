@@ -49,7 +49,7 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
         {...register("password")}
       />
       <div className="flex justify-end">
-        <Link href="/forgot-password" className="text-sm font-semibold text-primary underline-offset-4 hover:underline">
+        <Link href="/forgot-password" className="text-sm font-semibold text-primary-text underline-offset-4 hover:underline">
           Forgot password?
         </Link>
       </div>

@@ -1,53 +1,94 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
 /*
- * Design tokens. Components must use these semantic tokens (bg-primary,
- * text-muted-foreground, border-border ...) rather than raw hex values.
+ * Design tokens: "The Working Ledger" (shared with Doxa, see DESIGN.md there).
+ * Warm paper and one burnt-orange accent. Components must use these semantic
+ * tokens (bg-primary, text-muted-foreground, border-border ...) and never raw hex.
+ *
+ *  - text on the accent colour uses `primary-text` (deep terracotta, AA on white and on the tint)
+ *  - the one warm ground is `muted` / `surface` (Oat); hover washes are Oat, not the accent tint
+ *  - depth is flat: hairline borders and tonal grounds; only overlays (menus, dialogs, drawer) cast a shadow
  */
 :root {
+  color-scheme: light;
   --background: #ffffff;
-  --foreground: #444444;
+  --foreground: #1c1917;
   --card: #ffffff;
-  --card-foreground: #444444;
+  --card-foreground: #1c1917;
   --popover: #ffffff;
-  --popover-foreground: #444444;
-
+  --popover-foreground: #1c1917;
   --primary: #c74504;
   --primary-foreground: #ffffff;
-  --primary-soft: #fbefe8;
-
-  --secondary: #f8f8f7;
-  --secondary-foreground: #444444;
-  --muted: #f8f8f7;
-  --muted-foreground: #777777;
-  --accent: #f1f1ef;
-  --accent-foreground: #444444;
-
-  --destructive: #b42318;
-  --destructive-foreground: #ffffff;
-  --success: #1f7a45;
-
-  --border: #e8e8e6;
-  --input: #d3d3cf;
+  --secondary: #f4f2ea;
+  --secondary-foreground: #1c1917;
+  --muted: #f4f2ea;
+  --muted-foreground: #6f6963;
+  --accent: #fdefe7;
+  --accent-foreground: #a93a03;
+  --destructive: #b3261e;
+  --border: #e8ddc8;
+  --input: #e8ddc8;
   --ring: #c74504;
-  --radius: 0.5rem;
+  --radius: 0.375rem;
+  --sidebar: #f4f2ea;
+  --sidebar-foreground: #1c1917;
+  --sidebar-border: #e8ddc8;
+  --brand-ink: #444444;
+  --primary-hover: #a93a03;
+  --primary-soft: #fdefe7;
+  --primary-text: #a93a03;
+  --surface: #f4f2ea;
+  --surface-raised: #ffffff;
+  --border-strong: #d6c7ab;
+  --success: #146c43;
+  --success-soft: #e6f4ec;
+  --warning: #8a5a00;
+  --warning-soft: #fdf3e0;
+  --info: #1f5f9e;
+  --info-soft: #ebf3fb;
+  --destructive-soft: #fdeceb;
+}
 
-  --sidebar: #f8f8f7;
-  --sidebar-foreground: #444444;
-  --sidebar-border: #e8e8e6;
-
-  /* Project status colours (background / foreground pairs) */
-  --status-planning: #eef2f7;
-  --status-planning-foreground: #3b5775;
-  --status-in-progress: #fbefe8;
-  --status-in-progress-foreground: #a33a03;
-  --status-review: #fdf3dc;
-  --status-review-foreground: #8a5a00;
-  --status-completed: #e6f4ec;
-  --status-completed-foreground: #1f6b3d;
-  --status-archived: #efefed;
-  --status-archived-foreground: #666664;
+.dark {
+  color-scheme: dark;
+  --background: #12100e;
+  --foreground: #faf7f2;
+  --card: #1c1916;
+  --card-foreground: #faf7f2;
+  --popover: #1c1916;
+  --popover-foreground: #faf7f2;
+  --primary: #c74504;
+  --primary-foreground: #ffffff;
+  --secondary: #27221e;
+  --secondary-foreground: #faf7f2;
+  --muted: #27221e;
+  --muted-foreground: #a8a097;
+  --accent: #26130a;
+  --accent-foreground: #ff8a5c;
+  --destructive: #ff9d95;
+  --border: #302a25;
+  --input: #302a25;
+  --ring: #ff8a5c;
+  --sidebar: #181512;
+  --sidebar-foreground: #faf7f2;
+  --sidebar-border: #302a25;
+  --brand-ink: #e7e0d6;
+  --primary-hover: #dd5211;
+  --primary-soft: #26130a;
+  --primary-text: #ff8a5c;
+  --surface: #181512;
+  --surface-raised: #1c1916;
+  --border-strong: #453d35;
+  --success: #7ee2ab;
+  --success-soft: #10281c;
+  --warning: #f5c26b;
+  --warning-soft: #2b2110;
+  --info: #8cc2f5;
+  --info-soft: #10202e;
+  --destructive-soft: #2e1513;
 }
 
 @theme inline {
@@ -61,7 +102,10 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-brand-ink: var(--brand-ink);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-soft: var(--primary-soft);
+  --color-primary-text: var(--primary-text);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -69,30 +113,36 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-soft: var(--destructive-soft);
   --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-border: var(--sidebar-border);
 
-  --color-status-planning: var(--status-planning);
-  --color-status-planning-foreground: var(--status-planning-foreground);
-  --color-status-in-progress: var(--status-in-progress);
-  --color-status-in-progress-foreground: var(--status-in-progress-foreground);
-  --color-status-review: var(--status-review);
-  --color-status-review-foreground: var(--status-review-foreground);
-  --color-status-completed: var(--status-completed);
-  --color-status-completed-foreground: var(--status-completed-foreground);
-  --color-status-archived: var(--status-archived);
-  --color-status-archived-foreground: var(--status-archived-foreground);
+  /* Elevation: cards rest on a soft shadow; interactive cards lift to "raised" on hover. */
+  --shadow-card: 0 1px 2px 0 #1010140a, 0 1px 3px 0 #1010140f;
+  --shadow-raised: 0 2px 4px -1px #1010140f, 0 8px 24px -6px #1010141f;
 
-  --radius-sm: calc(var(--radius) - 2px);
-  --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) + 2px);
-  --radius-xl: calc(var(--radius) + 6px);
+  /* Radii: 6px base. lg = controls, md = tabs/menu items, xl = panels, card = cards. */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-card: 1rem;
 }
 
 @layer base {
@@ -104,6 +154,8 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    font-size: 14px;
+    line-height: 1.43;
     font-feature-settings: "cv11", "ss01";
   }
   h1,
@@ -114,6 +166,15 @@
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring;
   }
+  ::selection {
+    background: var(--primary-soft);
+    color: var(--foreground);
+  }
+}
+
+/* The band that introduces a page on public surfaces: a breath of the accent over the page ground. */
+.masthead {
+  background: color-mix(in oklab, var(--primary) 5%, var(--background));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -121,6 +182,8 @@
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

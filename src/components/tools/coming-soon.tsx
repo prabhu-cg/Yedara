@@ -11,7 +11,7 @@ export function ToolComingSoon({ tool }: { tool: ResearchTool }) {
     <Card className="max-w-2xl">
       <CardHeader className="gap-4">
         <div className="flex items-center justify-between">
-          <span className="flex size-12 items-center justify-center rounded-lg bg-primary-soft text-primary">
+          <span className="flex size-12 items-center justify-center rounded-lg bg-primary-soft text-primary-text">
             <Icon aria-hidden className="size-6" />
           </span>
           <Badge variant="default">
@@ -19,7 +19,7 @@ export function ToolComingSoon({ tool }: { tool: ResearchTool }) {
           </Badge>
         </div>
         <div className="space-y-1.5">
-          <CardTitle className="text-xl">{tool.name} is on its way</CardTitle>
+          <CardTitle className="text-base font-bold">{tool.name} is on its way</CardTitle>
           <p className="text-muted-foreground">{tool.summary}</p>
         </div>
       </CardHeader>
@@ -29,7 +29,7 @@ export function ToolComingSoon({ tool }: { tool: ResearchTool }) {
           <ul className="space-y-2">
             {tool.plannedCapabilities.map((item) => (
               <li key={item} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-primary" />
+                <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-primary-text" />
                 {item}
               </li>
             ))}

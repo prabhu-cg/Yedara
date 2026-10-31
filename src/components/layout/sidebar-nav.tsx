@@ -7,8 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const itemClasses =
-  "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
 
+/**
+ * The current page is shown by a quiet wash and weight, never an accent tint:
+ * the screen already carries the accent on its primary button.
+ */
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
@@ -16,9 +20,7 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
     <nav aria-label="Main" className="flex flex-col gap-6">
       {navGroups.map((group) => (
         <div key={group.label}>
-          <p className="px-3 pb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-            {group.label}
-          </p>
+          <p className="px-3 pb-2 text-xs font-semibold text-muted-foreground">{group.label}</p>
           <ul className="flex flex-col gap-0.5">
             {group.items.map((item) => {
               const active = isActive(item, pathname);
@@ -28,7 +30,7 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                   <Icon aria-hidden className="size-4 shrink-0" />
                   <span className="flex-1 truncate">{item.label}</span>
                   {item.badge && (
-                    <Badge variant="outline" className="bg-background px-2 py-0 text-[11px] font-medium">
+                    <Badge variant="outline" className="shrink-0 font-normal text-muted-foreground">
                       {item.badge}
                     </Badge>
                   )}
@@ -41,7 +43,7 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                     <span
                       aria-disabled="true"
                       title={`${item.label} is not available yet`}
-                      className={cn(itemClasses, "cursor-not-allowed text-muted-foreground opacity-80")}
+                      className={cn(itemClasses, "cursor-not-allowed text-muted-foreground opacity-70")}
                     >
                       {content}
                     </span>
@@ -53,8 +55,8 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                       className={cn(
                         itemClasses,
                         active
-                          ? "bg-primary-soft text-primary"
-                          : "text-foreground hover:bg-accent",
+                          ? "bg-foreground/5 font-semibold text-foreground"
+                          : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground",
                       )}
                     >
                       {content}

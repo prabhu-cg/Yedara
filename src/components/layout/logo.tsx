@@ -1,20 +1,34 @@
 import Link from "next/link";
+import { LogoMark } from "@/components/brand/logo-mark";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
-export function Logo({ href = "/", className }: { href?: string; className?: string }) {
+/** The mark with the product name, and optionally the tagline beneath it. */
+export function Logo({
+  href = "/",
+  className,
+  tagline = false,
+  markClassName = "size-8",
+}: {
+  href?: string;
+  className?: string;
+  tagline?: boolean;
+  markClassName?: string;
+}) {
   return (
     <Link
       href={href}
-      className={cn("inline-flex items-center gap-2.5 rounded-md font-bold text-foreground", className)}
+      aria-label={`${siteConfig.name} home`}
+      className={cn(
+        "inline-flex items-center gap-2.5 rounded-lg font-bold text-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
+        className,
+      )}
     >
-      <span
-        aria-hidden
-        className="flex size-8 items-center justify-center rounded-lg bg-primary text-base font-extrabold text-primary-foreground"
-      >
-        Y
+      <LogoMark className={markClassName} />
+      <span className="flex flex-col leading-tight">
+        <span className="text-[15px] tracking-tight">{siteConfig.name}</span>
+        {tagline && <span className="text-xs font-medium text-muted-foreground">{siteConfig.tagline}</span>}
       </span>
-      <span className="text-lg tracking-tight">{siteConfig.name}</span>
     </Link>
   );
 }

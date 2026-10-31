@@ -102,7 +102,7 @@ export function ReviewStep({
               onClick={() => setView(id)}
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                view === id ? "bg-primary-soft text-primary" : "text-muted-foreground hover:text-foreground",
+                view === id ? "bg-primary-soft text-primary-text" : "text-muted-foreground hover:text-foreground",
               )}
             >
               <Icon aria-hidden className="size-4" /> {label}
@@ -153,7 +153,7 @@ export function ReviewStep({
               const isEditing = editing === section.key;
               const title = SECTION_TITLES[section.key];
               return (
-                <li key={section.key} className="rounded-xl border border-border bg-card" aria-label={title}>
+                <li key={section.key} className="rounded-card border border-border bg-card shadow-card" aria-label={title}>
                   <div className="flex flex-wrap items-center justify-between gap-2 p-4">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-semibold">{title}</h3>

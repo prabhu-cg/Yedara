@@ -38,14 +38,14 @@ export function UserMenu({
       <DropdownMenuTrigger
         aria-label="Account menu"
         className={cn(
-          "flex items-center gap-3 rounded-md p-2 text-left outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring",
+          "flex items-center gap-3 rounded-md p-2 text-left outline-none hover:bg-foreground/5 focus-visible:ring-[3px] focus-visible:ring-ring/50",
           showDetails && "w-full",
           className,
         )}
       >
         <span
           aria-hidden
-          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary"
+          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary-text"
         >
           {initials(name)}
         </span>

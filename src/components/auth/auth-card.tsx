@@ -13,11 +13,11 @@ export function AuthCard({
   footer?: React.ReactNode;
 }) {
   return (
-    <div className="w-full max-w-md space-y-6">
-      <Card>
+    <div className="w-full space-y-6">
+      <Card className="rounded-2xl">
         <CardHeader className="space-y-2">
-          <CardTitle className="text-2xl font-bold">{title}</CardTitle>
-          {description && <CardDescription className="text-base">{description}</CardDescription>}
+          <CardTitle>{title}</CardTitle>
+          {description && <CardDescription>{description}</CardDescription>}
         </CardHeader>
         <CardContent>{children}</CardContent>
       </Card>
@@ -28,7 +28,7 @@ export function AuthCard({
 
 export function AuthLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link href={href} className="font-semibold text-primary underline-offset-4 hover:underline">
+    <Link href={href} className="font-semibold text-primary-text underline-offset-4 hover:underline">
       {children}
     </Link>
   );

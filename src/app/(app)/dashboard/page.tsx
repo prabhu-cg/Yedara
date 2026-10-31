@@ -75,7 +75,7 @@ export default async function DashboardPage() {
             title="You don't have any projects yet"
             description="Projects keep your research organised. Create your first one to get started."
             action={
-              <Button asChild>
+              <Button asChild variant="outline">
                 <Link href="/projects/new">
                   <Plus /> Create your first project
                 </Link>
@@ -83,7 +83,7 @@ export default async function DashboardPage() {
             }
           />
           <div>
-            <h2 id="getting-started" className="mb-4 text-lg font-semibold">
+            <h2 id="getting-started" className="mb-4 text-base font-bold">
               Getting started
             </h2>
             <ol className="grid gap-4 md:grid-cols-3">
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
                   <Card className="h-full">
                     <CardHeader className="gap-3">
                       <div className="flex items-center gap-3">
-                        <span className="flex size-8 items-center justify-center rounded-full bg-primary-soft text-sm font-bold text-primary">
+                        <span className="flex size-8 items-center justify-center rounded-full bg-primary-soft text-sm font-bold text-primary-text">
                           {index + 1}
                         </span>
                         <step.icon aria-hidden className="size-5 text-muted-foreground" />
@@ -103,7 +103,7 @@ export default async function DashboardPage() {
                     <CardContent>
                       <Link
                         href={step.href}
-                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-text hover:underline"
                       >
                         {step.cta} <ArrowRight aria-hidden className="size-4" />
                       </Link>
@@ -117,7 +117,7 @@ export default async function DashboardPage() {
       ) : (
         <>
           <section aria-labelledby="status-heading" className="mb-10">
-            <h2 id="status-heading" className="mb-3 text-lg font-semibold">
+            <h2 id="status-heading" className="mb-3 text-base font-bold">
               Project status
             </h2>
             <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
@@ -125,10 +125,10 @@ export default async function DashboardPage() {
                 <li key={status}>
                   <Link
                     href={`/projects?status=${status}`}
-                    className="flex flex-col gap-2 rounded-xl border border-border bg-card p-4 outline-none transition-colors hover:border-input hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring"
+                    className="flex flex-col gap-2 rounded-xl border border-border bg-card p-4 shadow-card transition-[border-color,box-shadow] hover:border-primary hover:shadow-raised outline-none focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-ring/50"
                   >
                     <StatusBadge status={status} className="w-fit" />
-                    <span className="text-2xl font-bold">{statusCounts[status]}</span>
+                    <span className="text-[28px] leading-none font-bold tabular-nums">{statusCounts[status]}</span>
                   </Link>
                 </li>
               ))}
@@ -137,10 +137,10 @@ export default async function DashboardPage() {
 
           <section aria-labelledby="recent-heading" className="mb-10">
             <div className="mb-3 flex items-center justify-between">
-              <h2 id="recent-heading" className="text-lg font-semibold">
+              <h2 id="recent-heading" className="text-base font-bold">
                 Recent projects
               </h2>
-              <Link href="/projects" className="text-sm font-semibold text-primary hover:underline">
+              <Link href="/projects" className="text-sm font-semibold text-primary-text hover:underline">
                 View all
               </Link>
             </div>
@@ -166,15 +166,15 @@ export default async function DashboardPage() {
 
           {recentlyEdited.length > 0 && (
             <section aria-labelledby="edited-heading" className="mb-10">
-              <h2 id="edited-heading" className="mb-3 text-lg font-semibold">
+              <h2 id="edited-heading" className="mb-3 text-base font-bold">
                 Recently edited
               </h2>
-              <ul className="divide-y divide-border rounded-xl border border-border bg-card">
+              <ul className="divide-y divide-border rounded-card border border-border bg-card shadow-card">
                 {recentlyEdited.map((project) => (
                   <li key={project.id}>
                     <Link
                       href={`/projects/${project.id}`}
-                      className="flex items-center justify-between gap-4 px-4 py-3 outline-none first:rounded-t-xl last:rounded-b-xl hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex items-center justify-between gap-4 px-4 py-3 outline-none first:rounded-t-xl last:rounded-b-xl hover:bg-secondary focus-visible:ring-[3px] focus-visible:ring-ring/50"
                     >
                       <span className="min-w-0 truncate font-semibold">{project.name}</span>
                       <span className="flex shrink-0 items-center gap-3">
@@ -194,10 +194,10 @@ export default async function DashboardPage() {
 
       <section aria-labelledby="tools-heading">
         <div className="mb-3 flex items-center justify-between">
-          <h2 id="tools-heading" className="text-lg font-semibold">
+          <h2 id="tools-heading" className="text-base font-bold">
             Research tools
           </h2>
-          <Link href="/tools" className="text-sm font-semibold text-primary hover:underline">
+          <Link href="/tools" className="text-sm font-semibold text-primary-text hover:underline">
             All tools
           </Link>
         </div>

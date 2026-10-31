@@ -2,21 +2,26 @@ import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { createPlan, createProject, fillPlanToReview, isPhoneViewport, nextStep, signUp, waitForSaved } from "./helpers";
 
+/**
+ * Picks an export format from the menu and returns the download. On touch emulation a tap
+ * that lands while the menu is still opening is occasionally swallowed, so retry the tap.
+ */
 async function download(page: Page, format: "pdf" | "docx" | "md") {
   const label = { pdf: "PDF document", docx: "Word document (.docx)", md: "Markdown (.md)" }[format];
   const trigger = page.getByRole("button", { name: "Export" });
   const item = page.getByRole("menuitem", { name: label });
-  const [file] = await Promise.all([
-    page.waitForEvent("download"),
-    (async () => {
-      await expect(async () => {
-        if (!(await item.isVisible())) await trigger.click();
-        await expect(item).toBeVisible({ timeout: 1000 });
-      }).toPass({ timeout: 10_000 });
-      await item.click();
-    })(),
-  ]);
-  return file;
+
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const pending = page.waitForEvent("download", { timeout: 10_000 }).catch(() => null);
+    await expect(async () => {
+      if (!(await item.isVisible())) await trigger.click();
+      await expect(item).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 10_000 });
+    await item.click();
+    const file = await pending;
+    if (file) return file;
+  }
+  throw new Error(`The ${format} export never started a download`);
 }
 
 test.describe("research planner: creating plans", () => {

@@ -5,6 +5,7 @@ import { Menu } from "lucide-react";
 import { Logo } from "@/components/layout/logo";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
 import { UserMenu } from "@/components/layout/user-menu";
+import { ThemeMenu } from "@/components/theme/theme-menu";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -19,7 +20,7 @@ export function MobileHeader({ name, email }: { name: string; email: string }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-border bg-background px-4 sm:px-6 lg:hidden">
+    <header className="sticky top-0 z-40 flex h-[59px] items-center justify-between border-t-[3px] border-b border-t-primary border-b-border bg-background px-4 sm:px-6 lg:hidden">
       <div className="flex items-center gap-2">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
@@ -43,7 +44,10 @@ export function MobileHeader({ name, email }: { name: string; email: string }) {
         </Sheet>
         <Logo href="/dashboard" />
       </div>
-      <UserMenu name={name} email={email} />
+      <div className="flex items-center gap-1">
+        <ThemeMenu />
+        <UserMenu name={name} email={email} />
+      </div>
     </header>
   );
 }

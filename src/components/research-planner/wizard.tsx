@@ -467,7 +467,7 @@ export function PlannerWizard(props: PlannerWizardProps) {
         </Link>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 space-y-1.5">
-            <h1 className="text-2xl font-bold [overflow-wrap:anywhere] sm:text-3xl">{title.trim() || "Untitled research plan"}</h1>
+            <h1 className="text-[28px] leading-tight font-bold [overflow-wrap:anywhere]">{title.trim() || "Untitled research plan"}</h1>
             <p className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <Badge variant={status === "completed" ? "default" : "secondary"}>{status === "completed" ? "Completed" : "Draft"}</Badge>
               {project && <span>{project.name}</span>}
@@ -487,10 +487,10 @@ export function PlannerWizard(props: PlannerWizardProps) {
       <div className={step === REVIEW_STEP ? "" : "grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem]"}>
         <Card>
           <CardHeader>
-            <p className="text-xs font-semibold tracking-wide text-primary uppercase">
+            <p className="text-xs font-semibold tabular-nums text-primary-text">
               Step {step} of {TOTAL_STEPS}
             </p>
-            <h2 ref={headingRef} tabIndex={-1} className="text-xl leading-snug font-semibold outline-none">
+            <h2 ref={headingRef} tabIndex={-1} className="text-base leading-snug font-bold outline-none">
               {stepInfo.title}
             </h2>
             <CardDescription>{stepInfo.description}</CardDescription>
@@ -531,7 +531,7 @@ function GuidanceBody({ guidance }: { guidance: { intro: string; tips: string[] 
   return (
     <div className="space-y-3 rounded-lg bg-secondary p-4 text-sm lg:bg-transparent lg:p-0">
       <p className="flex items-center gap-2 font-semibold">
-        <Lightbulb aria-hidden className="size-4 text-primary" /> Helpful guidance
+        <Lightbulb aria-hidden className="size-4 text-primary-text" /> Helpful guidance
       </p>
       <p className="text-muted-foreground">{guidance.intro}</p>
       <ul className="list-disc space-y-1.5 pl-5 text-muted-foreground">

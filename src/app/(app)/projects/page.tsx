@@ -62,7 +62,7 @@ export default async function ProjectsPage({ searchParams }: PageProps<"/project
           title="No projects yet"
           description="Create a project to start organising your research."
           action={
-            <Button asChild>
+            <Button asChild variant="outline">
               <Link href="/projects/new">
                 <Plus /> Create project
               </Link>

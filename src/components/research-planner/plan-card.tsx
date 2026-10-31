@@ -9,7 +9,7 @@ import { formatRelativeTime } from "@/lib/format";
 export function PlanCard({ plan }: { plan: PlanListItem }) {
   const completed = plan.status === "completed";
   return (
-    <article className="relative flex flex-col rounded-xl border border-border bg-card transition-colors focus-within:ring-2 focus-within:ring-ring hover:border-input">
+    <article className="relative flex flex-col rounded-card border border-border bg-card shadow-card transition-[border-color,box-shadow] hover:border-primary hover:shadow-raised focus-within:border-primary focus-within:shadow-raised focus-within:ring-[3px] focus-within:ring-ring/50">
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex items-center justify-between gap-2 pr-10">
           <Badge variant={completed ? "default" : "secondary"}>{completed ? "Completed" : "Draft"}</Badge>
@@ -20,7 +20,7 @@ export function PlanCard({ plan }: { plan: PlanListItem }) {
           )}
         </div>
         <h3 className="text-base font-semibold [overflow-wrap:anywhere]">
-          <Link href={`/tools/research-planner/${plan.id}`} className="outline-none after:absolute after:inset-0 after:rounded-xl hover:text-primary">
+          <Link href={`/tools/research-planner/${plan.id}`} className="outline-none after:absolute after:inset-0 after:rounded-card hover:text-primary-text">
             {plan.title}
           </Link>
         </h3>

@@ -71,10 +71,10 @@ export function MaterialsStep({
           const meta = info[key];
           const content = contents[key];
           return (
-            <li key={key} className="rounded-xl border border-border bg-card">
+            <li key={key} className="rounded-card border border-border bg-card shadow-card">
               {meta?.exists && content ? (
                 <details className="group">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl p-4 outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-card p-4 outline-none focus-visible:ring-2 focus-visible:ring-ring">
                     <span className="flex flex-wrap items-center gap-2">
                       <span className="font-semibold">{SECTION_TITLES[key]}</span>
                       {meta.source === "template" && <Badge variant="default">Starter draft</Badge>}
