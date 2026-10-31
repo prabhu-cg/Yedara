@@ -81,11 +81,11 @@ test.describe("responsive navigation", () => {
     }
   });
 
-  test("every research tool has a coming-soon entry point", async ({ page }) => {
+  test("every research tool has an entry point, and unfinished ones say so", async ({ page }) => {
     await page.goto("/tools");
-    await expect(page.getByText("Coming soon")).toHaveCount(6);
+    // The Research Planner is live; the other five are coming soon.
+    await expect(page.getByText("Coming soon")).toHaveCount(5);
     for (const [slug, name] of [
-      ["research-planner", "Research Planner"],
       ["persona-builder", "Persona Builder"],
       ["competitor-analyzer", "Competitor Analyzer"],
       ["journey-mapper", "Journey Mapper"],
@@ -96,6 +96,9 @@ test.describe("responsive navigation", () => {
       await expect(page.getByRole("heading", { level: 1, name })).toBeVisible();
       await expect(page.getByText(`${name} is on its way`)).toBeVisible();
     }
+    await page.goto("/tools/research-planner");
+    await expect(page.getByRole("heading", { level: 1, name: "Research Planner" })).toBeVisible();
+    await expect(page.getByText("is on its way")).toHaveCount(0);
     await page.goto("/tools/not-a-tool");
     await expect(page.getByText("Page not found")).toBeVisible();
   });

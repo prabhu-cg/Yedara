@@ -109,9 +109,70 @@ export type Database = {
         Update: { preferences?: Json };
         Relationships: [];
       };
+      research_plans: {
+        Row: {
+          id: string;
+          owner_id: string;
+          project_id: string;
+          title: string;
+          status: "draft" | "completed";
+          current_step: number;
+          completed_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          owner_id?: string;
+          project_id: string;
+          title: string;
+          status?: "draft" | "completed";
+          current_step?: number;
+          completed_at?: string | null;
+        };
+        Update: {
+          project_id?: string;
+          title?: string;
+          status?: "draft" | "completed";
+          current_step?: number;
+          completed_at?: string | null;
+        };
+        Relationships: [];
+      };
+      research_plan_sections: {
+        Row: {
+          id: string;
+          plan_id: string;
+          key: string;
+          position: number;
+          content: Json;
+          source: "manual" | "template" | "ai";
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          plan_id: string;
+          key: string;
+          position?: number;
+          content?: Json;
+          source?: "manual" | "template" | "ai";
+        };
+        Update: {
+          position?: number;
+          content?: Json;
+          source?: "manual" | "template" | "ai";
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      duplicate_research_plan: { Args: { p_plan_id: string }; Returns: string };
+      reorder_research_plan_sections: {
+        Args: { p_plan_id: string; p_keys: string[] };
+        Returns: undefined;
+      };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };

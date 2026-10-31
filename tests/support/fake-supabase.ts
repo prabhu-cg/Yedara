@@ -102,9 +102,8 @@ async function handleAuth(req: IncomingMessage, res: ServerResponse, url: URL) {
     if (String(body.password).length < 6) return send(res, 422, { code: "weak_password", msg: "Weak password" });
     const meta = (body.data ?? {}) as Record<string, unknown>;
     const id = randomUUID();
-    await db.query(
-      `insert into auth.users (id, email, raw_user_meta_data) values ($1, $2, $3::jsonb)`,
-      [id, email, JSON.stringify(meta)],
+    await serialised(() =>
+      db.query(`insert into auth.users (id, email, raw_user_meta_data) values ($1, $2, $3::jsonb)`, [id, email, JSON.stringify(meta)]),
     );
     const user = { id, email, password: String(body.password), meta };
     users.set(email, user);
@@ -161,6 +160,10 @@ function buildWhere(url: URL, params: unknown[]) {
     if (op === "eq") return `"${column}" = ${bind(value)}`;
     if (op === "neq") return `"${column}" <> ${bind(value)}`;
     if (op === "ilike") return `"${column}" ilike ${bind(value)}`;
+    if (op === "in") {
+      const list = value.replace(/^\(|\)$/g, "").split(",").map((v) => v.replace(/^"|"$/g, ""));
+      return `"${column}" = any(${bind(list)}::text[])`;
+    }
     throw new Error(`unsupported operator ${op}`);
   };
   for (const [key, value] of url.searchParams) {
@@ -178,9 +181,49 @@ function buildWhere(url: URL, params: unknown[]) {
   return clauses.length ? ` where ${clauses.join(" and ")}` : "";
 }
 
+/**
+ * One PGlite connection backs every request, and `asUser` switches role/claims on it.
+ * Serialise access so concurrent requests (parallel tests) can never see each other's identity.
+ */
+let lock: Promise<unknown> = Promise.resolve();
+function serialised<T>(fn: () => Promise<T>): Promise<T> {
+  const run = lock.then(fn, fn);
+  lock = run.catch(() => undefined);
+  return run;
+}
+const asUserLocked: typeof asUser = (database, userId, fn) => serialised(() => asUser(database, userId, fn));
+
+const jsonParam = (value: unknown) => (value !== null && typeof value === "object" ? JSON.stringify(value) : value);
+
+async function handleRpc(req: IncomingMessage, res: ServerResponse, url: URL) {
+  const fn = url.pathname.replace("/rest/v1/rpc/", "");
+  const user = userFromBearer(req);
+  const args = await readJson(req);
+  const calls: Record<string, { sql: string; params: unknown[]; scalar?: boolean }> = {
+    duplicate_research_plan: { sql: "select public.duplicate_research_plan($1::uuid) as r", params: [args.p_plan_id], scalar: true },
+    reorder_research_plan_sections: {
+      sql: "select public.reorder_research_plan_sections($1::uuid, $2::text[])",
+      params: [args.p_plan_id, args.p_keys],
+    },
+  };
+  const call = calls[fn];
+  if (!call) return send(res, 404, { message: "function not found" });
+  try {
+    const result = await asUserLocked(db, user?.id ?? null, () => db.query<{ r: unknown }>(call.sql, call.params));
+    return call.scalar ? send(res, 200, result.rows[0].r) : send(res, 204);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "error";
+    return send(res, /not found/i.test(message) ? 400 : /permission denied/i.test(message) ? 403 : 500, {
+      code: /not found/i.test(message) ? "P0002" : "42501",
+      message,
+    });
+  }
+}
+
 async function handleRest(req: IncomingMessage, res: ServerResponse, url: URL) {
+  if (url.pathname.startsWith("/rest/v1/rpc/")) return handleRpc(req, res, url);
   const table = url.pathname.replace("/rest/v1/", "");
-  if (!["profiles", "projects", "project_members", "project_settings"].includes(table)) {
+  if (!["profiles", "projects", "project_members", "project_settings", "research_plans", "research_plan_sections"].includes(table)) {
     return send(res, 404, { message: "not found" });
   }
   const user = userFromBearer(req);
@@ -189,14 +232,17 @@ async function handleRest(req: IncomingMessage, res: ServerResponse, url: URL) {
   const params: unknown[] = [];
 
   try {
-    const result = await asUser(db, user?.id ?? null, async () => {
+    const result = await asUserLocked(db, user?.id ?? null, async () => {
       let sql: string;
       if (req.method === "GET" || req.method === "HEAD") {
         sql = `select * from public.${table}${buildWhere(url, params)}`;
         const order = url.searchParams.get("order");
         if (order) {
-          const [col, dir] = order.split(".");
-          if (COLUMN.test(col)) sql += ` order by "${col}" ${dir === "asc" ? "asc" : "desc"}`;
+          const parts = order.split(",").flatMap((o) => {
+            const [col, dir] = o.split(".");
+            return COLUMN.test(col) ? [`"${col}" ${dir === "asc" ? "asc" : "desc"}`] : [];
+          });
+          if (parts.length) sql += ` order by ${parts.join(", ")}`;
         }
         const limit = Number(url.searchParams.get("limit"));
         if (limit > 0) sql += ` limit ${Math.floor(limit)}`;
@@ -204,11 +250,11 @@ async function handleRest(req: IncomingMessage, res: ServerResponse, url: URL) {
         const body = await readJson(req);
         const rows = Array.isArray(body) ? body : [body];
         const columns = Object.keys(rows[0]).filter((c) => COLUMN.test(c));
-        const values = rows.map((row) => `(${columns.map((c) => { params.push(row[c]); return `$${params.length}`; }).join(", ")})`);
+        const values = rows.map((row) => `(${columns.map((c) => { params.push(jsonParam(row[c])); return `$${params.length}`; }).join(", ")})`);
         sql = `insert into public.${table} (${columns.map((c) => `"${c}"`).join(", ")}) values ${values.join(", ")} returning *`;
       } else if (req.method === "PATCH") {
         const body = await readJson(req);
-        const sets = Object.keys(body).filter((c) => COLUMN.test(c)).map((c) => { params.push(body[c]); return `"${c}" = $${params.length}`; });
+        const sets = Object.keys(body).filter((c) => COLUMN.test(c)).map((c) => { params.push(jsonParam(body[c])); return `"${c}" = $${params.length}`; });
         sql = `update public.${table} set ${sets.join(", ")}${buildWhere(url, params)} returning *`;
       } else if (req.method === "DELETE") {
         sql = `delete from public.${table}${buildWhere(url, params)} returning *`;

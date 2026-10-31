@@ -31,10 +31,9 @@ async function siteOrigin() {
 
 async function limited(policy: keyof typeof RATE_LIMITS, scope: string) {
   const base = RATE_LIMITS[policy];
-  const effective =
-    policy === "authAttempt" && serverEnv.AUTH_RATE_LIMIT_MAX
-      ? { ...base, limit: serverEnv.AUTH_RATE_LIMIT_MAX }
-      : base;
+  const override =
+    policy === "authAttempt" ? serverEnv.AUTH_RATE_LIMIT_MAX : policy === "passwordReset" ? serverEnv.PASSWORD_RESET_RATE_LIMIT_MAX : undefined;
+  const effective = override ? { ...base, limit: override } : base;
   const result = await checkRateLimit(`${scope}:${await clientIp()}`, effective);
   return result.allowed ? null : fail("Too many attempts. Please wait a moment and try again.");
 }

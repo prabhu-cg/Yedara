@@ -30,7 +30,7 @@ export const researchTools: ResearchTool[] = [
     name: "Research Planner",
     summary: "Plan studies with clear goals, questions, methods and timelines.",
     icon: ClipboardList,
-    status: "coming-soon",
+    status: "available",
     plannedCapabilities: [
       "Define research goals and questions",
       "Choose methods that fit your constraints",

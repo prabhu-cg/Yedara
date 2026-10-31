@@ -69,9 +69,14 @@ describe("SidebarNav", () => {
     expect(billing).toHaveAttribute("aria-disabled", "true");
   });
 
-  it("flags unfinished research tools as coming soon", () => {
+  it("flags only the unfinished research tools as coming soon", () => {
     render(<SidebarNav />);
-    expect(screen.getAllByText("Soon")).toHaveLength(6);
+    expect(screen.getAllByText("Soon")).toHaveLength(5);
+    // The Research Planner is live, so it carries no badge.
+    const planner = screen.getByRole("link", { name: "Research Planner" });
+    expect(planner).toHaveAttribute("href", "/tools/research-planner");
+    expect(within(planner).queryByText("Soon")).toBeNull();
+    expect(within(screen.getByRole("link", { name: /Persona Builder/ })).getByText("Soon")).toBeInTheDocument();
   });
 });
 

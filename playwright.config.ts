@@ -20,10 +20,14 @@ const supabaseEnv: Record<string, string> = useReal
       NEXT_PUBLIC_SITE_URL: `http://127.0.0.1:${APP_PORT}`,
       // The suite signs up many users from one IP; raise the auth limiter.
       AUTH_RATE_LIMIT_MAX: "1000",
+      PASSWORD_RESET_RATE_LIMIT_MAX: "1000",
     };
 
 export default defineConfig({
   testDir: "./tests/e2e",
+  // One Next server and one single-connection fake database serve every worker, so allow for queueing.
+  timeout: 60_000,
+  expect: { timeout: 10_000 },
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,

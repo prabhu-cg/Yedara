@@ -8,8 +8,11 @@ import { z } from "zod";
 const serverEnvSchema = z.object({
   /** Max sign-in/sign-up attempts per IP per minute. Defaults to 10. */
   AUTH_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(100_000).optional(),
+  /** Max password-reset emails requested per IP per 15 minutes. Defaults to 5. */
+  PASSWORD_RESET_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(100_000).optional(),
 });
 
 export const serverEnv = serverEnvSchema.parse({
   AUTH_RATE_LIMIT_MAX: process.env.AUTH_RATE_LIMIT_MAX || undefined,
+  PASSWORD_RESET_RATE_LIMIT_MAX: process.env.PASSWORD_RESET_RATE_LIMIT_MAX || undefined,
 });

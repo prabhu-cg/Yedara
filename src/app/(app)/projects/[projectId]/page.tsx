@@ -11,6 +11,9 @@ import { researchTools } from "@/config/tools";
 import { formatDate, formatRelativeTime } from "@/lib/format";
 import { projectTypeLabel } from "@/lib/projects/constants";
 import { getProject } from "@/lib/projects/queries";
+import { listPlans } from "@/lib/research-planner/queries";
+import { PlanCard } from "@/components/research-planner/plan-card";
+import { Plus } from "lucide-react";
 
 export async function generateMetadata({ params }: PageProps<"/projects/[projectId]">): Promise<Metadata> {
   const { projectId } = await params;
@@ -22,6 +25,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[proj
   const { projectId } = await params;
   const project = await getProject(projectId);
   const archived = project.status === "archived";
+  const plans = await listPlans({ projectId: project.id });
 
   const details = [
     { icon: Shapes, label: "Project type", value: projectTypeLabel(project.project_type) },
@@ -106,6 +110,32 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[proj
           </CardContent>
         </Card>
       </div>
+
+      <section aria-labelledby="project-plans" className="mt-10">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h2 id="project-plans" className="text-lg font-semibold">
+            Research plans
+          </h2>
+          {!archived && (
+            <Button asChild size="sm" variant="outline">
+              <Link href={`/tools/research-planner/new?project=${project.id}`}>
+                <Plus /> New plan
+              </Link>
+            </Button>
+          )}
+        </div>
+        {plans.length ? (
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {plans.map((plan) => (
+              <PlanCard key={plan.id} plan={plan} />
+            ))}
+          </div>
+        ) : (
+          <p className="rounded-xl border border-dashed border-input bg-secondary px-5 py-6 text-sm text-muted-foreground">
+            No research plans for this project yet.
+          </p>
+        )}
+      </section>
 
       <section aria-labelledby="project-tools" className="mt-10">
         <h2 id="project-tools" className="mb-1 text-lg font-semibold">
