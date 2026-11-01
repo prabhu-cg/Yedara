@@ -269,6 +269,25 @@ export type Database = {
         };
         Relationships: [];
       };
+      contact_messages: {
+        Row: {
+          id: string;
+          name: string;
+          email: string;
+          topic: "general" | "support" | "pro" | "feedback" | "partnership";
+          message: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          email: string;
+          topic: "general" | "support" | "pro" | "feedback" | "partnership";
+          message: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
       competitor_analyses: {
         Row: {
           id: string;

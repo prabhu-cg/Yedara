@@ -17,7 +17,7 @@ async function chooseTheme(page: Page, name: "Light" | "Dark" | "System") {
 test.describe("theme", () => {
   test("follows the system preference until the user chooses", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto("/");
+    await page.goto("/login");
     await expect(page.locator("html")).toHaveClass(/dark/);
     await expect(page.locator("body")).toHaveCSS("background-color", DARK_BG);
 
@@ -28,7 +28,7 @@ test.describe("theme", () => {
 
   test("lets the user pick Light, Dark or System and remembers the choice", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
-    await page.goto("/");
+    await page.goto("/login");
     await expect(page.locator("body")).toHaveCSS("background-color", LIGHT_BG);
 
     await chooseTheme(page, "Dark");
@@ -56,7 +56,7 @@ test.describe("theme", () => {
 
   test("the choice is marked in the menu", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
-    await page.goto("/");
+    await page.goto("/login");
     await chooseTheme(page, "Dark");
     await page.getByRole("button", { name: "Change theme" }).filter({ visible: true }).first().click();
     await expect(page.getByRole("menuitemradio", { name: "Dark" })).toHaveAttribute("aria-checked", "true");
@@ -77,41 +77,13 @@ test.describe("theme", () => {
 });
 
 test.describe("shared visual language", () => {
-  test("the landing page uses Doxa's 1152px frame and a plain white hero", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "light" });
-    await page.goto("/");
-    for (const selector of ["header > div", "main section >> nth=0 >> div", "footer > div"]) {
-      await expect(page.locator(selector).first()).toHaveCSS("max-width", "1152px");
-    }
-    // No tinted masthead: the hero sits on the page background.
-    await expect(page.locator("main section").first()).toHaveCSS("background-color", "rgb(255, 255, 255)");
-    // Sticky header with a hairline, like Doxa's marketing site.
-    await expect(page.locator("header").first()).toHaveCSS("position", "sticky");
-    await expect(page.locator("header").first()).toHaveCSS("border-bottom-width", "1px");
-  });
-
-  test("landing tool cards: Doxa's 8.4px radius, resting elevation, and a brand border with raised shadow on hover", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "light" });
-    await page.goto("/");
-    const card = page.getByRole("link", { name: /Research Planner/ }).first();
-    await expect(card).toHaveCSS("border-top-left-radius", "8.4px");
-    await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
-    const resting = await card.evaluate((el) => getComputedStyle(el).boxShadow);
-    expect(resting).not.toBe("none");
-    if ((page.viewportSize()?.width ?? 0) >= 1024) {
-      await card.hover();
-      await expect(card).toHaveCSS("border-top-color", "rgb(199, 69, 4)");
-      await expect.poll(() => card.evaluate((el) => getComputedStyle(el).boxShadow)).not.toBe(resting);
-    }
-  });
-
   test("primary buttons use the accent, and darken to the deep terracotta on hover where hover exists", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
-    await page.goto("/");
-    const cta = page.getByRole("link", { name: /Create your workspace/ });
+    await page.goto("/login");
+    const cta = page.getByRole("button", { name: "Sign in" });
     await expect(cta).toHaveCSS("background-color", "rgb(199, 69, 4)");
     await expect(cta).toHaveCSS("border-top-left-radius", "6px");
-    await expect(cta).toHaveCSS("height", "40px");
+    await expect(cta).toHaveCSS("height", "36px");
     // Tailwind only applies hover styles on devices that can hover, so check it on desktop.
     if ((page.viewportSize()?.width ?? 0) >= 1024) {
       await cta.hover();
@@ -186,7 +158,6 @@ test.describe("brand identity", () => {
     await page.goto("/");
     const header = page.locator("header").first();
     await expect(header.getByRole("link", { name: "Yedara home" }).locator("svg path")).toHaveCount(2);
-    await expect(header.getByText("Know. Explore. Understand.")).toBeVisible();
     await expect(page.locator("footer").getByText(/Know\. Explore\. Understand\./)).toBeVisible();
 
     await page.goto("/login");
@@ -206,12 +177,12 @@ test.describe("brand identity", () => {
 
   test("the mark's dark wing lightens in dark mode so it stays visible", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
-    await page.goto("/");
-    const logoPaths = page.locator("header").first().getByRole("link", { name: "Yedara home" }).locator("svg path");
+    await page.goto("/login");
+    const logoPaths = page.locator("main a[href='/'] svg path");
     const wing = logoPaths.first();
     await expect(wing).toHaveCSS("fill", "rgb(68, 68, 68)");
     await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto("/");
+    await page.goto("/login");
     await expect(logoPaths.first()).toHaveCSS("fill", "rgb(231, 224, 214)");
     await expect(logoPaths.nth(1)).toHaveCSS("fill", "rgb(199, 69, 4)");
   });

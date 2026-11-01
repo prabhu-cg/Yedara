@@ -1,0 +1,372 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-01T12:00:00Z",
+  "title": "Design System: Yedara Marketing Site",
+  "extensions": {
+    "colorMeta": {
+      "page": {
+        "role": "neutral",
+        "displayName": "Page White",
+        "canonical": "#ffffff",
+        "dark": "#12100e",
+        "tonalRamp": [
+          "#2b2a28",
+          "#4a4843",
+          "#6b685f",
+          "#8f8b80",
+          "#b4afa2",
+          "#d3cfc3",
+          "#ebe8df",
+          "#ffffff"
+        ]
+      },
+      "sand": {
+        "role": "neutral",
+        "displayName": "Sand",
+        "canonical": "#f4f2ea",
+        "dark": "#1f1b18",
+        "tonalRamp": [
+          "#2b2a26",
+          "#4b483f",
+          "#6e6a5d",
+          "#928d7e",
+          "#b7b19f",
+          "#d6d1c1",
+          "#e8e4d8",
+          "#f4f2ea"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e8ddc8",
+        "dark": "#302a25",
+        "tonalRamp": [
+          "#2e2a22",
+          "#4f4637",
+          "#706250",
+          "#93816a",
+          "#b6a68a",
+          "#cdbe9f",
+          "#e8ddc8",
+          "#f4eee0"
+        ]
+      },
+      "hairline-strong": {
+        "role": "neutral",
+        "displayName": "Strong Hairline",
+        "canonical": "#d6c7ab",
+        "dark": "#453d35",
+        "tonalRamp": [
+          "#2e2820",
+          "#4d4333",
+          "#6e5f48",
+          "#90805f",
+          "#b3a17c",
+          "#d6c7ab",
+          "#e6dbc4",
+          "#f2ebdc"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Charcoal Ink",
+        "canonical": "#333333",
+        "dark": "#faf7f2",
+        "tonalRamp": [
+          "#111111",
+          "#222222",
+          "#333333",
+          "#555555",
+          "#777777",
+          "#999999",
+          "#bbbbbb",
+          "#e0e0e0"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Quiet Ink",
+        "canonical": "#5f5a54",
+        "dark": "#a8a097",
+        "tonalRamp": [
+          "#1e1c1a",
+          "#3a3733",
+          "#5f5a54",
+          "#7d7871",
+          "#9c978f",
+          "#bbb7b0",
+          "#d9d6d1",
+          "#efedea"
+        ]
+      },
+      "thread-orange": {
+        "role": "primary",
+        "displayName": "Thread Orange",
+        "canonical": "#c74504",
+        "dark": "#c74504",
+        "tonalRamp": [
+          "#3d1400",
+          "#6b2400",
+          "#963403",
+          "#c74504",
+          "#e0702f",
+          "#f09a68",
+          "#f8c4a2",
+          "#fdefe7"
+        ]
+      },
+      "thread-orange-text": {
+        "role": "primary",
+        "displayName": "Deep Terracotta",
+        "canonical": "#a93a03",
+        "dark": "#ff8a5c",
+        "tonalRamp": [
+          "#2e1000",
+          "#561e00",
+          "#7e2c02",
+          "#a93a03",
+          "#cc5a1f",
+          "#e58a5c",
+          "#f3bb9b",
+          "#fdefe7"
+        ]
+      },
+      "ember": {
+        "role": "secondary",
+        "displayName": "Ember (token only, no page band)",
+        "canonical": "#f28c38",
+        "dark": "#f28c38",
+        "tonalRamp": [
+          "#4a2300",
+          "#7a3b05",
+          "#a8530d",
+          "#d46e1f",
+          "#f28c38",
+          "#f7ac6a",
+          "#fbcb9f",
+          "#fde8d3"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Home h1 (centred) and final CTA headline."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Every section h2."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "h3, plan names, differentiator terms."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Paragraphs, 56 to 62ch."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Intro paragraph under headings, Quiet Ink."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Observation chips, tags, sample-data pill."
+      }
+    },
+    "shadows": [
+      {
+        "name": "app-window",
+        "value": "0 2px 4px -1px #1010140f, 0 18px 40px -14px #10101433",
+        "purpose": "Authored product previews only."
+      },
+      {
+        "name": "raised",
+        "value": "0 2px 4px -1px #1010140f, 0 8px 24px -6px #1010141f",
+        "purpose": "The hot observation card inside a preview."
+      },
+      {
+        "name": "laptop-base",
+        "value": "0 26px 40px -20px #10101459",
+        "purpose": "Hinge and base of the hero laptop mockup."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Hero rise (0.8s; laptop delayed 0.12s); only under prefers-reduced-motion: no-preference."
+      },
+      {
+        "name": "faq-rotate",
+        "value": "transform 200ms",
+        "purpose": "FAQ plus rotates 45deg when open."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ],
+    "darkTheme": {
+      "selector": ".dark .marketing",
+      "values": {
+        "background": "#12100e",
+        "foreground": "#faf7f2",
+        "card": "#1c1916",
+        "secondary": "#1f1b18",
+        "muted": "#1a1714",
+        "muted-foreground": "#a8a097",
+        "border": "#302a25",
+        "border-strong": "#453d35",
+        "primary": "#c74504",
+        "primary-hover": "#dd5211",
+        "primary-text": "#ff8a5c",
+        "primary-soft": "#26130a",
+        "ring": "#ff8a5c",
+        "charcoal": "#3a342e"
+      }
+    },
+    "layout": {
+      "frame": "1152px",
+      "gutters": "20px / 24px (sm) / 32px (lg)"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single filled action per view: Start free.",
+      "html": "<button class=\"ds-btn-primary\">Start free</button>",
+      "css": ".ds-btn-primary { background: #c74504; color: #fff; height: 48px; padding: 0 28px; border: 1px solid transparent; border-radius: 8px; font-family: Manrope, system-ui, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background-color 0.15s; } .ds-btn-primary:hover { background: #a93a03; } .ds-btn-primary:focus-visible { outline: 2px solid #c74504; outline-offset: 3px; } .ds-btn-primary:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Hero Button",
+      "kind": "button",
+      "refersTo": "button-hero",
+      "description": "Hero CTA: fully round primary with arrow.",
+      "html": "<button class=\"ds-btn-hero\">Start free <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></button>",
+      "css": ".ds-btn-hero { display: inline-flex; align-items: center; gap: 8px; background: #c74504; color: #fff; height: 48px; padding: 0 32px; border: 0; border-radius: 9999px; font-family: Manrope, system-ui, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background-color 0.15s; } .ds-btn-hero:hover { background: #a93a03; } .ds-btn-hero:focus-visible { outline: 2px solid #c74504; outline-offset: 3px; } .ds-btn-hero:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action beside the primary: See the features.",
+      "html": "<button class=\"ds-btn-outline\">See the features</button>",
+      "css": ".ds-btn-outline { background: #fff; color: #333; height: 48px; padding: 0 28px; border: 1px solid #e8ddc8; border-radius: 8px; font-family: Manrope, system-ui, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background-color 0.15s; } .ds-btn-outline:hover { background: #f4f2ea; } .ds-btn-outline:focus-visible { outline: 2px solid #c74504; outline-offset: 3px; }"
+    },
+    {
+      "name": "Button on Primary Band",
+      "kind": "button",
+      "refersTo": "button-on-primary",
+      "description": "Final CTA band: white button with orange text on the flat orange band.",
+      "html": "<div class=\"ds-band\"><button class=\"ds-btn-onp\">Start free</button></div>",
+      "css": ".ds-band { background: #c74504; padding: 24px; } .ds-btn-onp { background: #fff; color: #c74504; height: 44px; padding: 0 24px; border: 0; border-radius: 8px; font-family: Manrope, system-ui, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; } .ds-btn-onp:hover { background: rgba(255,255,255,0.9); } .ds-btn-onp:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }"
+    },
+    {
+      "name": "Observation Chip",
+      "kind": "chip",
+      "refersTo": "obs-chip",
+      "description": "The recurring motif: an observation ID; hot variant marks the traced one.",
+      "html": "<span class=\"ds-obs\">O3</span> <span class=\"ds-obs ds-obs-hot\">O7</span>",
+      "css": ".ds-obs { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: 6px; background: #fdefe7; color: #a93a03; font-family: Manrope, system-ui, sans-serif; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; } .ds-obs-hot { background: #c74504; color: #fff; }"
+    },
+    {
+      "name": "App Window Preview",
+      "kind": "card",
+      "refersTo": "app-window",
+      "description": "Authored product preview with sample-data pill and an evidence card.",
+      "html": "<div class=\"ds-win\"><div class=\"ds-win-bar\"><span class=\"ds-win-title\">Pantry onboarding study</span><span class=\"ds-win-pill\">Sample data</span></div><div class=\"ds-win-body\"><div class=\"ds-win-card\"><p>&ldquo;I didn't know where to start, so I closed it.&rdquo;</p><span class=\"ds-win-who\">P3 &middot; interview</span></div></div></div>",
+      "css": ".ds-win { background: #fff; border: 1px solid #d6c7ab; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 4px -1px #1010140f, 0 18px 40px -14px #10101433; font-family: Manrope, system-ui, sans-serif; max-width: 380px; } .ds-win-bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #f4f2ea; border-bottom: 1px solid #e8ddc8; } .ds-win-title { font-size: 12px; font-weight: 600; color: #333; } .ds-win-pill { margin-left: auto; background: #fff; border-radius: 9999px; padding: 2px 8px; font-size: 12px; font-weight: 600; color: #5f5a54; box-shadow: inset 0 0 0 1px #e8ddc8; } .ds-win-body { padding: 14px; } .ds-win-card { border: 1px solid #c74504; border-radius: 8px; padding: 10px; font-size: 12px; color: #333; box-shadow: 0 2px 4px -1px #1010140f, 0 8px 24px -6px #1010141f; } .ds-win-card p { margin: 0 0 8px; } .ds-win-who { color: #5f5a54; font-weight: 600; }"
+    },
+    {
+      "name": "Navigation Link",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Header link; current page carries a 2px orange underline.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\">Features</a><a href=\"#\" class=\"ds-current\">Pricing</a><a href=\"#\">About</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 4px; font-family: Manrope, system-ui, sans-serif; } .ds-nav a { padding: 8px 12px; border-radius: 6px; font-size: 15px; font-weight: 600; color: rgba(51,51,51,0.8); text-decoration: none; transition: color 0.15s; } .ds-nav a:hover { color: #333; } .ds-nav a:focus-visible { outline: 2px solid #c74504; outline-offset: 3px; } .ds-nav .ds-current { color: #333; text-decoration: underline; text-decoration-color: #c74504; text-decoration-thickness: 2px; text-underline-offset: 8px; }"
+    },
+    {
+      "name": "FAQ Row",
+      "kind": "custom",
+      "refersTo": "faq",
+      "description": "Native details row between strong hairlines with a plus that turns into a cross.",
+      "html": "<details class=\"ds-faq\"><summary>Is there a free plan?<span class=\"ds-faq-icon\" aria-hidden=\"true\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg></span></summary><p>Yes. Everything available today is on the Free plan.</p></details>",
+      "css": ".ds-faq { border-top: 1px solid #d6c7ab; border-bottom: 1px solid #d6c7ab; font-family: Manrope, system-ui, sans-serif; } .ds-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px 0; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: #333; cursor: pointer; list-style: none; } .ds-faq summary::-webkit-details-marker { display: none; } .ds-faq summary:focus-visible { outline: 2px solid #c74504; outline-offset: 3px; border-radius: 6px; } .ds-faq-icon { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #d6c7ab; border-radius: 9999px; transition: transform 0.2s; } .ds-faq[open] .ds-faq-icon { transform: rotate(45deg); } .ds-faq p { margin: 0; padding: 0 48px 24px 0; max-width: 62ch; color: #5f5a54; line-height: 1.6; }"
+    },
+    {
+      "name": "PointerHighlight Word",
+      "kind": "custom",
+      "refersTo": "pointer-highlight",
+      "description": "One h1 word selected like a design-tool layer: outline, corner handles, pointer.",
+      "html": "<h1 class=\"ds-h\">Stronger <span class=\"ds-ph\"><span class=\"ds-ph-box\"><i class=\"ds-c ds-tl\"></i><i class=\"ds-c ds-tr\"></i><i class=\"ds-c ds-bl\"></i><i class=\"ds-c ds-br\"></i></span>decisions.</span></h1>",
+      "css": ".ds-h { font-family: Manrope, system-ui, sans-serif; font-weight: 800; font-size: 40px; letter-spacing: -0.04em; color: #333; margin: 24px; } .ds-ph { position: relative; display: inline-block; margin: 0 4px; padding: 0 10px; color: #a93a03; } .ds-ph-box { position: absolute; inset: 0; border: 2px solid rgba(199,69,4,0.55); border-radius: 6px; pointer-events: none; } .ds-c { position: absolute; width: 8px; height: 8px; border: 1px solid #c74504; border-radius: 2px; background: #fff; } .ds-tl { top: -4px; left: -4px; } .ds-tr { top: -4px; right: -4px; } .ds-bl { bottom: -4px; left: -4px; } .ds-br { bottom: -4px; right: -4px; }"
+    },
+    {
+      "name": "Hero Badge",
+      "kind": "chip",
+      "refersTo": "hero-badge",
+      "description": "Pill announcement above the h1 (build carries it; not canonized as a pattern).",
+      "html": "<a class=\"ds-badge\"><span class=\"ds-badge-in\"><i></i>Five tools live</span><span class=\"ds-badge-t\">See what's inside</span></a>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 14px 4px 4px; border: 1px solid #e8ddc8; border-radius: 9999px; background: #f4f2ea; font-family: Manrope, system-ui, sans-serif; font-size: 14px; font-weight: 600; color: #333; } .ds-badge:hover { border-color: #d6c7ab; } .ds-badge-in { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 9999px; background: #fff; box-shadow: inset 0 0 0 1px #e8ddc8; } .ds-badge-in i { width: 8px; height: 8px; border-radius: 9999px; background: #c74504; } .ds-badge-t { margin-left: 8px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Evidence Thread",
+    "overview": "Research tools show boxes; Yedara shows the thread. The public site is a calm, conventional SaaS skeleton, following the Tynovo reference's layout and colour use: a white page, sand bands, warm hairlines, and orange spent on actions. The one signature is the evidence thread: a single orange line linking one tool to the next in the overview timeline, and the observation ID (O7) that travels through the authored previews.\n\nThe mood is plain-spoken, warm and specific. Surfaces are flat, separated by hairline borders and tonal bands (white and sand). Display type is heavy Manrope set tight. Proof is real or labelled: the hero shows a real screenshot of the app in a laptop frame; module previews are small authored app windows with invented, labelled sample data. No testimonials, stats or invented prices. The site extends the incumbent Yedara brand (burnt orange, Manrope, warm neutrals) and does not reinvent it.",
+    "keyCharacteristics": [
+      "Two-ground rhythm: white page (default) and sand bands (#f4f2ea, hairline top and bottom), closed by one flat orange band.",
+      "One accent, orange, spent on actions, the thread and the final band.",
+      "Manrope 800 for all display and titles; weight and scale carry hierarchy.",
+      "Light and dark themes: a theme switch in the header, and the hero swaps light and dark app screenshots.",
+      "Centred hero: pill badge, headline with a PointerHighlight word, rounded CTA plus text link, laptop-framed screenshot on a dot texture.",
+      "Observation chips (O3, O7, O12) recur inside previews."
+    ],
+    "rules": [
+      {
+        "name": "The One Voice Rule",
+        "body": "Orange is the only chromatic accent. Fills are Thread Orange, text is Deep Terracotta (light) or #ff8a5c (dark). Ember is not placed on a page band.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Thread Rule",
+        "body": "The 2px orange line (primary at 40%) joining 28px node rings in the overview timeline is the only connective graphic. Do not add other connector motifs.",
+        "section": "colors"
+      },
+      {
+        "name": "The Flat-Page Rule",
+        "body": "Page furniture (sections, FAQ, lists, nav, footer) is never shadowed. Only product pictures and the highlighted card inside them lift.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use the semantic utilities (bg-muted, text-muted-foreground, border-border-strong, text-primary-text) so the .marketing scope, light and dark, controls the palette.",
+      "Do use Deep Terracotta (#a93a03) for any orange text on white, sand or tint.",
+      "Do show the product honestly: a real screenshot in the laptop mockup for the hero, authored app windows with invented, labelled sample data and a visible caption elsewhere.",
+      "Do keep h1/h2/h3 in Manrope 800 with the tight tracking listed above and balanced wrapping.",
+      "Do alternate white and sand grounds, and close with the flat orange band.",
+      "Do supply a light and a dark asset for any screenshot, and test both themes.",
+      "Do show unfinished things honestly (\"In development\", \"Pro is still being shaped\"); no prices, stats, testimonials or integrations that do not exist."
+    ],
+    "donts": [
+      "Don't place Ember (#f28c38) on a page band; the final band is Thread Orange.",
+      "Don't add a second connective motif, gradient text, glows or decorative shadows to page furniture; the hero ground is dots only.",
+      "Don't use Thread Orange (#c74504) as text on a light ground.",
+      "Don't hard-code light-only hex values in marketing components; they break the dark theme.",
+      "Don't import app-only values (#1c1917 text, 14px base) into marketing pages, or marketing values into the app."
+    ]
+  }
+}

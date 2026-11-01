@@ -24,7 +24,7 @@ test.describe("protected routes", () => {
 
   test("public pages render without a session", async ({ page }) => {
     for (const [path, heading] of [
-      ["/", /Research that goes from questions/],
+      ["/", /Better insights/],
       ["/login", /Welcome back/],
       ["/signup", /Create your account/],
       ["/forgot-password", /Reset your password/],

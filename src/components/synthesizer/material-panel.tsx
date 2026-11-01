@@ -1,13 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { FileUp, ClipboardPaste, Pencil, Plus, ShieldCheck, Trash2 } from "lucide-react";
+import { FileUp, ClipboardPaste, Pencil, Plus, Search, ShieldCheck, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { FormAlert, SelectField, SubmitButton, TextField, TextareaField } from "@/components/forms/fields";
 import { ImportFlow } from "@/components/synthesizer/import-flow";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { NativeSelect } from "@/components/ui/native-select";
+import { SideDrawer } from "@/components/ui/side-drawer";
+import { cn } from "@/lib/utils";
 import { addObservationAction, deleteObservationAction, deleteSourceAction, updateObservationAction } from "@/lib/synthesizer/actions";
 import { LIMITS, OBSERVATION_KINDS, OBSERVATION_KIND_LABELS, PRIVACY_NOTICE, SOURCE_TYPE_LABELS, type ObservationKind } from "@/lib/synthesizer/constants";
 import { observationRefs } from "@/lib/synthesizer/document";
@@ -50,9 +53,16 @@ const BLANK: FormValues = { content: "", kind: "observation", participantRef: ""
 
 export function MaterialPanel({ synthesisId, sources, observations, insights, editingId, onEdit, onChange }: { synthesisId: string; sources: SourceRow[]; observations: ObservationRow[]; insights: InsightRow[]; editingId: string | null; onEdit: (id: string | null) => void; onChange: (c: MaterialChange) => void }) {
   const [adding, setAdding] = React.useState<null | "statement" | "paste" | "file">(null);
+  // The drawer keeps showing its last form while it slides out.
+  const [drawerMode, setDrawerMode] = React.useState<"statement" | "paste" | "file">("statement");
+  const [lastEditingId, setLastEditingId] = React.useState<string | null>(null);
+  const openAdding = (mode: "statement" | "paste" | "file") => { setError(null); setErrors({}); setDrawerMode(mode); setAdding(mode); };
+  const startEdit = (id: string) => { setError(null); setErrors({}); setLastEditingId(id); onEdit(id); };
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
+  const [view, setView] = React.useState<"observations" | "sources">("observations");
+  const [kindFilter, setKindFilter] = React.useState("");
   const [query, setQuery] = React.useState("");
   const [participant, setParticipant] = React.useState("");
   const [tag, setTag] = React.useState("");
@@ -65,7 +75,9 @@ export function MaterialPanel({ synthesisId, sources, observations, insights, ed
   const participants = [...new Set(observations.map((o) => o.participant_ref?.trim()).filter((p): p is string => Boolean(p)))].sort();
   const tags = [...new Set(observations.flatMap((o) => o.tags))].sort((a, b) => a.localeCompare(b));
   const q = query.trim().toLowerCase();
-  const shown = observations.filter((o) => (!q || o.content.toLowerCase().includes(q)) && (!participant || o.participant_ref === participant) && (!tag || o.tags.includes(tag)));
+  const shown = observations.filter((o) => (!q || o.content.toLowerCase().includes(q)) && (!participant || o.participant_ref === participant) && (!tag || o.tags.includes(tag)) && (!kindFilter || o.kind === kindFilter));
+  const filtered = Boolean(q || participant || tag || kindFilter);
+  const clearFilters = () => { setQuery(""); setParticipant(""); setTag(""); setKindFilter(""); };
   const usedBy = (id: string) => insights.filter((i) => i.evidence_ids.includes(id)).length;
 
   const submit = async (v: FormValues, id?: string) => {
@@ -131,88 +143,174 @@ export function MaterialPanel({ synthesisId, sources, observations, insights, ed
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 id="add-material" className="text-base font-bold">Add research material</h2>
           <div className="flex flex-wrap gap-2">
-            <Button type="button" size="sm" variant={adding === "statement" ? "default" : "outline"} onClick={() => { setError(null); setErrors({}); setAdding(adding === "statement" ? null : "statement"); }}><Plus /> Add a statement</Button>
-            <Button type="button" size="sm" variant={adding === "paste" ? "default" : "outline"} onClick={() => setAdding(adding === "paste" ? null : "paste")}><ClipboardPaste /> Paste notes</Button>
-            <Button type="button" size="sm" variant={adding === "file" ? "default" : "outline"} onClick={() => setAdding(adding === "file" ? null : "file")}><FileUp /> Upload a file</Button>
+            <Button type="button" size="sm" variant="outline" onClick={() => openAdding("statement")}><Plus /> Add a statement</Button>
+            <Button type="button" size="sm" variant="outline" onClick={() => openAdding("paste")}><ClipboardPaste /> Paste notes</Button>
+            <Button type="button" size="sm" variant="outline" onClick={() => openAdding("file")}><FileUp /> Upload a file</Button>
           </div>
         </div>
-        {adding === "statement" && <ObservationForm initial={BLANK} sources={sources} submitLabel="Add observation" pending={pending} error={error} errors={errors} onSubmit={(v) => submit(v)} onCancel={() => setAdding(null)} />}
-        {(adding === "paste" || adding === "file") && (
-          <ImportFlow key={adding} synthesisId={synthesisId} mode={adding} onCancel={() => setAdding(null)} onImported={(r) => { onChange({ type: "added", observations: r.observations, cards: r.cards, source: r.source }); setAdding(null); }} />
-        )}
+        <SideDrawer
+          open={adding !== null}
+          onOpenChange={(open) => !open && setAdding(null)}
+          title={drawerMode === "statement" ? "Add a statement" : drawerMode === "paste" ? "Paste notes" : "Upload a file"}
+          description={drawerMode === "statement" ? "One observation, quote or note. It becomes a card you can group on the board." : undefined}
+        >
+          {drawerMode === "statement" ? (
+            <ObservationForm initial={BLANK} sources={sources} submitLabel="Add observation" pending={pending} error={error} errors={errors} onSubmit={(v) => submit(v)} onCancel={() => setAdding(null)} />
+          ) : (
+            <ImportFlow key={drawerMode} synthesisId={synthesisId} mode={drawerMode} onCancel={() => setAdding(null)} onImported={(r) => { onChange({ type: "added", observations: r.observations, cards: r.cards, source: r.source }); setAdding(null); }} />
+          )}
+        </SideDrawer>
       </section>
 
-      {sources.length > 0 && (
-        <section aria-labelledby="sources-heading" className="space-y-3">
-          <h2 id="sources-heading" className="text-base font-bold">Sources <span className="ml-1 text-sm font-medium text-muted-foreground tabular-nums">{sources.length}</span></h2>
-          <ul className="divide-y divide-border rounded-card border border-border bg-card">
-            {sources.map((s) => {
-              const count = observations.filter((o) => o.source_id === s.id).length;
-              return (
-                <li key={s.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 text-sm">
-                  <span className="min-w-0 flex-1 font-semibold [overflow-wrap:anywhere]">{s.name}</span>
-                  <span className="text-muted-foreground">{SOURCE_TYPE_LABELS[s.source_type]}{s.participant_ref ? ` · ${s.participant_ref}` : ""}{s.file_name ? ` · ${s.file_name}` : ""}</span>
-                  <span className="text-muted-foreground tabular-nums">{count} {count === 1 ? "observation" : "observations"}</span>
-                  <Button type="button" variant="ghost" size="icon" aria-label={`Delete source ${s.name}`} onClick={() => { setAlsoDelete(false); setRemovingSource(s); }}><Trash2 /></Button>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      )}
+      <div className="space-y-4">
+        <div role="tablist" aria-label="Research material views" className="inline-flex items-center gap-0.5 rounded-lg bg-muted p-0.5" onKeyDown={(e) => {
+          if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+          e.preventDefault();
+          setView((v) => (v === "observations" ? "sources" : "observations"));
+          requestAnimationFrame(() => document.querySelector<HTMLElement>('[data-material-view][aria-selected="true"]')?.focus());
+        }}>
+          {([["observations", "Observations", observations.length], ["sources", "Sources", sources.length]] as const).map(([id, label, count]) => (
+            <button key={id} type="button" role="tab" id={`material-tab-${id}`} aria-selected={view === id} aria-controls={`material-panel-${id}`} tabIndex={view === id ? 0 : -1} data-material-view onClick={() => setView(id)}
+              className={cn("inline-flex h-8 items-center gap-2 rounded-md px-3 text-sm font-medium outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50", view === id ? "bg-background font-semibold text-foreground shadow-card" : "text-muted-foreground hover:text-foreground")}>
+              {label}
+              <span className="text-xs text-muted-foreground tabular-nums">{count}</span>
+            </button>
+          ))}
+        </div>
 
-      <section aria-labelledby="observations-heading" className="space-y-3">
-        <h2 id="observations-heading" className="text-base font-bold">Observations <span className="ml-1 text-sm font-medium text-muted-foreground tabular-nums">{observations.length}</span></h2>
-        {observations.length === 0 ? (
-          <p className="rounded-card border border-dashed border-input bg-secondary px-5 py-8 text-center text-sm text-muted-foreground">
-            No observations yet. Add a statement, paste interview notes, or upload a text file. Each one becomes a card you can group on the Affinity board.
-          </p>
-        ) : (
-          <>
-            <div className="grid gap-3 sm:grid-cols-3">
-              <TextField label="Search" placeholder="Search observations" value={query} onChange={(e) => setQuery(e.target.value)} />
-              <SelectField label="Participant" value={participant} onChange={(e) => setParticipant(e.target.value)}>
-                <option value="">All participants</option>
-                {participants.map((p) => <option key={p} value={p}>{p}</option>)}
-              </SelectField>
-              <SelectField label="Tag" value={tag} onChange={(e) => setTag(e.target.value)}>
-                <option value="">All tags</option>
-                {tags.map((t) => <option key={t} value={t}>{t}</option>)}
-              </SelectField>
-            </div>
-            {shown.length === 0 && <p className="text-sm text-muted-foreground">No observations match those filters.</p>}
-            <ul className="space-y-3">
-              {shown.map((o) => (
-                <li key={o.id} data-observation={o.id}>
-                  {editing?.id === o.id ? (
-                    <ObservationForm initial={{ content: o.content, kind: o.kind, participantRef: o.participant_ref ?? "", sourceId: o.source_id ?? "", tags: o.tags.join(", ") }} sources={sources} submitLabel="Save observation" pending={pending} error={error} errors={errors} onSubmit={(v) => submit(v, o.id)} onCancel={() => onEdit(null)} />
-                  ) : (
-                    <article className="rounded-card border border-border bg-card p-4 shadow-card">
-                      <div className="flex items-start gap-3">
-                        <div className="min-w-0 flex-1 space-y-2">
-                          <p className="whitespace-pre-wrap [overflow-wrap:anywhere]">{o.content}</p>
-                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
-                            <span className="font-semibold tabular-nums text-foreground">{refs.get(o.id)}</span>
-                            <Badge variant="secondary">{OBSERVATION_KIND_LABELS[o.kind]}</Badge>
-                            {o.participant_ref && <span>Participant {o.participant_ref}</span>}
-                            {o.source_id && sourceName.get(o.source_id) && <span>{sourceName.get(o.source_id)}</span>}
-                            {o.tags.map((t) => <Badge key={t} variant="outline">{t}</Badge>)}
-                            {usedBy(o.id) > 0 && <span>Evidence for {usedBy(o.id)} {usedBy(o.id) === 1 ? "insight" : "insights"}</span>}
-                          </div>
-                        </div>
-                        <div className="flex shrink-0 gap-1">
-                          <Button type="button" variant="ghost" size="icon" aria-label={`Edit observation ${refs.get(o.id)}`} onClick={() => { setError(null); setErrors({}); onEdit(o.id); }}><Pencil /></Button>
-                          <Button type="button" variant="ghost" size="icon" aria-label={`Delete observation ${refs.get(o.id)}`} onClick={() => setRemoving(o)}><Trash2 /></Button>
-                        </div>
-                      </div>
-                    </article>
+        {view === "sources" && (
+          <div role="tabpanel" id="material-panel-sources" aria-labelledby="material-tab-sources">
+            {sources.length === 0 ? (
+              <p className="rounded-card border border-dashed border-input bg-secondary px-5 py-8 text-center text-sm text-muted-foreground">
+                No sources yet. Pasting notes or uploading a file creates a source, so every observation can say where it came from.
+              </p>
+            ) : (
+              <div className="overflow-x-auto rounded-card border border-border bg-card">
+                <table className="w-full min-w-[640px] text-left text-sm">
+                  <caption className="sr-only">Sources of research material</caption>
+                  <thead className="border-b border-border bg-secondary/60 text-xs text-muted-foreground">
+                    <tr>
+                      <th scope="col" className="px-4 py-2.5 font-semibold">Source</th>
+                      <th scope="col" className="px-4 py-2.5 font-semibold">Type</th>
+                      <th scope="col" className="px-4 py-2.5 font-semibold">Participant</th>
+                      <th scope="col" className="px-4 py-2.5 font-semibold">File</th>
+                      <th scope="col" className="px-4 py-2.5 text-right font-semibold">Observations</th>
+                      <th scope="col" className="sticky right-0 w-14 bg-secondary px-2 py-2.5"><span className="sr-only">Actions</span></th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {sources.map((s) => {
+                      const count = observations.filter((o) => o.source_id === s.id).length;
+                      return (
+                        <tr key={s.id} className="hover:bg-secondary/40">
+                          <th scope="row" className="px-4 py-3 font-semibold [overflow-wrap:anywhere]">{s.name}</th>
+                          <td className="px-4 py-3 text-muted-foreground">{SOURCE_TYPE_LABELS[s.source_type]}</td>
+                          <td className="px-4 py-3 text-muted-foreground">{s.participant_ref || "—"}</td>
+                          <td className="px-4 py-3 text-muted-foreground [overflow-wrap:anywhere]">{s.file_name || "—"}</td>
+                          <td className="px-4 py-3 text-right tabular-nums">{count}</td>
+                          <td className="sticky right-0 bg-card px-2 py-1.5 text-right shadow-[-10px_0_8px_-8px_#10101414]">
+                            <Button type="button" variant="ghost" size="icon" aria-label={`Delete source ${s.name}`} onClick={() => { setAlsoDelete(false); setRemovingSource(s); }}><Trash2 /></Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {view === "observations" && (
+          <div role="tabpanel" id="material-panel-observations" aria-labelledby="material-tab-observations" className="space-y-3">
+            {observations.length === 0 ? (
+              <p className="rounded-card border border-dashed border-input bg-secondary px-5 py-8 text-center text-sm text-muted-foreground">
+                No observations yet. Add a statement, paste interview notes, or upload a text file. Each one becomes a card you can group on the Affinity board.
+              </p>
+            ) : (
+              <>
+                <div role="search" className="flex flex-wrap items-center gap-2">
+                  <div className="relative min-w-52 flex-1 sm:max-w-sm">
+                    <Search aria-hidden className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                    <input type="search" aria-label="Search observations" placeholder="Search observations" value={query} onChange={(e) => setQuery(e.target.value)}
+                      className="h-9 w-full rounded-lg border border-input bg-background pr-3 pl-9 text-base text-foreground placeholder:text-foreground/60 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none md:text-sm" />
+                  </div>
+                  <NativeSelect aria-label="Participant" value={participant} onChange={(e) => setParticipant(e.target.value)} className={cn("w-auto min-w-40", participant && "border-primary")}>
+                    <option value="">All participants</option>
+                    {participants.map((p) => <option key={p} value={p}>{p}</option>)}
+                  </NativeSelect>
+                  <NativeSelect aria-label="Tag" value={tag} onChange={(e) => setTag(e.target.value)} className={cn("w-auto min-w-32", tag && "border-primary")}>
+                    <option value="">All tags</option>
+                    {tags.map((t) => <option key={t} value={t}>{t}</option>)}
+                  </NativeSelect>
+                  <NativeSelect aria-label="Card type" value={kindFilter} onChange={(e) => setKindFilter(e.target.value)} className={cn("w-auto min-w-36", kindFilter && "border-primary")}>
+                    <option value="">All types</option>
+                    {OBSERVATION_KINDS.map((k) => <option key={k} value={k}>{OBSERVATION_KIND_LABELS[k]}</option>)}
+                  </NativeSelect>
+                  {filtered && (
+                    <Button type="button" variant="ghost" size="sm" onClick={clearFilters}><X /> Clear filters</Button>
                   )}
-                </li>
-              ))}
-            </ul>
-          </>
+                  <p role="status" className="ml-auto text-sm text-muted-foreground tabular-nums">{filtered ? `${shown.length} of ${observations.length} shown` : `${observations.length} ${observations.length === 1 ? "observation" : "observations"}`}</p>
+                </div>
+
+                {shown.length === 0 ? (
+                  <p className="rounded-card border border-dashed border-input bg-secondary px-5 py-8 text-center text-sm text-muted-foreground">
+                    No observations match those filters. <button type="button" onClick={clearFilters} className="font-semibold text-primary-text underline underline-offset-4">Clear filters</button>
+                  </p>
+                ) : (
+                  <div className="overflow-x-auto rounded-card border border-border bg-card">
+                    <table className="w-full min-w-[820px] text-left text-sm">
+                      <caption className="sr-only">Observations</caption>
+                      <thead className="border-b border-border bg-secondary/60 text-xs text-muted-foreground">
+                        <tr>
+                          <th scope="col" className="w-16 px-4 py-2.5 font-semibold">Ref</th>
+                          <th scope="col" className="px-4 py-2.5 font-semibold">Observation</th>
+                          <th scope="col" className="px-4 py-2.5 font-semibold">Type</th>
+                          <th scope="col" className="px-4 py-2.5 font-semibold">Participant</th>
+                          <th scope="col" className="px-4 py-2.5 font-semibold">Source</th>
+                          <th scope="col" className="px-4 py-2.5 font-semibold">Tags</th>
+                          <th scope="col" className="px-4 py-2.5 font-semibold">Evidence for</th>
+                          <th scope="col" className="sticky right-0 w-24 bg-secondary px-2 py-2.5"><span className="sr-only">Actions</span></th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {shown.map((o) => (
+                          <tr key={o.id} data-observation={o.id} className="align-top hover:bg-secondary/40">
+                            <th scope="row" className="px-4 py-3 font-semibold tabular-nums">{refs.get(o.id)}</th>
+                            <td className="max-w-md px-4 py-3"><p className="whitespace-pre-wrap [overflow-wrap:anywhere]">{o.content}</p></td>
+                            <td className="px-4 py-3"><Badge variant="secondary">{OBSERVATION_KIND_LABELS[o.kind]}</Badge></td>
+                            <td className="px-4 py-3 text-muted-foreground">{o.participant_ref || "—"}</td>
+                            <td className="px-4 py-3 text-muted-foreground [overflow-wrap:anywhere]">{(o.source_id && sourceName.get(o.source_id)) || "—"}</td>
+                            <td className="px-4 py-3">
+                              {o.tags.length ? <div className="flex flex-wrap gap-1">{o.tags.map((t) => <Badge key={t} variant="outline">{t}</Badge>)}</div> : <span className="text-muted-foreground">—</span>}
+                            </td>
+                            <td className="px-4 py-3 text-muted-foreground tabular-nums">{usedBy(o.id) > 0 ? `${usedBy(o.id)} ${usedBy(o.id) === 1 ? "insight" : "insights"}` : "—"}</td>
+                            <td className="sticky right-0 bg-card px-2 py-1.5 text-right whitespace-nowrap shadow-[-10px_0_8px_-8px_#10101414]">
+                              <Button type="button" variant="ghost" size="icon" aria-label={`Edit observation ${refs.get(o.id)}`} onClick={() => startEdit(o.id)}><Pencil /></Button>
+                              <Button type="button" variant="ghost" size="icon" aria-label={`Delete observation ${refs.get(o.id)}`} onClick={() => setRemoving(o)}><Trash2 /></Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         )}
-      </section>
+      </div>
+
+      {(() => {
+        const target = observations.find((o) => o.id === (editingId ?? lastEditingId));
+        return (
+          <SideDrawer open={Boolean(editing)} onOpenChange={(open) => !open && onEdit(null)} title={`Edit observation ${target ? refs.get(target.id) ?? "" : ""}`.trim()}>
+            {target && (
+              <ObservationForm key={target.id} initial={{ content: target.content, kind: target.kind, participantRef: target.participant_ref ?? "", sourceId: target.source_id ?? "", tags: target.tags.join(", ") }} sources={sources} submitLabel="Save observation" pending={pending} error={error} errors={errors} onSubmit={(v) => submit(v, target.id)} onCancel={() => onEdit(null)} />
+            )}
+          </SideDrawer>
+        );
+      })()}
 
       <AlertDialog open={Boolean(removing)} onOpenChange={(open) => !open && setRemoving(null)}>
         <AlertDialogContent>

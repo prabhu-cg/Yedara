@@ -197,6 +197,8 @@ export async function addObservation(page: Page, content: string, fields: { part
   if (fields.tags) await form.getByLabel("Tags").fill(fields.tags);
   await form.getByRole("button", { name: "Add observation" }).click();
   await expect(page.locator("[data-observation]").filter({ hasText: content })).toBeVisible();
+  // The form is in a drawer: wait for it to finish sliding out so the page behind it is usable again.
+  await expect(page.getByRole("dialog")).toHaveCount(0);
 }
 
 export const selectTab = (page: Page, name: string) => page.getByRole("tab", { name }).click();

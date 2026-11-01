@@ -20,7 +20,7 @@ test.describe("research synthesizer: research material", () => {
     await addObservation(page, "Could not find the pricing page", { participant: "P1", tags: "pricing, #navigation, Pricing" });
 
     const card = cards(page).first();
-    await expect(card).toContainText("Participant P1");
+    await expect(card).toContainText("P1");
     await expect(card.getByText("pricing", { exact: true })).toBeVisible();
     await expect(card.getByText("navigation", { exact: true })).toBeVisible();
     // Tags are de-duplicated ignoring case.
@@ -75,8 +75,10 @@ test.describe("research synthesizer: research material", () => {
     await review.getByRole("button", { name: "Add 3 observations" }).click();
 
     await expect(cards(page)).toHaveCount(3);
-    await expect(cards(page).first()).toContainText("Participant P3");
-    await expect(page.getByRole("heading", { name: /^Sources/ })).toBeVisible();
+    await expect(cards(page).first()).toContainText("P3");
+    await page.getByRole("tab", { name: /^Sources/ }).click();
+    await expect(page.locator("#material-panel-sources")).toContainText("Interview with P3");
+    await page.getByRole("tab", { name: /^Observations/ }).click();
     await expect(page.getByText("Interview with P3").first()).toBeVisible();
     await page.reload();
     await expect(cards(page)).toHaveCount(3);
@@ -117,6 +119,7 @@ test.describe("research synthesizer: research material", () => {
     await page.getByRole("group", { name: "Upload a file" }).getByRole("button", { name: "Review" }).click();
     await page.getByRole("form", { name: "Review before adding" }).getByRole("button", { name: "Add 2 observations" }).click();
     await expect(cards(page)).toHaveCount(2);
+    await page.getByRole("tab", { name: /^Sources/ }).click();
     await expect(page.getByText("p2-notes.txt")).toBeVisible();
     expect(uploads).toEqual([]);
   });
@@ -149,14 +152,18 @@ test.describe("research synthesizer: research material", () => {
       await review.getByRole("button", { name: "Add 2 observations" }).click();
       await expect(cards(page)).toHaveCount(name === "First" ? 2 : 4);
     }
+    await page.getByRole("tab", { name: /^Sources/ }).click();
     await page.getByRole("button", { name: "Delete source First interview" }).click();
     await page.getByRole("alertdialog").getByRole("button", { name: "Delete source" }).click();
     await expect(page.getByRole("button", { name: "Delete source First interview" })).toHaveCount(0);
+    await page.getByRole("tab", { name: /^Observations/ }).click();
     await expect(cards(page)).toHaveCount(4); // kept, just unlinked
 
+    await page.getByRole("tab", { name: /^Sources/ }).click();
     await page.getByRole("button", { name: "Delete source Second interview" }).click();
     await page.getByRole("alertdialog").getByLabel("Delete the observations too").check();
     await page.getByRole("alertdialog").getByRole("button", { name: "Delete source" }).click();
+    await page.getByRole("tab", { name: /^Observations/ }).click();
     await expect(cards(page)).toHaveCount(2);
     await page.reload();
     await expect(cards(page)).toHaveCount(2);
@@ -337,11 +344,44 @@ test.describe("research synthesizer: affinity board", () => {
     await expect(page.getByRole("group", { name: "Zoom" })).toContainText("115%");
   });
 
+  test("adding and editing open in right-hand drawers, and insights get the wider one", async ({ page }) => {
+    test.skip((page.viewportSize()?.width ?? 0) < 1024, "the drawers fill the screen on small viewports");
+    await withCards(page, ["Pricing was buried"]);
+    await selectTab(page, "Research material");
+
+    const dialog = page.getByRole("dialog");
+    const box = async () => (await dialog.boundingBox())!;
+    const viewport = page.viewportSize()!;
+
+    for (const name of ["Add a statement", "Paste notes", "Upload a file"]) {
+      await page.getByRole("button", { name }).click();
+      await expect(dialog).toBeVisible();
+      await expect.poll(async () => Math.round((await box()).x + (await box()).width)).toBe(viewport.width); // slid in, anchored to the right edge
+      expect((await box()).width).toBeLessThanOrEqual(640);
+      await dialog.getByRole("button", { name: "Close" }).click();
+      await expect(dialog).toHaveCount(0);
+    }
+
+    await page.getByRole("button", { name: "Edit observation O1" }).click();
+    await expect(dialog.getByRole("form", { name: "Save observation" })).toBeVisible();
+    await dialog.getByRole("button", { name: "Cancel" }).click();
+    await expect(dialog).toHaveCount(0);
+
+    await selectTab(page, "Insights");
+    await page.getByRole("button", { name: "New insight" }).click();
+    await expect(dialog.getByRole("form", { name: "Save insight" })).toBeVisible();
+    await expect.poll(async () => Math.round((await box()).x + (await box()).width)).toBe(viewport.width);
+    expect((await box()).width).toBeGreaterThan(640);
+    await dialog.getByRole("button", { name: "Cancel" }).click();
+    await expect(dialog).toHaveCount(0);
+  });
+
   test("editing a card from the board returns to the material tab", async ({ page }) => {
     await withCards(page, ["Pricing was buried"]);
     await page.getByRole("button", { name: "Edit card O1" }).click();
-    await expect(page.getByRole("tab", { name: "Research material", selected: true })).toBeVisible();
+    // The edit form opens in a drawer over the material tab, so the tab itself is behind the overlay.
     await expect(page.getByRole("form", { name: "Save observation" })).toBeVisible();
+    await expect(page.getByRole("tab", { name: "Research material", selected: true, includeHidden: true })).toHaveCount(1);
   });
 
   test("cards added or deleted elsewhere appear and disappear on the board", async ({ page }) => {
@@ -408,9 +448,12 @@ test.describe("research synthesizer: insights", () => {
     await expect(insight).toContainText("Low confidence");
     await expect(insight).toContainText("Pricing");
     await expect(insight).toContainText("Add pricing to the main navigation");
-    await insight.getByText("Evidence (1)").click();
     await expect(insight).toContainText("O1");
-    await expect(insight).toContainText("Could not find the pricing page");
+    // Evidence opens in a drawer with the full observation text.
+    await insight.getByRole("button", { name: "Evidence (1)" }).click();
+    await expect(page.getByRole("dialog")).toContainText("Could not find the pricing page");
+    await page.getByRole("dialog").getByRole("button", { name: "Close" }).click();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
 
     await page.reload();
     await selectTab(page, "Insights");

@@ -232,7 +232,7 @@ async function handleRpc(req: IncomingMessage, res: ServerResponse, url: URL) {
 async function handleRest(req: IncomingMessage, res: ServerResponse, url: URL) {
   if (url.pathname.startsWith("/rest/v1/rpc/")) return handleRpc(req, res, url);
   const table = url.pathname.replace("/rest/v1/", "");
-  if (!["profiles", "projects", "project_members", "project_settings", "research_plans", "research_plan_sections", "personas", "persona_sections", "persona_evidence", "competitor_analyses", "competitors", "competitor_criteria", "competitor_sources", "competitor_comparisons", "research_syntheses", "research_sources", "research_observations", "research_themes", "affinity_boards", "affinity_cards", "research_insights", "research_insight_evidence", "journeys", "journey_stages", "journey_items", "opportunity_candidates"].includes(table)) {
+  if (!["profiles", "projects", "project_members", "project_settings", "research_plans", "research_plan_sections", "personas", "persona_sections", "persona_evidence", "competitor_analyses", "competitors", "competitor_criteria", "competitor_sources", "competitor_comparisons", "research_syntheses", "research_sources", "research_observations", "research_themes", "affinity_boards", "affinity_cards", "research_insights", "research_insight_evidence", "journeys", "journey_stages", "journey_items", "opportunity_candidates", "contact_messages"].includes(table)) {
     return send(res, 404, { message: "not found" });
   }
   const user = userFromBearer(req);
@@ -266,7 +266,8 @@ async function handleRest(req: IncomingMessage, res: ServerResponse, url: URL) {
           const updates = columns.filter((c) => !conflict.includes(c)).map((c) => `"${c}" = excluded."${c}"`);
           sql += ` on conflict (${conflict.map((c) => `"${c}"`).join(", ")}) do ${updates.length ? `update set ${updates.join(", ")}` : "nothing"}`;
         }
-        sql += " returning *";
+        // contact_messages is insert-only for API clients, so an insert that did not ask for the row back must not ask to read the row back.
+        if (prefer.includes("return=representation")) sql += " returning *";
       } else if (req.method === "PATCH") {
         const body = await readJson(req);
         const sets = Object.keys(body).filter((c) => COLUMN.test(c)).map((c) => { params.push(jsonParam(body[c])); return `"${c}" = $${params.length}`; });

@@ -1,0 +1,176 @@
+/*
+ * Marketing tokens. Scoped to `.marketing` so the authenticated app keeps its own palette:
+ * these re-point the shared semantic tokens (bg-background, text-primary-text ...) to the public-site
+ * palette, so the shared Button / Input / Badge components work here unchanged. Light is the default;
+ * `.dark` (set on <html> by the same switch the app uses) swaps in the dark values below.
+ *
+ *  - ground #FAF9F6, ink and charcoal bands #333333
+ *  - orange #C74504 carries actions and the evidence thread; #F28C38 is only ever used on charcoal
+ *    (it fails AA as text on the paper ground)
+ */
+.marketing {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #333333;
+  --card: #ffffff;
+  --card-foreground: #333333;
+  --popover: #ffffff;
+  --popover-foreground: #333333;
+  --primary: #c74504;
+  --primary-foreground: #ffffff;
+  --primary-hover: #a93a03;
+  --primary-soft: #fdefe7;
+  --primary-text: #a93a03;
+  --secondary: #f4f2ea;
+  --secondary-foreground: #333333;
+  --muted: #f4f2ea;
+  --muted-foreground: #5f5a54;
+  --accent: #fdefe7;
+  --accent-foreground: #a93a03;
+  --border: #e8ddc8;
+  --border-strong: #d6c7ab;
+  --input: #d6c7ab;
+  --ring: #c74504;
+  --surface: #f4f2ea;
+  --surface-raised: #ffffff;
+  --brand-ink: #333333;
+  --charcoal: #333333;
+  --charcoal-foreground: #faf9f6;
+  --charcoal-muted: #d2ccc1;
+  --ember: #f28c38;
+  --destructive: #b3261e;
+  --destructive-soft: #fdeceb;
+  --success: #146c43;
+  --success-soft: #e6f4ec;
+  --warning: #8a5a00;
+  --warning-soft: #fdf3e0;
+  --info: #1f5f9e;
+  --info-soft: #ebf3fb;
+
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Dark: the app's own dark ground, with the marketing-only bands lifted so they still read as bands. */
+.dark .marketing {
+  color-scheme: dark;
+  --background: #12100e;
+  --foreground: #faf7f2;
+  --card: #1c1916;
+  --card-foreground: #faf7f2;
+  --popover: #1c1916;
+  --popover-foreground: #faf7f2;
+  --primary: #c74504;
+  --primary-foreground: #ffffff;
+  --primary-hover: #dd5211;
+  --primary-soft: #26130a;
+  --primary-text: #ff8a5c;
+  --secondary: #1f1b18;
+  --secondary-foreground: #faf7f2;
+  --muted: #1a1714;
+  --muted-foreground: #a8a097;
+  --accent: #26130a;
+  --accent-foreground: #ff8a5c;
+  --border: #302a25;
+  --border-strong: #453d35;
+  --input: #453d35;
+  --ring: #ff8a5c;
+  --surface: #181512;
+  --surface-raised: #1c1916;
+  --brand-ink: #e7e0d6;
+  --charcoal: #3a342e;
+  --charcoal-foreground: #faf7f2;
+  --charcoal-muted: #cfc9bf;
+  --ember: #f28c38;
+  --destructive: #ff9d95;
+  --destructive-soft: #2e1513;
+  --success: #7ee2ab;
+  --success-soft: #10281c;
+  --warning: #f5c26b;
+  --warning-soft: #2b2110;
+  --info: #8cc2f5;
+  --info-soft: #10202e;
+}
+
+.marketing h1,
+.marketing h2,
+.marketing h3 {
+  color: inherit;
+  text-wrap: balance;
+}
+
+.marketing ::selection {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.marketing :focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+.marketing .on-charcoal :focus-visible {
+  outline-color: var(--ember);
+}
+
+.marketing .on-primary :focus-visible {
+  outline-color: #ffffff;
+}
+
+/* The evidence thread: drawn once when the hero loads. Visible by default, animated only when motion is allowed. */
+@media (prefers-reduced-motion: no-preference) {
+  .thread-line {
+    height: 100%;
+    transform-origin: top;
+    animation: thread-grow 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+  }
+  .rise {
+    animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .rise-delay {
+    animation-delay: 0.12s;
+  }
+}
+
+@keyframes thread-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+/* Native <details> FAQ: rotate the plus into a cross. */
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq details[open] .faq-icon {
+  transform: rotate(45deg);
+}
+
+.thread-line {
+  height: 100%;
+}
+
+/* Hero ground: a fine dot texture that fades toward the edges and the bottom. */
+.hero-aura {
+  position: relative;
+  isolation: isolate;
+}
+.hero-aura::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(var(--border-strong) 1.4px, transparent 1.5px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 85% 80% at 50% 40%, #000 30%, transparent 85%);
+}

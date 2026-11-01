@@ -126,6 +126,10 @@
   --color-ring: var(--ring);
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
+  --color-charcoal: var(--charcoal);
+  --color-charcoal-foreground: var(--charcoal-foreground);
+  --color-charcoal-muted: var(--charcoal-muted);
+  --color-ember: var(--ember);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-border: var(--sidebar-border);

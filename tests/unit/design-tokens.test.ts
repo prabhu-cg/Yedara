@@ -90,10 +90,11 @@ describe("design tokens", () => {
 
   // layout.tsx is excluded: the `themeColor` meta (browser chrome) cannot use CSS variables.
   // auth-aside.tsx is excluded: the brand panel's dark-brown overlay is fixed (it sits on a photograph, so it must not follow the theme).
+  // opengraph-image.tsx is excluded: the social card is rendered to a PNG without CSS, so it carries its own copy of the palette.
   // export/ is excluded: PDF and DOCX files have no CSS and carry their own copy of the palette.
   it("never hard-codes hex colours in components", async () => {
     const { globSync } = await import("node:fs");
-    const files = globSync("src/**/*.tsx", { cwd: path.resolve(import.meta.dirname, "../..") }).filter((f) => !f.includes("export/") && f !== "src/app/layout.tsx" && !f.endsWith("auth-aside.tsx"));
+    const files = globSync("src/**/*.tsx", { cwd: path.resolve(import.meta.dirname, "../..") }).filter((f) => !f.includes("export/") && f !== "src/app/layout.tsx" && !f.endsWith("auth-aside.tsx") && !f.endsWith("opengraph-image.tsx"));
     const offenders = files.filter((f) => /#[0-9a-fA-F]{6}\b/.test(readFileSync(path.resolve(import.meta.dirname, "../..", f), "utf8")));
     expect(offenders).toEqual([]);
   });

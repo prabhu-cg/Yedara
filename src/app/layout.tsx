@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { themeInitScript } from "@/components/theme/theme-menu";
 import { Toaster } from "@/components/ui/sonner";
-import { siteConfig } from "@/config/site";
+import { siteConfig, siteUrl } from "@/config/site";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -12,6 +12,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: { default: `${siteConfig.name} — ${siteConfig.descriptor}`, template: `%s · ${siteConfig.name}` },
   description: siteConfig.description,
 };

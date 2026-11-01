@@ -29,6 +29,7 @@ export const RATE_LIMITS = {
   authAttempt: { limit: 10, windowMs: 60_000 },
   passwordReset: { limit: 5, windowMs: 15 * 60_000 },
   export: { limit: 30, windowMs: 60_000 },
+  contact: { limit: 5, windowMs: 15 * 60_000 },
   /** Reserved for future AI endpoints. */
   ai: { limit: 20, windowMs: 60_000 },
 } as const satisfies Record<string, RateLimitPolicy>;

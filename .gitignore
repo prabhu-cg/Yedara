@@ -48,3 +48,7 @@ next-env.d.ts
 /blob-report/
 /playwright/.cache/
 /.next-dev/
+
+# impeccable: review captures and hook cache are local artefacts
+/.impeccable/review/
+/.impeccable/hook.cache.json
