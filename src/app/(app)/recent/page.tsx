@@ -11,9 +11,9 @@ import { getRecentItems } from "@/lib/recent";
 
 export const metadata: Metadata = { title: "Recent" };
 
-const FILTERS = ["all", "project", "plan", "persona", "analysis"] as const;
+const FILTERS = ["all", "project", "plan", "persona", "analysis", "synthesis", "journey"] as const;
 type Filter = (typeof FILTERS)[number];
-const LABELS: Record<Filter, string> = { all: "All", project: "Projects", plan: "Plans", persona: "Personas", analysis: "Analyses" };
+const LABELS: Record<Filter, string> = { all: "All", project: "Projects", plan: "Plans", persona: "Personas", analysis: "Analyses", synthesis: "Syntheses", journey: "Journeys" };
 
 export default async function RecentPage({ searchParams }: PageProps<"/recent">) {
   const raw = (await searchParams).type;

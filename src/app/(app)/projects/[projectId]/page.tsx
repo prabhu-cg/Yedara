@@ -13,6 +13,8 @@ import { projectTypeLabel } from "@/lib/projects/constants";
 import { getProject } from "@/lib/projects/queries";
 import { parseWorkParams } from "@/lib/projects/work-items";
 import { listPlans } from "@/lib/research-planner/queries";
+import { listJourneys } from "@/lib/journeys/queries";
+import { listSyntheses } from "@/lib/synthesizer/queries";
 
 export async function generateMetadata({ params }: PageProps<"/projects/[projectId]">): Promise<Metadata> {
   const { projectId } = await params;
@@ -25,10 +27,12 @@ export default async function ProjectPage({ params, searchParams }: PageProps<"/
   const { view, type } = parseWorkParams(await searchParams);
   const project = await getProject(projectId);
   const archived = project.status === "archived";
-  const [plans, personas, analyses] = await Promise.all([
+  const [plans, personas, analyses, syntheses, journeys] = await Promise.all([
     listPlans({ projectId: project.id }),
     listPersonas({ projectId: project.id }),
     listAnalyses({ projectId: project.id }),
+    listSyntheses({ projectId: project.id }),
+    listJourneys({ projectId: project.id }),
   ]);
 
   // Only what is filled in: an empty field is not worth a row of its own.
@@ -119,7 +123,7 @@ export default async function ProjectPage({ params, searchParams }: PageProps<"/
         </p>
       )}
 
-      <ProjectWork projectId={project.id} archived={archived} plans={plans} personas={personas} analyses={analyses} view={view} type={type} />
+      <ProjectWork projectId={project.id} archived={archived} plans={plans} personas={personas} analyses={analyses} syntheses={syntheses} journeys={journeys} view={view} type={type} />
     </>
   );
 }

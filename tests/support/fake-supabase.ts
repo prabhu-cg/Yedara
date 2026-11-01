@@ -204,6 +204,12 @@ async function handleRpc(req: IncomingMessage, res: ServerResponse, url: URL) {
     duplicate_persona: { sql: "select public.duplicate_persona($1::uuid) as r", params: [args.p_persona_id], scalar: true },
     reorder_competitors: { sql: "select public.reorder_competitors($1::uuid, $2::uuid[])", params: [args.p_analysis_id, args.p_ids] },
     reorder_competitor_criteria: { sql: "select public.reorder_competitor_criteria($1::uuid, $2::uuid[])", params: [args.p_analysis_id, args.p_ids] },
+    save_affinity_layout: {
+      sql: "select public.save_affinity_layout($1::uuid, $2::jsonb, $3::jsonb)",
+      params: [args.p_synthesis_id, JSON.stringify(args.p_themes), JSON.stringify(args.p_cards)],
+    },
+    reorder_journey_stages: { sql: "select public.reorder_journey_stages($1::uuid, $2::uuid[])", params: [args.p_journey_id, args.p_ids] },
+    duplicate_journey: { sql: "select public.duplicate_journey($1::uuid, $2::text) as r", params: [args.p_journey_id, args.p_state ?? null], scalar: true },
     reorder_research_plan_sections: {
       sql: "select public.reorder_research_plan_sections($1::uuid, $2::text[])",
       params: [args.p_plan_id, args.p_keys],
@@ -226,7 +232,7 @@ async function handleRpc(req: IncomingMessage, res: ServerResponse, url: URL) {
 async function handleRest(req: IncomingMessage, res: ServerResponse, url: URL) {
   if (url.pathname.startsWith("/rest/v1/rpc/")) return handleRpc(req, res, url);
   const table = url.pathname.replace("/rest/v1/", "");
-  if (!["profiles", "projects", "project_members", "project_settings", "research_plans", "research_plan_sections", "personas", "persona_sections", "persona_evidence", "competitor_analyses", "competitors", "competitor_criteria", "competitor_sources", "competitor_comparisons"].includes(table)) {
+  if (!["profiles", "projects", "project_members", "project_settings", "research_plans", "research_plan_sections", "personas", "persona_sections", "persona_evidence", "competitor_analyses", "competitors", "competitor_criteria", "competitor_sources", "competitor_comparisons", "research_syntheses", "research_sources", "research_observations", "research_themes", "affinity_boards", "affinity_cards", "research_insights", "research_insight_evidence", "journeys", "journey_stages", "journey_items", "opportunity_candidates"].includes(table)) {
     return send(res, 404, { message: "not found" });
   }
   const user = userFromBearer(req);

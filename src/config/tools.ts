@@ -66,7 +66,7 @@ export const researchTools: ResearchTool[] = [
     name: "Journey Mapper",
     summary: "Map the customer journey from first touch to long-term use.",
     icon: Route,
-    status: "coming-soon",
+    status: "available",
     plannedCapabilities: [
       "Lay out stages, actions and touchpoints",
       "Track emotions and pain points",
@@ -78,7 +78,7 @@ export const researchTools: ResearchTool[] = [
     name: "Research Synthesizer",
     summary: "Gather notes and observations, then cluster them into insights.",
     icon: Layers,
-    status: "coming-soon",
+    status: "available",
     plannedCapabilities: [
       "Collect notes from interviews and tests",
       "Group observations into themes",

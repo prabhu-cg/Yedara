@@ -2,13 +2,13 @@
 
 Next.js 16 (App Router) · React 19 · TypeScript (strict) · Tailwind CSS 4 · shadcn/ui-style components (Radix) · Supabase (Postgres, Auth) · React Hook Form + Zod · Vitest · Playwright.
 
-Phase 1 delivers auth, project management and the app shell. Phase 2 adds the **Research Planner** (`/tools/research-planner`). Phase 3 adds the **Persona Builder** (`/tools/persona-builder`) and the **Competitor Analyzer** (`/tools/competitor-analyzer`). The other three research tools are still coming-soon pages.
+Phase 1 delivers auth, project management and the app shell. Phase 2 adds the **Research Planner** (`/tools/research-planner`). Phase 3 adds the **Persona Builder** (`/tools/persona-builder`) and the **Competitor Analyzer** (`/tools/competitor-analyzer`). Phase 4 adds the **Research Synthesizer** (`/tools/research-synthesizer`) and the **Journey Mapper** (`/tools/journey-mapper`). Only the Opportunity Analyzer is still a coming-soon page.
 
 ## Setup
 
 1. `npm install`
 2. Create a Supabase project. In **Authentication → URL Configuration** add `http://localhost:3000/auth/callback` (and your production URL) to the redirect allow-list.
-3. Apply the migrations in `supabase/migrations/` (in order, four files): `supabase link --project-ref <ref> && supabase db push`, or paste each file's *contents* into the SQL editor. Phase 2 adds `20260101000200_research_planner.sql`; Phase 3 adds `20260101000300_personas_competitors.sql` (new project-brief columns, personas, competitor analyses, RLS and RPCs).
+3. Apply the migrations in `supabase/migrations/` (in order, five files): `supabase link --project-ref <ref> && supabase db push`, or paste each file's *contents* into the SQL editor. Phase 2 adds `20260101000200_research_planner.sql`; Phase 3 adds `20260101000300_personas_competitors.sql` (new project-brief columns, personas, competitor analyses, RLS and RPCs); Phase 4 adds `20260101000400_synthesizer_journeys.sql` (research syntheses, journeys, RLS and RPCs).
 4. `cp .env.example .env.local` and fill in `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 5. `npm run dev` → http://localhost:3000
 
@@ -86,6 +86,39 @@ A project now carries a short brief (description, industry, product or service, 
 - Competitors and criteria are reordered with up/down buttons, not drag and drop.
 - Comparison supports four personas at a time. Two tabs editing the same item: last save wins.
 - PDF uses Helvetica, so characters outside Latin text print as `?`. A very wide matrix (many competitors) gets narrow columns in PDF and Word.
+
+## Research Synthesizer and Journey Mapper (Phase 4)
+
+### Research Synthesizer
+
+A synthesis is a workspace with four tabs: **Research material**, **Affinity board**, **Insights** and **Report**. It works fully by hand; nothing is generated and nothing is sent to an AI service.
+
+- **Material:** add a statement, paste notes, or upload a text file. Pasted notes and files are *reviewed first*: you see how they were split, remove statements you don't want, and confirm. Nothing is saved before that. Each observation is a card with a participant code, source, kind (observation, quote, survey response, note) and tags.
+- **Files:** `.txt`, `.md`, `.csv` and `.tsv`, up to 1 MB and 500 statements per import (statements up to 2,000 characters; up to 2,000 observations per synthesis). The file is read **in the browser and never uploaded or stored**; only the confirmed text is saved, plus the file's name and size for reference. CSV and TSV files let you pick the column to import. Limits are checked in the browser before reading and again on the server.
+- **Affinity board:** themes are columns beside "Not grouped yet". Drag a card by its handle (pointer or keyboard: Space, arrows, Space), or use each card's "Move to" menu. Rename themes, add notes, reorder and delete them (deleting ungroups cards, never deletes evidence). Zoom 60–150%, drag empty space to pan. **Undo and redo** (buttons, Ctrl/⌘+Z) cover board changes: moving cards, and creating, renaming, reordering and deleting themes. Adding or deleting an observation is not undoable. The board autosaves as one transaction (`save_affinity_layout`).
+- **Insights:** observation, evidence, theme, pattern, user need, problem or opportunity, insight statement, confidence and recommended action. Each is marked as a *direct observation*, *research interpretation*, *hypothesis* or *recommendation*. **At least one piece of evidence is required**, enforced on the server. Deleting evidence leaves the insight in place, flagged "No evidence linked".
+- **Report:** overview, methodology, participants, key themes, supporting observations, insights, user needs, pain points, recommendations and limitations. You write the overview, methodology, participant, pain point, recommendation and limitation text; everything else is built from your work, with observations numbered O1, O2... and cited from insights. Export to PDF, Word and Markdown (`GET /api/syntheses/[id]/export?format=md|pdf|docx`, authenticated, rate limited, 404 for syntheses you don't own).
+- **AI readiness:** `src/lib/ai/synthesis-ai.ts` is disabled. It states the rules for a future provider: suggestions only, evidence is never invented, and the research-notes sharing warning must be shown and agreed to before anything leaves Yedara.
+
+### Journey Mapper
+
+- **Journeys** belong to a project and optionally one of its personas, with a name, type (customer, user, service, employee), scenario and *current* or *future* state. Copy a journey, or copy it as a future-state journey, with its stages and items (`duplicate_journey`).
+- **Stages** can be added (with optional suggestions), renamed, reordered and deleted. Each has an emotion (1 very negative to 5 very positive, or *not rated*) and a note, and holds user actions, goals, thoughts, touchpoints, channels, pain points, opportunities and supporting evidence.
+- **Views:** a **visual map** (stages left to right, readable column widths, scrolls sideways inside its own frame, optional emotion curve that breaks at unrated stages rather than reading them as neutral), a **structured table**, and a **presentation** (overview then one slide per stage, arrow keys, optional full screen). The open view is kept in the address.
+- **Evidence:** pain points, opportunities and evidence items take a note and can link to an observation from a synthesis. You can only link observations you own (enforced by RLS).
+- **Opportunities:** "Add to opportunities" on a pain point or opportunity creates a record for the future Opportunity Analyzer, keeping the journey and stage names (copied, so they survive renames and deletions), the evidence note and the linked observation. Each item can be handed on once.
+
+### Data and security
+
+New tables: `research_syntheses`, `research_sources`, `research_observations`, `research_themes`, `affinity_boards`, `affinity_cards`, `research_insights`, `research_insight_evidence` (the join that makes evidence traceable), `journeys`, `journey_stages`, `journey_items` and `opportunity_candidates`. Every child row carries its parent id, composite foreign keys keep sources, cards, themes, evidence and stages inside their own synthesis or journey, and RLS is owner-only with parent ownership checked on every child row. Nothing is publicly readable. Research notes can contain personal information, so the app keeps them in your account only, tells you to use participant codes, and stores no uploaded files. Deleting a source (keeping or deleting its observations), an observation, an insight, a synthesis or a journey is always a confirmed, explicit action.
+
+### Known limitations (Phase 4)
+
+- Only plain-text files are supported (no PDF or Word import), and one file is imported at a time.
+- Board undo and redo reset when you leave the page. Two tabs editing the same synthesis or journey: last save wins.
+- The board is a column layout (themes side by side), not a free canvas, and touch dragging on phones is better done with each card's "Move to" menu.
+- Journey stages and items are reordered with buttons (stages) or by creation order (items), not drag and drop.
+- There is no journey export yet; use the presentation view or print the page.
 
 ## Design system
 

@@ -6,6 +6,10 @@ import { PersonaActionsMenu } from "@/components/personas/persona-actions-menu";
 import { PersonaCard } from "@/components/personas/persona-card";
 import { NewWorkMenu } from "@/components/projects/new-work-menu";
 import { WorkKindTag } from "@/components/projects/work-kind-tag";
+import { JourneyActionsMenu } from "@/components/journeys/journey-actions-menu";
+import { JourneyCard } from "@/components/journeys/journey-card";
+import { SynthesisActionsMenu } from "@/components/synthesizer/synthesis-actions-menu";
+import { SynthesisCard } from "@/components/synthesizer/synthesis-card";
 import { PlanActionsMenu } from "@/components/research-planner/plan-actions-menu";
 import { PlanCard } from "@/components/research-planner/plan-card";
 import { Badge } from "@/components/ui/badge";
@@ -14,16 +18,20 @@ import { Segmented, SegmentLink } from "@/components/ui/segmented";
 import { WORK_KINDS } from "@/config/work-kinds";
 import type { AnalysisListItem } from "@/lib/competitors/queries";
 import { formatDate, formatRelativeTime } from "@/lib/format";
+import type { JourneyListItem } from "@/lib/journeys/queries";
 import type { PersonaListItem } from "@/lib/personas/queries";
+import type { SynthesisListItem } from "@/lib/synthesizer/queries";
 import { buildWorkItems, type ProjectWorkKind, type WorkFilter, type WorkItem, type WorkView } from "@/lib/projects/work-items";
 import type { PlanListItem } from "@/lib/research-planner/queries";
 
-const FILTER_LABELS: Record<WorkFilter, string> = { all: "All", plan: "Plans", persona: "Personas", analysis: "Analyses" };
-const KINDS: ProjectWorkKind[] = ["plan", "persona", "analysis"];
+const FILTER_LABELS: Record<WorkFilter, string> = { all: "All", plan: "Plans", persona: "Personas", analysis: "Analyses", synthesis: "Syntheses", journey: "Journeys" };
+const KINDS: ProjectWorkKind[] = ["plan", "persona", "analysis", "synthesis", "journey"];
 
 function ItemActions({ item }: { item: WorkItem }) {
   if (item.kind === "plan") return <PlanActionsMenu planId={item.id} title={item.title} />;
   if (item.kind === "persona") return <PersonaActionsMenu personaId={item.id} name={item.title} />;
+  if (item.kind === "synthesis") return <SynthesisActionsMenu synthesisId={item.id} title={item.title} />;
+  if (item.kind === "journey") return <JourneyActionsMenu journeyId={item.id} title={item.title} />;
   return <AnalysisActionsMenu analysisId={item.id} title={item.title} />;
 }
 
@@ -83,6 +91,8 @@ export function ProjectWork({
   plans,
   personas,
   analyses,
+  syntheses,
+  journeys,
   view,
   type,
 }: {
@@ -91,16 +101,20 @@ export function ProjectWork({
   plans: PlanListItem[];
   personas: PersonaListItem[];
   analyses: AnalysisListItem[];
+  syntheses: SynthesisListItem[];
+  journeys: JourneyListItem[];
   view: WorkView;
   type: WorkFilter;
 }) {
-  const all = buildWorkItems({ plans, personas, analyses });
+  const all = buildWorkItems({ plans, personas, analyses, syntheses, journeys });
   const items = type === "all" ? all : all.filter((i) => i.kind === type);
   const counts: Record<WorkFilter, number> = {
     all: all.length,
     plan: plans.length,
     persona: personas.length,
     analysis: analyses.length,
+    synthesis: syntheses.length,
+    journey: journeys.length,
   };
   const href = (next: { view?: WorkView; type?: WorkFilter }) => {
     const v = next.view ?? view;
@@ -114,6 +128,8 @@ export function ProjectWork({
   const planById = new Map(plans.map((p) => [p.id, p]));
   const personaById = new Map(personas.map((p) => [p.id, p]));
   const analysisById = new Map(analyses.map((a) => [a.id, a]));
+  const synthesisById = new Map(syntheses.map((s) => [s.id, s]));
+  const journeyById = new Map(journeys.map((j) => [j.id, j]));
 
   return (
     <section aria-labelledby="project-research">
@@ -184,6 +200,8 @@ export function ProjectWork({
               {item.kind === "plan" && <PlanCard plan={planById.get(item.id)!} showTool />}
               {item.kind === "persona" && <PersonaCard persona={personaById.get(item.id)!} showTool />}
               {item.kind === "analysis" && <AnalysisCard analysis={analysisById.get(item.id)!} showTool />}
+              {item.kind === "synthesis" && <SynthesisCard synthesis={synthesisById.get(item.id)!} showTool />}
+              {item.kind === "journey" && <JourneyCard journey={journeyById.get(item.id)!} showTool />}
             </li>
           ))}
         </ul>

@@ -27,15 +27,17 @@ export async function getRecentItems(limit = 100): Promise<RecentItem[]> {
   try {
     await requireUser();
     const supabase = await createClient();
-    const [projects, plans, personas, analyses] = await Promise.all([
+    const [projects, plans, personas, analyses, syntheses, journeys] = await Promise.all([
       supabase.from("projects").select("id, name, updated_at").neq("status", "archived").order("updated_at", { ascending: false }).limit(limit),
       supabase.from("research_plans").select("id, title, project_id, updated_at").order("updated_at", { ascending: false }).limit(limit),
       supabase.from("personas").select("id, name, project_id, updated_at").order("updated_at", { ascending: false }).limit(limit),
       supabase.from("competitor_analyses").select("id, title, project_id, updated_at").order("updated_at", { ascending: false }).limit(limit),
+      supabase.from("research_syntheses").select("id, title, project_id, updated_at").order("updated_at", { ascending: false }).limit(limit),
+      supabase.from("journeys").select("id, name, project_id, updated_at").order("updated_at", { ascending: false }).limit(limit),
     ]);
 
     const projectIds = [
-      ...new Set([...(plans.data ?? []), ...(personas.data ?? []), ...(analyses.data ?? [])].map((r) => r.project_id)),
+      ...new Set([...(plans.data ?? []), ...(personas.data ?? []), ...(analyses.data ?? []), ...(syntheses.data ?? []), ...(journeys.data ?? [])].map((r) => r.project_id)),
     ];
     const names = new Map<string, string>();
     if (projectIds.length) {
@@ -58,6 +60,8 @@ export async function getRecentItems(limit = 100): Promise<RecentItem[]> {
         ...(plans.data ?? []).map((r) => item("plan", r.id, r.title, r.updated_at, r.project_id)),
         ...(personas.data ?? []).map((r) => item("persona", r.id, r.name, r.updated_at, r.project_id)),
         ...(analyses.data ?? []).map((r) => item("analysis", r.id, r.title, r.updated_at, r.project_id)),
+        ...(syntheses.data ?? []).map((r) => item("synthesis", r.id, r.title, r.updated_at, r.project_id)),
+        ...(journeys.data ?? []).map((r) => item("journey", r.id, r.name, r.updated_at, r.project_id)),
       ],
       limit,
     );

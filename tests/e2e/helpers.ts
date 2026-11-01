@@ -175,3 +175,69 @@ export async function openNav(page: Page) {
   if (isCompactViewport(page)) await page.getByRole("button", { name: "Open navigation menu" }).click();
   return page.getByRole("navigation", { name: "Main" });
 }
+
+/* ---------------- Research Synthesizer ---------------- */
+
+export async function createSynthesis(page: Page, options: { title: string; projectName: string }) {
+  await page.goto("/tools/research-synthesizer/new");
+  await page.getByLabel("Synthesis title").fill(options.title);
+  await page.getByRole("combobox", { name: "Project" }).selectOption({ label: options.projectName });
+  await page.getByRole("button", { name: "Start synthesis" }).click();
+  await expect(page).toHaveURL(/\/tools\/research-synthesizer\/[0-9a-f-]{36}$/);
+  await expect(page.getByRole("tab", { name: "Research material", selected: true })).toBeVisible();
+  return page.url().split("/").pop()!.split("?")[0];
+}
+
+/** Adds one observation card through the "Add a statement" form. */
+export async function addObservation(page: Page, content: string, fields: { participant?: string; tags?: string } = {}) {
+  await page.getByRole("button", { name: "Add a statement" }).click();
+  const form = page.getByRole("form", { name: "Add observation" });
+  await form.getByLabel("What was observed or said").fill(content);
+  if (fields.participant) await form.getByLabel("Participant").fill(fields.participant);
+  if (fields.tags) await form.getByLabel("Tags").fill(fields.tags);
+  await form.getByRole("button", { name: "Add observation" }).click();
+  await expect(page.locator("[data-observation]").filter({ hasText: content })).toBeVisible();
+}
+
+export const selectTab = (page: Page, name: string) => page.getByRole("tab", { name }).click();
+
+/** Clicks an in-page export button and returns the downloaded file's contents. */
+export async function exportFromButton(page: Page, label: "PDF" | "Word" | "Markdown") {
+  const pending = page.waitForEvent("download", { timeout: 15_000 });
+  await page.getByRole("button", { name: `Export as ${label}` }).click();
+  const file = await pending;
+  const path = await file.path();
+  return { name: file.suggestedFilename(), path };
+}
+
+/* ---------------- Journey Mapper ---------------- */
+
+export async function createJourney(page: Page, options: { name: string; projectName: string; persona?: string; state?: "Current state" | "Future state" }) {
+  await page.goto("/tools/journey-mapper/new");
+  await page.getByLabel("Journey name").fill(options.name);
+  await page.getByRole("combobox", { name: "Project" }).selectOption({ label: options.projectName });
+  if (options.persona) await page.getByRole("combobox", { name: "Persona" }).selectOption({ label: options.persona });
+  if (options.state) await page.getByRole("combobox", { name: "State" }).selectOption({ label: options.state });
+  await page.getByRole("button", { name: "Start mapping" }).click();
+  await expect(page).toHaveURL(/\/tools\/journey-mapper\/[0-9a-f-]{36}(\?.*)?$/);
+  await expect(page.getByRole("tab", { name: "Edit stages", selected: true })).toBeVisible();
+  return page.url().split("/").pop()!.split("?")[0];
+}
+
+export async function addStage(page: Page, name: string) {
+  const before = await page.getByRole("textbox", { name: /^Name of stage \d+$/ }).count();
+  await page.getByLabel("New stage name").fill(name);
+  await page.getByRole("button", { name: "Add stage", exact: true }).click();
+  await expect(page.getByRole("textbox", { name: `Name of stage ${before + 1}` })).toHaveValue(name);
+}
+
+const escapeRegExp = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** Adds an item to a stage's group, e.g. ("Discover", "User actions", "Searches online"). */
+export async function addJourneyItem(page: Page, stageName: string, group: string, text: string) {
+  const stage = page.getByRole("region", { name: new RegExp(`^Stage \\d+: ${escapeRegExp(stageName)}$`) });
+  const box = stage.getByRole("group", { name: `${group} for ${stageName}` });
+  await box.getByRole("textbox", { name: /^Add / }).fill(text);
+  await box.getByRole("button", { name: /confirm$/ }).click();
+  await expect(box.getByRole("textbox", { name: new RegExp(`^[A-Za-z ]+: ${escapeRegExp(text.slice(0, 40))}`) })).toBeVisible();
+}

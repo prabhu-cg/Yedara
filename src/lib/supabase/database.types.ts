@@ -438,6 +438,381 @@ export type Database = {
         };
         Relationships: [];
       };
+      research_syntheses: {
+        Row: {
+          id: string;
+          owner_id: string;
+          project_id: string;
+          title: string;
+          status: "draft" | "completed";
+          completed_at: string | null;
+          report: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          owner_id?: string;
+          project_id: string;
+          title: string;
+          status?: "draft" | "completed";
+          completed_at?: string | null;
+          report?: Json;
+        };
+        Update: {
+          project_id?: string;
+          title?: string;
+          status?: "draft" | "completed";
+          completed_at?: string | null;
+          report?: Json;
+        };
+        Relationships: [];
+      };
+      research_sources: {
+        Row: {
+          id: string;
+          synthesis_id: string;
+          name: string;
+          source_type: "interview" | "observation_session" | "survey" | "document" | "other";
+          participant_ref: string | null;
+          conducted_on: string | null;
+          notes: string | null;
+          file_name: string | null;
+          file_size: number | null;
+          import_method: "manual" | "paste" | "file";
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          synthesis_id: string;
+          name: string;
+          source_type?: "interview" | "observation_session" | "survey" | "document" | "other";
+          participant_ref?: string | null;
+          conducted_on?: string | null;
+          notes?: string | null;
+          file_name?: string | null;
+          file_size?: number | null;
+          import_method?: "manual" | "paste" | "file";
+        };
+        Update: {
+          name?: string;
+          source_type?: "interview" | "observation_session" | "survey" | "document" | "other";
+          participant_ref?: string | null;
+          conducted_on?: string | null;
+          notes?: string | null;
+          file_name?: string | null;
+          file_size?: number | null;
+        };
+        Relationships: [];
+      };
+      research_observations: {
+        Row: {
+          id: string;
+          synthesis_id: string;
+          source_id: string | null;
+          participant_ref: string | null;
+          kind: "observation" | "quote" | "survey_response" | "note";
+          content: string;
+          tags: Json;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          synthesis_id: string;
+          source_id?: string | null;
+          participant_ref?: string | null;
+          kind?: "observation" | "quote" | "survey_response" | "note";
+          content: string;
+          tags?: Json;
+          position?: number;
+        };
+        Update: {
+          source_id?: string | null;
+          participant_ref?: string | null;
+          kind?: "observation" | "quote" | "survey_response" | "note";
+          content?: string;
+          tags?: Json;
+          position?: number;
+        };
+        Relationships: [];
+      };
+      research_themes: {
+        Row: {
+          id: string;
+          synthesis_id: string;
+          title: string;
+          notes: string | null;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          synthesis_id: string;
+          title: string;
+          notes?: string | null;
+          position?: number;
+        };
+        Update: {
+          title?: string;
+          notes?: string | null;
+          position?: number;
+        };
+        Relationships: [];
+      };
+      affinity_boards: {
+        Row: {
+          id: string;
+          synthesis_id: string;
+          zoom: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          synthesis_id: string;
+          zoom?: number;
+        };
+        Update: {
+          zoom?: number;
+        };
+        Relationships: [];
+      };
+      affinity_cards: {
+        Row: {
+          id: string;
+          synthesis_id: string;
+          board_id: string;
+          observation_id: string;
+          theme_id: string | null;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          synthesis_id: string;
+          board_id: string;
+          observation_id: string;
+          theme_id?: string | null;
+          position?: number;
+        };
+        Update: {
+          theme_id?: string | null;
+          position?: number;
+        };
+        Relationships: [];
+      };
+      research_insights: {
+        Row: {
+          id: string;
+          synthesis_id: string;
+          theme_id: string | null;
+          kind: "direct_observation" | "interpretation" | "hypothesis" | "recommendation";
+          observation: string | null;
+          pattern: string | null;
+          user_need: string | null;
+          problem_kind: "problem" | "opportunity" | null;
+          problem_text: string | null;
+          statement: string;
+          confidence: "high" | "medium" | "low";
+          recommended_action: string | null;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          synthesis_id: string;
+          theme_id?: string | null;
+          kind?: "direct_observation" | "interpretation" | "hypothesis" | "recommendation";
+          observation?: string | null;
+          pattern?: string | null;
+          user_need?: string | null;
+          problem_kind?: "problem" | "opportunity" | null;
+          problem_text?: string | null;
+          statement: string;
+          confidence?: "high" | "medium" | "low";
+          recommended_action?: string | null;
+          position?: number;
+        };
+        Update: {
+          theme_id?: string | null;
+          kind?: "direct_observation" | "interpretation" | "hypothesis" | "recommendation";
+          observation?: string | null;
+          pattern?: string | null;
+          user_need?: string | null;
+          problem_kind?: "problem" | "opportunity" | null;
+          problem_text?: string | null;
+          statement?: string;
+          confidence?: "high" | "medium" | "low";
+          recommended_action?: string | null;
+          position?: number;
+        };
+        Relationships: [];
+      };
+      research_insight_evidence: {
+        Row: {
+          insight_id: string;
+          observation_id: string;
+          synthesis_id: string;
+          created_at: string;
+        };
+        Insert: {
+          insight_id: string;
+          observation_id: string;
+          synthesis_id: string;
+        };
+        Update: Record<string, never>;
+        Relationships: [];
+      };
+      journeys: {
+        Row: {
+          id: string;
+          owner_id: string;
+          project_id: string;
+          persona_id: string | null;
+          name: string;
+          journey_type: "customer" | "user" | "service" | "employee";
+          scenario: string | null;
+          state: "current" | "future";
+          status: "draft" | "completed";
+          completed_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          owner_id?: string;
+          project_id: string;
+          persona_id?: string | null;
+          name: string;
+          journey_type?: "customer" | "user" | "service" | "employee";
+          scenario?: string | null;
+          state?: "current" | "future";
+          status?: "draft" | "completed";
+          completed_at?: string | null;
+        };
+        Update: {
+          project_id?: string;
+          persona_id?: string | null;
+          name?: string;
+          journey_type?: "customer" | "user" | "service" | "employee";
+          scenario?: string | null;
+          state?: "current" | "future";
+          status?: "draft" | "completed";
+          completed_at?: string | null;
+        };
+        Relationships: [];
+      };
+      journey_stages: {
+        Row: {
+          id: string;
+          journey_id: string;
+          name: string;
+          position: number;
+          emotion: number | null;
+          emotion_note: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          journey_id: string;
+          name: string;
+          position?: number;
+          emotion?: number | null;
+          emotion_note?: string | null;
+        };
+        Update: {
+          name?: string;
+          position?: number;
+          emotion?: number | null;
+          emotion_note?: string | null;
+        };
+        Relationships: [];
+      };
+      journey_items: {
+        Row: {
+          id: string;
+          journey_id: string;
+          stage_id: string;
+          kind: "action" | "goal" | "thought" | "touchpoint" | "channel" | "pain_point" | "opportunity" | "evidence";
+          content: string;
+          evidence_note: string | null;
+          observation_id: string | null;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          journey_id: string;
+          stage_id: string;
+          kind: "action" | "goal" | "thought" | "touchpoint" | "channel" | "pain_point" | "opportunity" | "evidence";
+          content: string;
+          evidence_note?: string | null;
+          observation_id?: string | null;
+          position?: number;
+        };
+        Update: {
+          stage_id?: string;
+          kind?: "action" | "goal" | "thought" | "touchpoint" | "channel" | "pain_point" | "opportunity" | "evidence";
+          content?: string;
+          evidence_note?: string | null;
+          observation_id?: string | null;
+          position?: number;
+        };
+        Relationships: [];
+      };
+      opportunity_candidates: {
+        Row: {
+          id: string;
+          owner_id: string;
+          project_id: string;
+          journey_id: string | null;
+          stage_id: string | null;
+          source_item_id: string | null;
+          observation_id: string | null;
+          title: string;
+          origin_kind: "pain_point" | "opportunity";
+          journey_name: string | null;
+          stage_name: string | null;
+          evidence_note: string | null;
+          status: "candidate";
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          owner_id?: string;
+          project_id: string;
+          journey_id?: string | null;
+          stage_id?: string | null;
+          source_item_id?: string | null;
+          observation_id?: string | null;
+          title: string;
+          origin_kind: "pain_point" | "opportunity";
+          journey_name?: string | null;
+          stage_name?: string | null;
+          evidence_note?: string | null;
+          status?: "candidate";
+        };
+        Update: {
+          journey_id?: string | null;
+          stage_id?: string | null;
+          observation_id?: string | null;
+          title?: string;
+          journey_name?: string | null;
+          stage_name?: string | null;
+          evidence_note?: string | null;
+          status?: "candidate";
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -445,6 +820,9 @@ export type Database = {
       duplicate_persona: { Args: { p_persona_id: string }; Returns: string };
       reorder_competitors: { Args: { p_analysis_id: string; p_ids: string[] }; Returns: undefined };
       reorder_competitor_criteria: { Args: { p_analysis_id: string; p_ids: string[] }; Returns: undefined };
+      save_affinity_layout: { Args: { p_synthesis_id: string; p_themes: Json; p_cards: Json }; Returns: undefined };
+      reorder_journey_stages: { Args: { p_journey_id: string; p_ids: string[] }; Returns: undefined };
+      duplicate_journey: { Args: { p_journey_id: string; p_state?: string | null }; Returns: string };
       reorder_research_plan_sections: {
         Args: { p_plan_id: string; p_keys: string[] };
         Returns: undefined;

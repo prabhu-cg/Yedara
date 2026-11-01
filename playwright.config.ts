@@ -63,7 +63,7 @@ export default defineConfig({
     {
       command: `npm run build && npx next start -p ${APP_PORT}`,
       url: `http://127.0.0.1:${APP_PORT}`,
-      env: supabaseEnv,
+      env: { ...supabaseEnv, NEXT_DIST_DIR: ".next-e2e" },
       reuseExistingServer: !process.env.CI,
       timeout: 240_000,
     },

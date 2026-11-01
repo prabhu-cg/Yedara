@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { WORK_KINDS } from "@/config/work-kinds";
 
-const KINDS = ["plan", "persona", "analysis"] as const;
+const KINDS = ["plan", "persona", "analysis", "synthesis", "journey"] as const;
 
 /** One entry point for starting research in this project; each choice opens its drawer. */
 export function NewWorkMenu({ projectId }: { projectId: string }) {

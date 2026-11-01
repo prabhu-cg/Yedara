@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { FolderPlus } from "lucide-react";
 import { EmptyState } from "@/components/layout/empty-state";
+import { NewJourneyForm } from "@/components/journeys/new-journey-form";
+import { NewSynthesisForm } from "@/components/synthesizer/new-synthesis-form";
 import { NewAnalysisForm } from "@/components/competitors/new-analysis-form";
 import { NewPersonaForm } from "@/components/personas/new-persona-form";
 import { ProjectForm } from "@/components/projects/project-form";
@@ -9,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { EDITABLE_STATUSES, PROJECT_TYPE_VALUES } from "@/lib/projects/constants";
 import { getProject } from "@/lib/projects/queries";
 import type { ProjectFormValues } from "@/lib/projects/schemas";
+import { listPersonaOptions } from "@/lib/journeys/queries";
 import { listProjectOptions } from "@/lib/research-planner/queries";
 
 /**
@@ -74,6 +77,15 @@ export function NewPersonaPanel({ defaultProjectId }: { defaultProjectId?: strin
 
 export function NewAnalysisPanel({ defaultProjectId }: { defaultProjectId?: string }) {
   return <WithProjects what="analysis">{(projects) => <NewAnalysisForm projects={projects} defaultProjectId={defaultProjectId} />}</WithProjects>;
+}
+
+export function NewSynthesisPanel({ defaultProjectId }: { defaultProjectId?: string }) {
+  return <WithProjects what="synthesis">{(projects) => <NewSynthesisForm projects={projects} defaultProjectId={defaultProjectId} />}</WithProjects>;
+}
+
+export async function NewJourneyPanel({ defaultProjectId }: { defaultProjectId?: string }) {
+  const personas = await listPersonaOptions();
+  return <WithProjects what="journey">{(projects) => <NewJourneyForm projects={projects} personas={personas} defaultProjectId={defaultProjectId} />}</WithProjects>;
 }
 
 /** `?project=` as a plain string, or undefined. */

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Dialog as DrawerPrimitive } from "radix-ui";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,15 +24,19 @@ export const useRouteDrawer = () => React.useContext(DrawerContext);
  * works as a link, and Back or Escape closes it. Used by intercepting routes in `@drawer`.
  */
 export function RouteDrawer({
+  routeKey,
   title,
   description,
   children,
 }: {
+  /** The pathname this drawer belongs to. The slot keeps its last page when you navigate elsewhere, so the drawer hides itself unless the address is its own. */
+  routeKey: string;
   title: string;
   description?: string;
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = React.useState(true);
   const closing = React.useRef(false);
 
@@ -51,6 +55,8 @@ export function RouteDrawer({
   );
 
   const api = React.useMemo(() => ({ close }), [close]);
+
+  if (pathname !== routeKey) return null;
 
   return (
     <DrawerContext.Provider value={api}>

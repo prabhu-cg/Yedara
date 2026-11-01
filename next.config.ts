@@ -11,6 +11,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // The Playwright run builds and serves into its own folder (NEXT_DIST_DIR=.next-e2e), so it can
+  // never overwrite what a running `npm run dev` is using.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   poweredByHeader: false,
   turbopack: {
     rules: {
