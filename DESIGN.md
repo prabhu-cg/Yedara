@@ -245,6 +245,9 @@ Sticky 64px header, page ground at 92% with blur and hairline bottom border. Lin
 ### Footer
 White ground with a hairline top border. Logo and tagline left; four link columns (Product, Company, Legal, Account) right, 15px Quiet Ink links that underline on hover; a hairline-topped, centred 14px copyright line.
 
+### Feedback widget
+A fixed bottom-right pill (foreground colour, `Feedback` with a message icon) on every public page and inside the signed-in app. It opens a non-modal 24rem card panel (`rounded-2xl`, card surface, `shadow-xl`) with three pill radios (Something is broken, An idea or request, Something else), a textarea and a full-width primary button; Escape closes it and returns focus to the pill. It states that feedback is posted publicly on GitHub and asks for no name or email. Other CTAs (the Pro plan, "Ask us", the footer) open it through `OpenFeedback`, which sets the type. There is no contact page.
+
 ### Final CTA band
 Flat Thread Orange full-bleed band, centred: headline in primary-foreground, 90% white lede (48ch), white button plus ghost button. No gradient, image or pattern.
 

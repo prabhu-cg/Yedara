@@ -38,7 +38,8 @@ export function AppShell({
       <div className="lg:pl-72">
         <MobileHeader name={name} email={email} />
         <main id="main-content" tabIndex={-1} className="outline-none">
-          <div className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+          {/* Bottom space keeps the floating Feedback button from covering the last row or action. */}
+          <div className="mx-auto w-full max-w-[1400px] px-4 pt-6 pb-24 sm:px-6 lg:px-8 lg:pt-8">
             {children}
           </div>
         </main>

@@ -5,7 +5,6 @@ const PAGES: [string, RegExp][] = [
   ["/features", /Everything in the workspace/],
   ["/pricing", /Free today\. Pro when it/],
   ["/about", /Research is only useful/],
-  ["/contact", /Tell us what you/],
   ["/privacy", /Privacy policy/],
   ["/terms", /Terms of service/],
 ];
@@ -36,9 +35,9 @@ test.describe("marketing site", () => {
     await expect(page.getByRole("heading", { name: /Create your account/ }).first()).toBeVisible();
 
     await page.goto("/pricing");
-    await page.getByRole("link", { name: "Tell us what you'd want" }).click();
-    await expect(page).toHaveURL(/\/contact\?topic=pro$/);
-    await expect(page.getByLabel("What is this about?")).toHaveValue("pro");
+    await page.getByRole("button", { name: "Tell us what you'd want" }).click();
+    await expect(page.getByRole("dialog", { name: "Send feedback" })).toBeVisible();
+    await expect(page.getByRole("radio", { name: "An idea or request" })).toBeChecked();
   });
 
   test("every internal link on the homepage resolves", async ({ page, request }) => {
@@ -68,21 +67,21 @@ test.describe("marketing site", () => {
     await expect(page.getByText(/no payment step\./).first()).toBeVisible();
   });
 
-  test("the contact form validates on the server-side schema and shows field errors", async ({ page }) => {
-    await page.goto("/contact");
-    await page.getByRole("button", { name: "Send message" }).click();
-    await expect(page.getByText("Enter your name.")).toBeVisible();
-    await expect(page.getByText("Write at least a sentence so we can help.")).toBeVisible();
+  test("the feedback widget opens, validates and closes with Escape", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Feedback", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: "Send feedback" });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByText(/posted publicly on GitHub/)).toBeVisible();
+    await dialog.getByLabel("Your feedback").fill("too short");
+    await dialog.getByRole("button", { name: "Send feedback" }).click();
+    await expect(dialog.getByRole("alert")).toContainText("at least 10 characters");
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
   });
 
-  test("a valid contact message is accepted", async ({ page }) => {
-    await page.goto("/contact");
-    await page.getByLabel("Name").fill("Sam Tester");
-    await page.getByLabel("Email").fill("sam@example.com");
-    await page.getByLabel("Message").fill("How do I export a synthesis report to Word?");
-    await page.waitForTimeout(3200); // the minimum fill time
-    await page.getByRole("button", { name: "Send message" }).click();
-    await expect(page.getByRole("status")).toContainText("Message sent.");
+  test("there is no contact page any more", async ({ request }) => {
+    expect((await request.get("/contact")).status()).toBe(404);
   });
 
   test("has light and dark themes, switchable from the header", async ({ page }) => {
@@ -103,7 +102,7 @@ test.describe("marketing site", () => {
     const sitemap = await request.get("/sitemap.xml");
     expect(sitemap.status()).toBe(200);
     const xml = await sitemap.text();
-    for (const path of ["/features", "/pricing", "/about", "/contact", "/privacy", "/terms"]) expect(xml).toContain(path);
+    for (const path of ["/features", "/pricing", "/about", "/privacy", "/terms"]) expect(xml).toContain(path);
     const robots = await request.get("/robots.txt");
     expect(await robots.text()).toMatch(/Disallow: \/dashboard/);
     const home = await request.get("/");

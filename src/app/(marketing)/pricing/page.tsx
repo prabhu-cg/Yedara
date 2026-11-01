@@ -35,7 +35,7 @@ export default function PricingPage() {
           <div className="lg:col-span-7">
             <Lede>
               We would rather build Pro around real needs than guess at them. If a limit, a feature or a way of
-              working would make you upgrade, send it through the contact form and choose the Pro plan topic.
+              working would make you upgrade, use the Feedback button and tell us. Feedback is public, so leave out personal details.
             </Lede>
           </div>
         </div>

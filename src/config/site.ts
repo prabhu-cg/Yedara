@@ -17,4 +17,4 @@ export function siteUrl() {
 }
 
 /** Public pages, in sitemap order. */
-export const PUBLIC_PATHS = ["/", "/features", "/pricing", "/about", "/contact", "/privacy", "/terms"] as const;
+export const PUBLIC_PATHS = ["/", "/features", "/pricing", "/about", "/privacy", "/terms"] as const;

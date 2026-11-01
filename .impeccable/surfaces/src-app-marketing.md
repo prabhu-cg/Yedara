@@ -7,7 +7,7 @@ related_targets: []
 
 # Marketing site (Persuade)
 
-Scope: public marketing routes /, /features, /pricing, /about, /contact, /privacy, /terms. Visitor mode: Persuade. Audience: designers, researchers, agencies, product teams deciding whether to try a free workspace. Action: Start free (/signup); Pro is an enquiry (/contact?topic=pro). Proof: authored product UI previews labelled sample data; the real chain of evidence between modules. Constraints: no testimonials, stats, integrations or prices; Opportunity Analyzer shown as in development.
+Scope: public marketing routes /, /features, /pricing, /about, /privacy, /terms. Visitor mode: Persuade. Audience: designers, researchers, agencies, product teams deciding whether to try a free workspace. Action: Start free (/signup); Pro is an enquiry through the floating Feedback widget. Proof: authored product UI previews labelled sample data; the real chain of evidence between modules. Constraints: no testimonials, stats, integrations or prices; Opportunity Analyzer shown as in development.
 
 ## Direction contract
 

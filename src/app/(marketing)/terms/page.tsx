@@ -39,7 +39,7 @@ const SECTIONS: LegalSection[] = [
       [
         "break the law or infringe anyone’s rights,",
         "attempt to access other people’s data or disrupt the service,",
-        "send spam or automated bulk requests through the site or the contact form,",
+        "send spam or automated bulk requests through the site or the feedback button,",
         "reverse engineer or resell the service without our written agreement.",
       ],
     ],
@@ -76,7 +76,7 @@ const SECTIONS: LegalSection[] = [
     id: "changes",
     title: "Changes and contact",
     body: [
-      "We may update these terms. When we do, we will change the date at the top, and continued use after that means you accept the update. Questions about these terms can be sent through the contact form.",
+      "We may update these terms. When we do, we will change the date at the top, and continued use after that means you accept the update. Questions about these terms can be sent with the Feedback button. Feedback is public, so leave out personal details.",
     ],
   },
 ];

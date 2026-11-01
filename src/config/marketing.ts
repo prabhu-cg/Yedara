@@ -6,7 +6,6 @@ export const PRIMARY_NAV = [
   { href: "/features", label: "Features" },
   { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
 ] as const;
 
 export type MarketingModule = {
@@ -239,7 +238,7 @@ export const FAQS = [
   },
   {
     q: "What will Pro include?",
-    a: "Pro is in development and is not available yet, so there is no price and nothing to buy. If there is something you would need from it, tell us on the contact page.",
+    a: "Pro is in development and is not available yet, so there is no price and nothing to buy. If there is something you would need from it, use the Feedback button to tell us.",
   },
   {
     q: "Does Yedara use AI to write my findings?",
@@ -281,6 +280,6 @@ export const PLANS = {
       "Tell us what you would need from it",
       "Pro cannot be bought today",
     ],
-    cta: { label: "Tell us what you'd want", href: "/contact?topic=pro" },
+    cta: { label: "Tell us what you'd want", href: null },
   },
 } as const;

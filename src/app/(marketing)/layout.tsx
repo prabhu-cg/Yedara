@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FeedbackWidget } from "@/components/feedback/feedback-widget";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { siteConfig } from "@/config/site";
@@ -28,6 +29,7 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
         {children}
       </main>
       <SiteFooter />
+      <FeedbackWidget />
     </div>
   );
 }

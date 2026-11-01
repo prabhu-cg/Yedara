@@ -34,7 +34,7 @@ export default async function AccountSettingsPage() {
         <CardHeader>
           <CardTitle>Delete account</CardTitle>
           <CardDescription>
-            Account deletion isn&apos;t available yet. Contact support if you need your data removed.
+            Account deletion isn&apos;t available yet.
           </CardDescription>
         </CardHeader>
       </Card>

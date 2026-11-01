@@ -17,7 +17,7 @@ const SECTIONS: LegalSection[] = [
       [
         "Account details: your name, email address and password. Passwords are handled by our authentication provider and are not readable by us. You may also add a job title and company.",
         "Your research content: the projects, plans, personas, competitor analyses, observations, insights and journeys you create.",
-        "Contact messages: the name, email address, topic and message you send through the contact form.",
+        "Feedback: the type and text you send through the Feedback button. It is posted as a public issue on GitHub, and Yedara does not ask for your name or email address with it.",
       ],
       "We do not collect payment details. There is nothing to buy today.",
     ],
@@ -26,7 +26,7 @@ const SECTIONS: LegalSection[] = [
     id: "how-we-use-it",
     title: "How we use it",
     body: [
-      "We use your account details to sign you in and keep your workspace secure, your research content to show it back to you and produce the exports you ask for, and contact messages to reply to you.",
+      "We use your account details to sign you in and keep your workspace secure, your research content to show it back to you and produce the exports you ask for, and feedback to fix problems and decide what to build.",
       "We do not sell your data, use it for advertising, or use your research content to train models. Nothing you write is sent to an AI service.",
     ],
   },
@@ -59,14 +59,14 @@ const SECTIONS: LegalSection[] = [
         "Supabase, for the database and authentication, which stores your account and research content.",
         "Vercel, for hosting the website and application, which may keep standard request logs including IP addresses.",
       ],
-      "We also use your IP address briefly, in memory, to limit repeated sign-in and contact attempts. It is not stored with your account.",
+      "We also use your IP address briefly, in memory, to limit repeated sign-in and feedback attempts. It is not stored with your account.",
     ],
   },
   {
     id: "retention",
     title: "How long we keep it",
     body: [
-      "We keep your account and research content until you delete it or ask us to. Contact messages are kept as long as needed to answer you and to keep a record of the conversation.",
+      "We keep your account and research content until you delete it or ask us to. Feedback is kept as a public GitHub issue for as long as we need it, and may stay visible in GitHub's history.",
     ],
   },
   {
@@ -74,7 +74,7 @@ const SECTIONS: LegalSection[] = [
     title: "Your choices and rights",
     body: [
       "You can edit your profile and delete your projects and research items inside Yedara. Depending on where you live, you may also have the right to access, correct, export or delete your personal data, or to object to how it is used.",
-      "To exercise any of these, or to ask us anything about this policy, use the contact form and choose the general question topic.",
+      "Yedara does not yet have a private way to reach us. Feedback is public, so do not put personal details in it. A private contact route for these requests will be added here.",
     ],
   },
   {

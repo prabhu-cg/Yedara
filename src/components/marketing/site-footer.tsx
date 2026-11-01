@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { OpenFeedback } from "@/components/feedback/feedback-trigger";
 import { FRAME } from "@/components/marketing/frame";
 import { Logo } from "@/components/layout/logo";
 import { MODULES } from "@/config/marketing";
@@ -8,16 +9,15 @@ const COLUMNS = [
   {
     title: "Product",
     links: [
-      { href: "/features", label: "Features" },
-      { href: "/pricing", label: "Pricing" },
       ...MODULES.slice(0, 5).map((m) => ({ href: `/features#${m.slug}`, label: m.name })),
     ],
   },
   {
     title: "Company",
     links: [
+      { href: "/features", label: "Features" },
+      { href: "/pricing", label: "Pricing" },
       { href: "/about", label: "About" },
-      { href: "/contact", label: "Contact" },
     ],
   },
   {
@@ -62,6 +62,13 @@ export function SiteFooter() {
                       </Link>
                     </li>
                   ))}
+                  {column.title === "Company" && (
+                    <li>
+                      <OpenFeedback className="text-[15px] text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline">
+                        Send feedback
+                      </OpenFeedback>
+                    </li>
+                  )}
                 </ul>
               </div>
             ))}

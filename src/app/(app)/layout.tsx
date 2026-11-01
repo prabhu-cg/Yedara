@@ -1,3 +1,4 @@
+import { FeedbackWidget } from "@/components/feedback/feedback-widget";
 import { AppShell } from "@/components/layout/app-shell";
 import { displayName, getProfile, requireUser } from "@/lib/auth/dal";
 
@@ -11,6 +12,7 @@ export default async function AppLayout({ children, drawer }: LayoutProps<"/">) 
       <AppShell name={displayName(profile, user.email)} email={user.email ?? ""}>
         {children}
       </AppShell>
+      <FeedbackWidget />
       {/* New/edit forms open here as a right-hand drawer (intercepting routes in @drawer). */}
       {drawer}
     </>

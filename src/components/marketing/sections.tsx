@@ -3,6 +3,7 @@ import { ArrowRight, Check, Plus } from "lucide-react";
 import { FRAME, Lede, Section, SectionHeading } from "@/components/marketing/frame";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { OpenFeedback } from "@/components/feedback/feedback-trigger";
 import { CONNECTIONS, DIFFERENTIATORS, FAQS, PLANS, WORKFLOW, moduleBySlug } from "@/config/marketing";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -135,7 +136,11 @@ function PlanPanel({ plan, tone, compact }: { plan: (typeof PLANS)[keyof typeof 
       </ul>
       <div className="mt-auto pt-8">
         <Button asChild size="lg" variant={free ? "default" : "outline"} className="w-full font-bold sm:w-fit">
-          <Link href={plan.cta.href}>{plan.cta.label}</Link>
+          {plan.cta.href ? (
+            <Link href={plan.cta.href}>{plan.cta.label}</Link>
+          ) : (
+            <OpenFeedback feedbackType="idea">{plan.cta.label}</OpenFeedback>
+          )}
         </Button>
       </div>
     </div>
@@ -202,9 +207,9 @@ export function FaqSection() {
           <SectionHeading id="faq-heading">Questions, answered plainly.</SectionHeading>
           <p className="mt-5 text-muted-foreground">
             Something missing?{" "}
-            <Link href="/contact" className="font-bold text-primary-text underline underline-offset-4">
+            <OpenFeedback className="font-bold text-primary-text underline underline-offset-4" feedbackType="other">
               Ask us
-            </Link>
+            </OpenFeedback>
             .
           </p>
         </div>
