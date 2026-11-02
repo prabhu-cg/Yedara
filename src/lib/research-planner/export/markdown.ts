@@ -1,4 +1,5 @@
 import type { Block, ListItem, PlanDocument } from "@/lib/research-planner/document";
+import { siteUrl } from "@/config/site";
 
 /** Escapes Markdown syntax that would otherwise change meaning at the start of a line. */
 function escapeLine(line: string) {
@@ -45,6 +46,10 @@ function block(b: Block): string {
 export function renderMarkdown(doc: PlanDocument): string {
   const parts: string[] = [`# ${doc.title.replace(/\s+/g, " ").trim()}`];
   parts.push(`*${doc.kicker}*`);
+  if (doc.image) {
+    // Absolute URL so the picture still resolves when the file is opened elsewhere.
+    parts.push(`![${doc.image.alt.replace(/[\[\]]/g, "")}](${siteUrl()}${doc.image.src})\n\n*${doc.image.caption.replace(/\s*\n\s*/g, " ").trim()}*`);
+  }
   if (doc.meta.length) {
     parts.push(doc.meta.map((m) => `- **${m.label}:** ${m.value.replace(/\s*\n\s*/g, " ").trim()}`).join("\n"));
   }

@@ -28,9 +28,19 @@ export type Block =
 
 export type DocSection = { key: string; title: string; blocks: Block[] };
 
+/** An optional picture shown on the cover (personas use it for an illustrative portrait). */
+export type DocImage = {
+  /** Site-relative path under /public. Exports only embed files under /personas/avatars. */
+  src: string;
+  alt: string;
+  /** Always shown under the picture, in the preview and every export. */
+  caption: string;
+};
+
 export type PlanDocument = {
   title: string;
   kicker: string;
+  image?: DocImage;
   meta: { label: string; value: string }[];
   sections: DocSection[];
 };

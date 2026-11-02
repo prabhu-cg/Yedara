@@ -2,6 +2,7 @@ import "server-only";
 import { requireUser } from "@/lib/auth/dal";
 import { createClient } from "@/lib/supabase/server";
 import { workHref, type WorkKind } from "@/config/work-kinds";
+import { loadAvatarIds } from "@/lib/personas/queries";
 
 export type RecentItem = {
   kind: WorkKind;
@@ -11,6 +12,8 @@ export type RecentItem = {
   /** The project it belongs to, for items that are not projects themselves. */
   project: string | null;
   updatedAt: string;
+  /** Personas only: the chosen portrait id, empty for initials. */
+  avatar?: string;
 };
 
 /** Merge per-table results into one most-recent-first list. */
@@ -39,6 +42,7 @@ export async function getRecentItems(limit = 100): Promise<RecentItem[]> {
     const projectIds = [
       ...new Set([...(plans.data ?? []), ...(personas.data ?? []), ...(analyses.data ?? []), ...(syntheses.data ?? []), ...(journeys.data ?? [])].map((r) => r.project_id)),
     ];
+    const avatars = await loadAvatarIds(supabase, (personas.data ?? []).map((r) => r.id));
     const names = new Map<string, string>();
     if (projectIds.length) {
       const { data } = await supabase.from("projects").select("id, name").in("id", projectIds);
@@ -58,7 +62,7 @@ export async function getRecentItems(limit = 100): Promise<RecentItem[]> {
       [
         ...(projects.data ?? []).map((r) => item("project", r.id, r.name, r.updated_at)),
         ...(plans.data ?? []).map((r) => item("plan", r.id, r.title, r.updated_at, r.project_id)),
-        ...(personas.data ?? []).map((r) => item("persona", r.id, r.name, r.updated_at, r.project_id)),
+        ...(personas.data ?? []).map((r) => ({ ...item("persona", r.id, r.name, r.updated_at, r.project_id), avatar: avatars.get(r.id) ?? "" })),
         ...(analyses.data ?? []).map((r) => item("analysis", r.id, r.title, r.updated_at, r.project_id)),
         ...(syntheses.data ?? []).map((r) => item("synthesis", r.id, r.title, r.updated_at, r.project_id)),
         ...(journeys.data ?? []).map((r) => item("journey", r.id, r.name, r.updated_at, r.project_id)),

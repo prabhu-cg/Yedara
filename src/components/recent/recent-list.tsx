@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { PersonaAvatar } from "@/components/personas/persona-avatar";
 import { WORK_KINDS } from "@/config/work-kinds";
 import { formatRelativeTime } from "@/lib/format";
 import type { RecentItem } from "@/lib/recent";
@@ -43,7 +44,11 @@ export function RecentList({ items, now }: { items: RecentItem[]; now: string })
                 <tr key={`${item.kind}-${item.id}`} data-kind={item.kind} className="border-t border-border align-middle first:border-t-0 hover:bg-secondary/60">
                   <th scope="row" className="max-w-0 min-w-40 px-4 py-3 font-semibold">
                     <Link href={item.href} className="flex items-center gap-3 rounded-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
-                      <Icon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+                      {item.kind === "persona" ? (
+                        <PersonaAvatar avatarId={item.avatar ?? ""} name={item.title} decorative className="size-7 text-[11px]" />
+                      ) : (
+                        <Icon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+                      )}
                       <span className="min-w-0">
                         <span className="block truncate hover:text-primary-text">{item.title}</span>
                         <span className="block truncate text-xs font-normal text-muted-foreground sm:hidden">

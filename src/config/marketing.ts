@@ -60,7 +60,7 @@ export const MODULES: MarketingModule[] = [
     details: [
       "Six steps: context, profile, behaviour, needs, evidence and output. Keep several personas per project, duplicate them, and edit any time.",
       "Each persona is labelled research-backed, hypothesis or proto-persona, on screen and in every export. A research-backed persona needs a research source plus an observation or quote.",
-      "Every quote needs a source. Demographics only appear when you record why they matter. Initials stand in for photos, so nobody is represented by a stranger's face.",
+      "Every quote needs a source. Demographics only appear when you record why they matter. Initials are the default. A persona can use an illustrative stock portrait, always labelled as not a real participant.",
       "Compare up to four personas side by side, and export to PDF, Word or Markdown.",
     ],
     status: "available",

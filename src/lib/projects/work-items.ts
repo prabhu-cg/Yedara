@@ -16,6 +16,8 @@ export type WorkItem = {
   progress: string | null;
   createdAt: string;
   updatedAt: string;
+  /** Personas only: the chosen portrait id, empty for initials. */
+  avatar?: string;
 };
 
 type Source = { id: string; status: string; current_step?: number; created_at: string; updated_at: string };
@@ -36,14 +38,14 @@ const toItem = (kind: ProjectWorkKind, title: string, total: number | null, s: S
 
 export function buildWorkItems(input: {
   plans: (Source & { title: string })[];
-  personas: (Source & { name: string })[];
+  personas: (Source & { name: string; avatar?: string })[];
   analyses: (Source & { title: string })[];
   syntheses?: (Source & { title: string })[];
   journeys?: (Source & { name: string })[];
 }): WorkItem[] {
   return [
     ...input.plans.map((p) => toItem("plan", p.title, TOTAL_STEPS, p)),
-    ...input.personas.map((p) => toItem("persona", p.name, PERSONA_TOTAL_STEPS, p)),
+    ...input.personas.map((p) => ({ ...toItem("persona", p.name, PERSONA_TOTAL_STEPS, p), avatar: p.avatar ?? "" })),
     ...input.analyses.map((a) => toItem("analysis", a.title, COMPETITOR_TOTAL_STEPS, a)),
     ...(input.syntheses ?? []).map((s) => toItem("synthesis", s.title, null, s)),
     ...(input.journeys ?? []).map((j) => toItem("journey", j.name, null, j)),

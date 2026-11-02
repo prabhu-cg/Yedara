@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 import { requireUser } from "@/lib/auth/dal";
 import { createClient } from "@/lib/supabase/server";
+import { loadAvatarIds } from "@/lib/personas/queries";
 import type { CandidateRow, ItemRow, JourneyRow, StageRow } from "@/lib/journeys/schemas";
 
 const JOURNEY_COLUMNS = "id, owner_id, project_id, persona_id, name, journey_type, scenario, state, status, completed_at, created_at, updated_at";
@@ -62,7 +63,7 @@ export async function getJourneyBundle(journeyId: string) {
   return bundle;
 }
 
-export type JourneyListItem = JourneyRow & { project_name: string | null; persona_name: string | null; stage_count: number };
+export type JourneyListItem = JourneyRow & { project_name: string | null; persona_name: string | null; persona_avatar: string; stage_count: number };
 
 export async function listJourneys(options: { projectId?: string } = {}): Promise<JourneyListItem[]> {
   await requireUser();
@@ -77,16 +78,17 @@ export async function listJourneys(options: { projectId?: string } = {}): Promis
   if (!rows?.length) return [];
 
   const personaIds = [...new Set(rows.map((r) => r.persona_id).filter((p): p is string => Boolean(p)))];
-  const [projects, personas, stages] = await Promise.all([
+  const [projects, personas, stages, avatars] = await Promise.all([
     supabase.from("projects").select("id, name").in("id", [...new Set(rows.map((r) => r.project_id))]),
     personaIds.length ? supabase.from("personas").select("id, name").in("id", personaIds) : Promise.resolve({ data: [] as { id: string; name: string }[] }),
     supabase.from("journey_stages").select("journey_id").in("journey_id", rows.map((r) => r.id)),
+    loadAvatarIds(supabase, personaIds),
   ]);
   const projectName = new Map((projects.data ?? []).map((p) => [p.id, p.name]));
   const personaName = new Map((personas.data ?? []).map((p) => [p.id, p.name]));
   const counts = new Map<string, number>();
   for (const s of stages.data ?? []) counts.set(s.journey_id, (counts.get(s.journey_id) ?? 0) + 1);
-  return (rows as JourneyRow[]).map((r) => ({ ...r, project_name: projectName.get(r.project_id) ?? null, persona_name: r.persona_id ? (personaName.get(r.persona_id) ?? null) : null, stage_count: counts.get(r.id) ?? 0 }));
+  return (rows as JourneyRow[]).map((r) => ({ ...r, project_name: projectName.get(r.project_id) ?? null, persona_name: r.persona_id ? (personaName.get(r.persona_id) ?? null) : null, persona_avatar: r.persona_id ? (avatars.get(r.persona_id) ?? "") : "", stage_count: counts.get(r.id) ?? 0 }));
 }
 
 /** Personas a new journey can use, with their project so the form can filter. */

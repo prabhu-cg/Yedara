@@ -7,6 +7,7 @@ import { ArrowLeft, CheckCircle2, ChevronRight, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { SelectField, TextareaField } from "@/components/forms/fields";
 import { JourneyEditor, type ItemEdit, type StageEdit } from "@/components/journeys/journey-editor";
+import { PersonaAvatar } from "@/components/personas/persona-avatar";
 import { OpportunitiesPanel } from "@/components/journeys/opportunities-panel";
 import { JourneyPresentation } from "@/components/journeys/journey-presentation";
 import { JourneyMap, JourneyTable } from "@/components/journeys/journey-views";
@@ -30,7 +31,7 @@ export function JourneyWorkspace(props: {
   initialStatus: "draft" | "completed";
   initialTab: JourneyTab;
   project: { id: string; name: string } | null;
-  personas: { id: string; name: string }[];
+  personas: { id: string; name: string; avatar?: string }[];
   initialStages: StageRow[];
   initialItems: ItemRow[];
   initialCandidates: CandidateRow[];
@@ -113,7 +114,8 @@ export function JourneyWorkspace(props: {
   const saveAndClose = async () => { if (await flush()) router.push("/tools/journey-mapper"); };
   const visible = JOURNEY_TABS;
   const empty = stages.length === 0;
-  const personaName = props.personas.find((p) => p.id === meta.personaId)?.name ?? null;
+  const persona = props.personas.find((p) => p.id === meta.personaId) ?? null;
+  const personaName = persona?.name ?? null;
 
   return (
     <div>
@@ -126,7 +128,7 @@ export function JourneyWorkspace(props: {
               <Badge variant={status === "completed" ? "default" : "secondary"}>{status === "completed" ? "Completed" : "Draft"}</Badge>
               <Badge variant="outline">{JOURNEY_STATE_LABELS[meta.state]}</Badge>
               <span>{JOURNEY_TYPE_LABELS[meta.journeyType]}</span>
-              {personaName && <><span aria-hidden>·</span><span>Persona: {personaName}</span></>}
+              {persona && <><span aria-hidden>·</span><span className="inline-flex items-center gap-1.5"><PersonaAvatar avatarId={persona.avatar ?? ""} name={persona.name} decorative className="size-5 text-[9px]" />Persona: {persona.name}</span></>}
               {props.project && <><span aria-hidden>·</span><Link href={`/projects/${props.project.id}`} className="hover:text-foreground hover:underline">{props.project.name}</Link></>}
               <span aria-hidden>·</span><span className="tabular-nums">{stages.length} {stages.length === 1 ? "stage" : "stages"}</span>
             </div>
@@ -178,7 +180,7 @@ export function JourneyWorkspace(props: {
           </div>
         )}
         {tab === "table" && !empty && <JourneyTable stages={stages} items={items} />}
-        {tab === "presentation" && !empty && <JourneyPresentation name={meta.name} scenario={meta.scenario || null} type={meta.journeyType} state={meta.state} personaName={personaName} stages={stages} items={items} />}
+        {tab === "presentation" && !empty && <JourneyPresentation name={meta.name} scenario={meta.scenario || null} type={meta.journeyType} state={meta.state} personaName={personaName} personaAvatar={persona?.avatar ?? ""} stages={stages} items={items} />}
         {tab === "edit" && <JourneyEditor journeyId={id} stages={stages} items={items} candidates={candidates} evidenceOptions={props.evidenceOptions} setStages={setStages} setItems={setItems} setCandidates={setCandidates} editStage={editStage} editItem={editItem} flush={flush} />}
         {tab === "opportunities" && <OpportunitiesPanel candidates={candidates} onRemoved={(cid) => setCandidates((all) => all.filter((c) => c.id !== cid))} />}
       </div>

@@ -20,6 +20,8 @@ export const personaContextSchema = z.object({
 });
 
 export const personaProfileSchema = z.object({
+  /** Id of an illustrative stock portrait (see avatars.ts). Empty = initials. Unknown ids are treated as empty. */
+  avatar: z.string().max(20).default(""),
   background: text(3000),
   role: text(300),
   experience_level: z.enum(["", ...EXPERIENCE_LEVELS]).default(""),

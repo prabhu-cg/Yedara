@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/auth/dal";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 import { PERSONA_SECTION_KEYS, type PersonaSectionKey } from "@/lib/personas/constants";
+import { getAvatar } from "@/lib/personas/avatars";
 import { normalizePersonaContent, type EvidenceRow, type PersonaContent } from "@/lib/personas/schemas";
 import type { ProjectBrief } from "@/lib/shared-context";
 
@@ -103,7 +104,26 @@ export async function getPersonaBundle(personaId: string) {
   return bundle;
 }
 
-export type PersonaListItem = PersonaRow & { project_name: string | null; evidence_count: number };
+/**
+ * The chosen portrait id for each persona (empty string = initials), read from the profile section
+ * under the caller's RLS. Unknown ids come back empty, so a stale value can never break a page.
+ */
+export async function loadAvatarIds(supabase: Awaited<ReturnType<typeof createClient>>, personaIds: string[]): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  if (!personaIds.length) return out;
+  const { data, error } = await supabase.from("persona_sections").select("persona_id, content").eq("key", "profile").in("persona_id", personaIds);
+  if (error) {
+    console.error("[personas] avatar lookup failed:", error.code ?? error.message);
+    return out; // a missing picture is not worth failing the page: initials stand in
+  }
+  for (const row of data ?? []) {
+    const id = (row.content as { avatar?: unknown } | null)?.avatar;
+    out.set(row.persona_id, typeof id === "string" && getAvatar(id) ? id : "");
+  }
+  return out;
+}
+
+export type PersonaListItem = PersonaRow & { project_name: string | null; evidence_count: number; avatar: string };
 
 export async function listPersonas(options: { projectId?: string } = {}): Promise<PersonaListItem[]> {
   await requireUser();
@@ -117,14 +137,15 @@ export async function listPersonas(options: { projectId?: string } = {}): Promis
   }
   if (!personas?.length) return [];
 
-  const [projects, evidence] = await Promise.all([
+  const [projects, evidence, avatars] = await Promise.all([
     supabase.from("projects").select("id, name").in("id", [...new Set(personas.map((p) => p.project_id))]),
     supabase.from("persona_evidence").select("persona_id").in("persona_id", personas.map((p) => p.id)),
+    loadAvatarIds(supabase, personas.map((p) => p.id)),
   ]);
   const names = new Map((projects.data ?? []).map((p) => [p.id, p.name]));
   const counts = new Map<string, number>();
   for (const e of evidence.data ?? []) counts.set(e.persona_id, (counts.get(e.persona_id) ?? 0) + 1);
-  return personas.map((p) => ({ ...p, project_name: names.get(p.project_id) ?? null, evidence_count: counts.get(p.id) ?? 0 }));
+  return personas.map((p) => ({ ...p, project_name: names.get(p.project_id) ?? null, evidence_count: counts.get(p.id) ?? 0, avatar: avatars.get(p.id) ?? "" }));
 }
 
 /** Loads up to four personas for side-by-side comparison (each read under RLS). */

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LayoutGrid, Plus, Table2 } from "lucide-react";
 import { AnalysisActionsMenu } from "@/components/competitors/analysis-actions-menu";
 import { AnalysisCard } from "@/components/competitors/analysis-card";
+import { PersonaAvatar } from "@/components/personas/persona-avatar";
 import { PersonaActionsMenu } from "@/components/personas/persona-actions-menu";
 import { PersonaCard } from "@/components/personas/persona-card";
 import { NewWorkMenu } from "@/components/projects/new-work-menu";
@@ -60,8 +61,9 @@ function WorkTable({ items }: { items: WorkItem[] }) {
           {items.map((item) => (
             <tr key={`${item.kind}-${item.id}`} data-kind={item.kind} className="align-middle hover:bg-secondary/60">
               <th scope="row" className="max-w-0 min-w-32 px-4 py-3 font-semibold [overflow-wrap:anywhere]">
-                <Link href={item.href} className="rounded-sm outline-none hover:text-primary-text focus-visible:ring-[3px] focus-visible:ring-ring/50">
-                  {item.title}
+                <Link href={item.href} className="inline-flex items-center gap-2.5 rounded-sm outline-none hover:text-primary-text focus-visible:ring-[3px] focus-visible:ring-ring/50">
+                  {item.kind === "persona" && <PersonaAvatar avatarId={item.avatar ?? ""} name={item.title} decorative className="size-7 text-[11px]" />}
+                  <span className="min-w-0">{item.title}</span>
                 </Link>
                 <span className="mt-0.5 block text-xs font-normal text-muted-foreground sm:hidden">
                   {item.completed ? "Completed" : "Draft"} · Edited {formatRelativeTime(item.updatedAt)}

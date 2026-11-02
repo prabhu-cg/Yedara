@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ArrowLeft, ArrowRight, Maximize2, Minimize2 } from "lucide-react";
+import { PersonaAvatar } from "@/components/personas/persona-avatar";
 import { EmotionIndicator } from "@/components/journeys/emotion";
 import { EmotionCurve, ItemChip, itemsFor } from "@/components/journeys/journey-views";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,7 @@ import type { ItemRow, StageRow } from "@/lib/journeys/schemas";
 const KINDS: ItemKind[] = ["action", "goal", "thought", "touchpoint", "channel", "pain_point", "opportunity", "evidence"];
 
 /** One slide per stage, after an overview. Arrow keys move between slides; full screen is optional. */
-export function JourneyPresentation({ name, scenario, type, state, personaName, stages, items }: { name: string; scenario: string | null; type: JourneyType; state: JourneyState; personaName: string | null; stages: StageRow[]; items: ItemRow[] }) {
+export function JourneyPresentation({ name, scenario, type, state, personaName, personaAvatar, stages, items }: { name: string; scenario: string | null; type: JourneyType; state: JourneyState; personaName: string | null; personaAvatar?: string; stages: StageRow[]; items: ItemRow[] }) {
   const [slide, setSlide] = React.useState(0); // 0 = overview, 1..n = stages
   const [full, setFull] = React.useState(false);
   const frame = React.useRef<HTMLDivElement>(null);
@@ -52,7 +53,12 @@ export function JourneyPresentation({ name, scenario, type, state, personaName, 
           <div className="mx-auto max-w-4xl space-y-6">
             <p className="text-sm font-semibold text-primary-text">{JOURNEY_TYPE_LABELS[type]} · {JOURNEY_STATE_LABELS[state]}</p>
             <h2 className="text-4xl leading-tight font-bold [overflow-wrap:anywhere]">{name}</h2>
-            {personaName && <p className="text-lg text-muted-foreground">Persona: {personaName}</p>}
+            {personaName && (
+              <p className="flex items-center gap-3 text-lg text-muted-foreground">
+                <PersonaAvatar avatarId={personaAvatar ?? ""} name={personaName} decorative className="size-10 text-sm" />
+                Persona: {personaName}
+              </p>
+            )}
             {scenario && <p className="max-w-prose text-lg leading-relaxed [overflow-wrap:anywhere]">{scenario}</p>}
             {stages.length > 0 ? (
               <>

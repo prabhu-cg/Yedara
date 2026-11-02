@@ -8,7 +8,9 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { TextareaField, TextField } from "@/components/forms/fields";
 import { DocumentView } from "@/components/research-planner/document-view";
+import { PersonaAvatar } from "@/components/personas/persona-avatar";
 import { PersonaTypeNotice, PersonaTypeBadge } from "@/components/personas/persona-type";
+import { AVATAR_LABEL, getAvatar } from "@/lib/personas/avatars";
 import { CONFIDENCE_LABELS, EXPERIENCE_LABELS, type PersonaType } from "@/lib/personas/constants";
 import type { PlanDocument } from "@/lib/research-planner/document";
 import type { EvidenceRow, PersonaContent } from "@/lib/personas/schemas";
@@ -16,11 +18,6 @@ import { summariseEvidence, type PersonaIssue } from "@/lib/personas/validation"
 import { cn } from "@/lib/utils";
 
 export type PersonaExportFormat = "md" | "pdf" | "docx";
-
-const initials = (name: string) => {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  return ((parts[0]?.[0] ?? "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase() || "?";
-};
 
 function Section({ title, step, onEdit, children, empty }: { title: string; step: number; onEdit: (s: number) => void; children?: React.ReactNode; empty: boolean }) {
   return (
@@ -151,7 +148,7 @@ export function PersonaOutput({
       ) : (
         <div role="tabpanel" aria-label="Persona profile" className="space-y-5">
           <header className="flex flex-col gap-4 rounded-card border border-border bg-card p-5 shadow-card sm:flex-row sm:items-start sm:p-6">
-            <span aria-hidden className="flex size-16 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xl font-bold text-primary-text">{initials(name)}</span>
+            <PersonaAvatar avatarId={profile.avatar} name={name} />
             <div className="min-w-0 flex-1 space-y-2">
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="text-xl font-bold [overflow-wrap:anywhere]">{name.trim() || "Untitled persona"}</h3>
@@ -160,7 +157,11 @@ export function PersonaOutput({
               </div>
               {content.output.headline.trim() && <p className="text-[15px] font-medium">{content.output.headline}</p>}
               {content.output.summary.trim() && <p className="text-sm whitespace-pre-line text-muted-foreground [overflow-wrap:anywhere]">{content.output.summary}</p>}
-              <p className="text-xs text-muted-foreground">Initials stand in for a photo on purpose: Yedara doesn&apos;t invent faces or identities.</p>
+              <p className="text-xs text-muted-foreground">
+                {getAvatar(profile.avatar)
+                  ? `${AVATAR_LABEL} Change it in step 2.`
+                  : "Initials stand in for a photo by default: Yedara doesn’t invent faces or identities. You can choose an illustrative portrait in step 2."}
+              </p>
             </div>
           </header>
 

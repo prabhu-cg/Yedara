@@ -193,6 +193,54 @@ test.describe("persona builder: building a persona", () => {
   });
 });
 
+test.describe("persona builder: illustrative portrait", () => {
+  test("a chosen portrait shows on the persona and the document preview, labelled, and exports", async ({ page }) => {
+    await signUp(page, { name: "Maya Patel" });
+    await createProjectWithBrief(page, { name: "Budgeto", industry: "Fintech" });
+    await createPersona(page, { name: "Time-poor Tamsin", projectName: "Budgeto" });
+    await nextStep(page);
+    await step(page, "User profile");
+
+    // Initials are the default; a portrait is an explicit choice.
+    await expect(page.getByRole("radio", { name: "Initials, no photo" })).toBeChecked();
+    await page.locator("label", { has: page.getByRole("radio", { name: "Older man with glasses and a grey beard" }) }).click();
+    await expect(page.getByRole("radio", { name: "Older man with glasses and a grey beard" })).toBeChecked();
+
+    await fillToOutput(page);
+    const profile = page.getByRole("tabpanel", { name: "Persona profile" });
+    await expect(profile.getByRole("img", { name: "Older man with glasses and a grey beard" })).toBeVisible();
+    await expect(profile).toContainText("Illustrative stock photo. Not a real participant.");
+
+    await page.getByRole("tab", { name: "Document preview" }).click();
+    const preview = page.getByRole("article", { name: "Document preview" });
+    await expect(preview.getByRole("img", { name: "Older man with glasses and a grey beard" })).toBeVisible();
+    await expect(preview).toContainText("Illustrative stock photo. Not a real participant.");
+    await expect(preview).not.toContainText("Unsplash");
+
+    const md = readFileSync((await (await download(page, "md")).path())!, "utf8");
+    expect(md).toMatch(/!\[[^\]]+\]\([^)]+\/personas\/avatars\/02\.jpg\)/);
+    expect(md).toContain("Illustrative stock photo. Not a real participant.");
+    const pdf = await download(page, "pdf");
+    expect(pdf.suggestedFilename()).toMatch(/\.pdf$/);
+
+    // The choice survives a reload, and switching back to initials removes it from the preview.
+    await page.reload();
+    await page.getByRole("tab", { name: "Document preview" }).click();
+    await expect(page.getByRole("article", { name: "Document preview" }).getByRole("img", { name: /grey beard/ })).toBeVisible();
+
+    // The portrait follows the persona into the places that list it.
+    const portrait = 'img[src*="personas%2Favatars"], img[src*="personas/avatars"]'; // next/image encodes the path
+    await page.goto("/tools/persona-builder");
+    await expect(page.locator("article", { hasText: "Time-poor Tamsin" }).locator(portrait)).toBeVisible();
+    await page.goto("/recent");
+    await expect(page.locator("tr", { hasText: "Time-poor Tamsin" }).locator(portrait)).toBeVisible();
+    await page.goto("/tools/persona-builder");
+    await page.getByRole("link", { name: "Time-poor Tamsin" }).click();
+    await page.getByRole("link", { name: "Compare" }).click();
+    await expect(page.locator("th", { hasText: "Time-poor Tamsin" }).locator(portrait)).toBeVisible();
+  });
+});
+
 test.describe("persona builder: shared project context", () => {
   test("inherits the project brief and overrides it for one persona without touching the project", async ({ page }) => {
     await signUp(page);

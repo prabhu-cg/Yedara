@@ -1,6 +1,7 @@
-import { Document, Font, Page, Path, StyleSheet, Svg, Text, View, renderToBuffer } from "@react-pdf/renderer";
+import { Document, Font, Image, Page, Path, StyleSheet, Svg, Text, View, renderToBuffer } from "@react-pdf/renderer";
 import { LOGO_ACCENT_HEX, LOGO_INK_HEX, LOGO_VIEWBOX, LOGO_WING_ACCENT, LOGO_WING_INK } from "@/components/brand/logo-paths";
 import type { Block, ListItem, PlanDocument } from "@/lib/research-planner/document";
+import { loadDocImage } from "@/lib/export/doc-image";
 
 // Same palette as the app (light theme): accent, warm ink, Stone, parchment hairline, Oat.
 const C = { primary: "#C74504", text: "#1C1917", muted: "#6F6963", border: "#E8DDC8", fill: "#F4F2EA" };
@@ -116,7 +117,7 @@ function BlockView({ block }: { block: Block }) {
   );
 }
 
-export function PlanPdf({ doc }: { doc: PlanDocument }) {
+export function PlanPdf({ doc, image }: { doc: PlanDocument; image?: Buffer | null }) {
   return (
     <Document title={doc.title} author="Yedara" subject={doc.kicker}>
       <Page size="A4" style={s.page}>
@@ -125,6 +126,13 @@ export function PlanPdf({ doc }: { doc: PlanDocument }) {
             <Path d={LOGO_WING_INK} fill={LOGO_INK_HEX} />
             <Path d={LOGO_WING_ACCENT} fill={LOGO_ACCENT_HEX} />
           </Svg>
+          {image && doc.image && (
+            <View style={{ marginBottom: 22 }}>
+              {/* eslint-disable-next-line jsx-a11y/alt-text -- react-pdf Image, not an HTML img */}
+              <Image src={{ data: image, format: "jpg" }} style={{ width: 84, height: 84, borderRadius: 42 }} />
+              <Text style={{ fontSize: 8.5, color: C.muted, marginTop: 6, maxWidth: 300 }}>{pdfSafe(doc.image.caption)}</Text>
+            </View>
+          )}
           <Text style={s.coverKicker}>{pdfSafe(doc.kicker)}</Text>
           <Text style={s.coverTitle}>{pdfSafe(doc.title)}</Text>
           {doc.meta.map((m) => (
@@ -163,5 +171,5 @@ export function PlanPdf({ doc }: { doc: PlanDocument }) {
 }
 
 export async function renderPdf(doc: PlanDocument): Promise<Buffer> {
-  return renderToBuffer(<PlanPdf doc={doc} />);
+  return renderToBuffer(<PlanPdf doc={doc} image={await loadDocImage(doc.image)} />);
 }

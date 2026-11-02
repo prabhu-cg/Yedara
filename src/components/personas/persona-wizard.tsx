@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { SelectField, TextareaField, TextField } from "@/components/forms/fields";
 import { ListEditor, RowsEditor } from "@/components/research-planner/editor-primitives";
 import { EvidenceEditor } from "@/components/personas/evidence-editor";
+import { AvatarPicker } from "@/components/personas/persona-avatar";
 import { PersonaOutput, type PersonaExportFormat } from "@/components/personas/persona-output";
 import { PersonaTypeBadge, PersonaTypeNotice } from "@/components/personas/persona-type";
 import { PersonaTypePicker } from "@/components/personas/persona-type-picker";
@@ -351,6 +352,7 @@ export function PersonaWizard(props: PersonaWizardProps) {
         const set = (patch: Partial<typeof p>) => updateSection("profile", { ...p, ...patch });
         return (
           <div className="space-y-6">
+            <AvatarPicker value={p.avatar} name={name} onChange={(avatar) => set({ avatar })} />
             <TextareaField id="field-background" label="Background" rows={4} placeholder="Who are they, and what is their story relevant to your product?" error={e.background} value={p.background} onChange={(ev) => set({ background: ev.target.value })} />
             <div className="grid gap-6 sm:grid-cols-2">
               <TextField label="Role or occupation" optional placeholder="e.g. Freelance UX designer" value={p.role} onChange={(ev) => set({ role: ev.target.value })} />

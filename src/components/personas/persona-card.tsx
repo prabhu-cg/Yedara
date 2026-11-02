@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Clock, FolderKanban, Quote } from "lucide-react";
 import { WorkKindTag } from "@/components/projects/work-kind-tag";
 import { Badge } from "@/components/ui/badge";
+import { PersonaAvatar } from "@/components/personas/persona-avatar";
 import { PersonaActionsMenu } from "@/components/personas/persona-actions-menu";
 import { PersonaTypeBadge } from "@/components/personas/persona-type";
 import { PERSONA_TOTAL_STEPS } from "@/lib/personas/constants";
@@ -18,11 +19,14 @@ export function PersonaCard({ persona, showTool }: { persona: PersonaListItem; s
           <PersonaTypeBadge type={persona.persona_type} />
           <Badge variant={completed ? "default" : "secondary"}>{completed ? "Completed" : "Draft"}</Badge>
         </div>
-        <h3 className="text-base font-semibold [overflow-wrap:anywhere]">
-          <Link href={`/tools/persona-builder/${persona.id}`} className="outline-none after:absolute after:inset-0 after:rounded-card hover:text-primary-text">
-            {persona.name}
-          </Link>
-        </h3>
+        <div className="flex items-center gap-3">
+          <PersonaAvatar avatarId={persona.avatar} name={persona.name} decorative className="size-11 text-sm" />
+          <h3 className="min-w-0 text-base font-semibold [overflow-wrap:anywhere]">
+            <Link href={`/tools/persona-builder/${persona.id}`} className="outline-none after:absolute after:inset-0 after:rounded-card hover:text-primary-text">
+              {persona.name}
+            </Link>
+          </h3>
+        </div>
         <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 text-xs text-muted-foreground">
           {persona.project_name && (
             <span className="inline-flex items-center gap-1.5"><FolderKanban aria-hidden className="size-3.5" />{persona.project_name}</span>

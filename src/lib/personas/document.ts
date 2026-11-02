@@ -10,6 +10,7 @@ import {
 import type { EvidenceRow, PersonaContent } from "@/lib/personas/schemas";
 import { evidenceStatement, hasDemographics, summariseEvidence } from "@/lib/personas/validation";
 import { AI_ASSUMPTION_LABEL } from "@/lib/ai/persona-ai";
+import { AVATAR_LABEL, avatarSrc, getAvatar } from "@/lib/personas/avatars";
 import { resolveSharedContext, SHARED_FIELD_LABELS, type ProjectBrief } from "@/lib/shared-context";
 
 export type PersonaDocumentInput = {
@@ -184,7 +185,12 @@ export function buildPersonaDocument(input: PersonaDocumentInput): PlanDocument 
     { label: "Last updated", value: formatDocDate(persona.updatedAt) },
   ].filter((m) => m.value.trim());
 
-  return { title: t(persona.name) || "Untitled persona", kicker: "Persona", meta, sections };
+  const avatar = getAvatar(content.profile.avatar);
+  const image = avatar
+    ? { src: avatarSrc(avatar), alt: avatar.alt, caption: AVATAR_LABEL }
+    : undefined;
+
+  return { title: t(persona.name) || "Untitled persona", kicker: "Persona", ...(image ? { image } : {}), meta, sections };
 }
 
 /** Labels for the shared fields, re-exported for the UI. */

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JourneyWorkspace } from "@/components/journeys/journey-workspace";
 import { isJourneyTab } from "@/lib/journeys/constants";
 import { getJourneyBundle } from "@/lib/journeys/queries";
+import { loadAvatarIds } from "@/lib/personas/queries";
 import { listEvidenceOptions } from "@/lib/synthesizer/queries";
 import { createClient } from "@/lib/supabase/server";
 
@@ -18,6 +19,8 @@ export default async function JourneyPage({ params, searchParams }: PageProps<"/
     listEvidenceOptions(bundle.journey.project_id),
   ]);
 
+  const avatars = await loadAvatarIds(supabase, (personas ?? []).map((p) => p.id));
+
   return (
     <JourneyWorkspace
       journeyId={bundle.journey.id}
@@ -25,7 +28,7 @@ export default async function JourneyPage({ params, searchParams }: PageProps<"/
       initialStatus={bundle.journey.status}
       initialTab={isJourneyTab(query.tab) ? query.tab : bundle.stages.length ? "map" : "edit"}
       project={bundle.project ? { id: bundle.project.id, name: bundle.project.name } : null}
-      personas={personas ?? []}
+      personas={(personas ?? []).map((p) => ({ ...p, avatar: avatars.get(p.id) ?? "" }))}
       initialStages={bundle.stages}
       initialItems={bundle.items}
       initialCandidates={bundle.candidates}

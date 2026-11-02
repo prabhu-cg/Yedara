@@ -4,6 +4,7 @@ import { GitCompareArrows } from "lucide-react";
 import { EmptyState } from "@/components/layout/empty-state";
 import { PageHeader } from "@/components/layout/page-header";
 import { CompareView } from "@/components/personas/compare-view";
+import { PersonaAvatar } from "@/components/personas/persona-avatar";
 import { PersonaTypeBadge } from "@/components/personas/persona-type";
 import { Button } from "@/components/ui/button";
 import { listPersonas, loadPersonasForComparison } from "@/lib/personas/queries";
@@ -34,6 +35,7 @@ export default async function ComparePersonasPage({ searchParams }: PageProps<"/
                   <li key={p.id}>
                     <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border px-3 py-2 text-sm hover:bg-muted has-[:checked]:border-primary">
                       <input type="checkbox" name="ids" value={p.id} defaultChecked={chosen.has(p.id)} className="size-4 accent-[var(--primary)]" />
+                      <PersonaAvatar avatarId={p.avatar} name={p.name} decorative className="size-7 text-[11px]" />
                       <span className="min-w-0 flex-1 truncate font-medium">{p.name}</span>
                       <PersonaTypeBadge type={p.persona_type} />
                     </label>

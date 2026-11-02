@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Clock, FolderKanban, Layers3, UserRound } from "lucide-react";
 import { WorkKindTag } from "@/components/projects/work-kind-tag";
 import { Badge } from "@/components/ui/badge";
+import { PersonaAvatar } from "@/components/personas/persona-avatar";
 import { JourneyActionsMenu } from "@/components/journeys/journey-actions-menu";
 import { JOURNEY_STATE_LABELS } from "@/lib/journeys/constants";
 import type { JourneyListItem } from "@/lib/journeys/queries";
@@ -27,7 +28,12 @@ export function JourneyCard({ journey, showTool }: { journey: JourneyListItem; s
             <span className="inline-flex items-center gap-1.5"><FolderKanban aria-hidden className="size-3.5" />{journey.project_name}</span>
           )}
           <span className="inline-flex items-center gap-1.5"><Layers3 aria-hidden className="size-3.5" />{journey.stage_count} {journey.stage_count === 1 ? "stage" : "stages"}</span>
-          {journey.persona_name && <span className="inline-flex items-center gap-1.5"><UserRound aria-hidden className="size-3.5" />{journey.persona_name}</span>}
+          {journey.persona_name && (
+            <span className="inline-flex items-center gap-1.5">
+              {journey.persona_avatar ? <PersonaAvatar avatarId={journey.persona_avatar} name={journey.persona_name} decorative className="size-5 text-[9px]" /> : <UserRound aria-hidden className="size-3.5" />}
+              {journey.persona_name}
+            </span>
+          )}
           <span className="inline-flex items-center gap-1.5"><Clock aria-hidden className="size-3.5" />Edited {formatRelativeTime(journey.updated_at)}</span>
         </div>
       </div>

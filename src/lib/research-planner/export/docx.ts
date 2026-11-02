@@ -18,6 +18,7 @@ import {
   type ParagraphChild,
 } from "docx";
 import type { Block, ListItem, PlanDocument } from "@/lib/research-planner/document";
+import { loadDocImage } from "@/lib/export/doc-image";
 import { LOGO_PNG_BASE64 } from "@/lib/research-planner/export/logo-png";
 
 const FONT = "Calibri";
@@ -100,6 +101,7 @@ function buildBlocks(blocks: Block[], nextNumbering: () => number) {
 }
 
 export async function renderDocx(doc: PlanDocument): Promise<Buffer> {
+  const image = await loadDocImage(doc.image);
   let numbering = 0;
   const nextNumbering = () => ++numbering;
 
@@ -149,6 +151,22 @@ export async function renderDocx(doc: PlanDocument): Promise<Buffer> {
         }),
       ],
     }),
+    ...(image && doc.image
+      ? [
+          new Paragraph({
+            spacing: { after: 60 },
+            children: [
+              new ImageRun({
+                type: "jpg",
+                data: image,
+                transformation: { width: 96, height: 96 },
+                altText: { name: "Persona portrait", title: "Illustrative portrait", description: doc.image.alt },
+              }),
+            ],
+          }),
+          new Paragraph({ spacing: { after: 280 }, children: runs(doc.image.caption, { color: MUTED, size: 17 }) }),
+        ]
+      : []),
     new Paragraph({ spacing: { after: 160 }, children: runs(doc.kicker, { color: PRIMARY, bold: true, size: 24 }) }),
     new Paragraph({ heading: HeadingLevel.TITLE, spacing: { after: 480 }, children: runs(doc.title) }),
     ...coverMeta,

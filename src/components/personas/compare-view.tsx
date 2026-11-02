@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { PersonaAvatar } from "@/components/personas/persona-avatar";
 import { PersonaTypeBadge } from "@/components/personas/persona-type";
 import { buildComparison, type ComparablePersona } from "@/lib/personas/compare";
 
@@ -37,7 +38,10 @@ export function CompareView({ personas }: { personas: ComparablePersona[] }) {
               <th scope="col" className="w-40 px-4 py-3 text-xs font-semibold text-muted-foreground">Attribute</th>
               {personas.map((p) => (
                 <th key={p.id} scope="col" className="min-w-52 px-4 py-3 align-top">
-                  <Link href={`/tools/persona-builder/${p.id}`} className="font-semibold hover:text-primary-text hover:underline [overflow-wrap:anywhere]">{p.name}</Link>
+                  <span className="flex items-center gap-2.5">
+                    <PersonaAvatar avatarId={p.content.profile.avatar} name={p.name} decorative className="size-10 text-sm" />
+                    <Link href={`/tools/persona-builder/${p.id}`} className="font-semibold hover:text-primary-text hover:underline [overflow-wrap:anywhere]">{p.name}</Link>
+                  </span>
                   <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <PersonaTypeBadge type={p.type} />
                     {p.projectName && <Badge variant="outline">{p.projectName}</Badge>}

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Block, ListItem, PlanDocument } from "@/lib/research-planner/document";
 import { cn } from "@/lib/utils";
 
@@ -76,6 +77,12 @@ export function DocumentView({ doc }: { doc: PlanDocument }) {
   return (
     <article aria-label="Document preview" className="mx-auto max-w-3xl rounded-card border border-border bg-background p-6 sm:p-10 shadow-card">
       <header className="mb-8 border-b border-border pb-8">
+        {doc.image && (
+          <figure className="mb-6 flex items-center gap-4">
+            <Image src={doc.image.src} alt={doc.image.alt} width={160} height={160} className="size-20 shrink-0 rounded-full border border-border bg-muted object-cover" />
+            <figcaption className="max-w-[44ch] text-xs text-muted-foreground">{doc.image.caption}</figcaption>
+          </figure>
+        )}
         <p className="text-xs font-semibold text-primary-text">{doc.kicker}</p>
         <h2 className="mt-3 text-[28px] leading-tight font-bold [overflow-wrap:anywhere]">{doc.title}</h2>
         {doc.meta.length > 0 && (
