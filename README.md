@@ -1,15 +1,17 @@
-# Yedara — Research Workspace (Phase 1 foundation)
+# Yedara — Research Workspace
 
 Next.js 16 (App Router) · React 19 · TypeScript (strict) · Tailwind CSS 4 · shadcn/ui-style components (Radix) · Supabase (Postgres, Auth) · React Hook Form + Zod · Vitest · Playwright.
 
-Phase 1 delivers auth, project management and the app shell. Phase 2 adds the **Research Planner** (`/tools/research-planner`). Phase 3 adds the **Persona Builder** (`/tools/persona-builder`) and the **Competitor Analyzer** (`/tools/competitor-analyzer`). Phase 4 adds the **Research Synthesizer** (`/tools/research-synthesizer`) and the **Journey Mapper** (`/tools/journey-mapper`). Only the Opportunity Analyzer is still a coming-soon page.
+The app has auth, project management and an app shell, plus a public marketing site and a Feedback widget.
+
+Built in phases: Phase 1 delivers auth, project management and the app shell. Phase 2 adds the **Research Planner** (`/tools/research-planner`). Phase 3 adds the **Persona Builder** (`/tools/persona-builder`) and the **Competitor Analyzer** (`/tools/competitor-analyzer`). Phase 4 adds the **Research Synthesizer** (`/tools/research-synthesizer`) and the **Journey Mapper** (`/tools/journey-mapper`). Only the Opportunity Analyzer is still a coming-soon page.
 
 ## Setup
 
 1. `npm install`
 2. Create a Supabase project. In **Authentication → URL Configuration** add `http://localhost:3000/auth/callback` (and your production URL) to the redirect allow-list.
-3. Apply the migrations in `supabase/migrations/` (in order, five files): `supabase link --project-ref <ref> && supabase db push`, or paste each file's *contents* into the SQL editor. Phase 2 adds `20260101000200_research_planner.sql`; Phase 3 adds `20260101000300_personas_competitors.sql` (new project-brief columns, personas, competitor analyses, RLS and RPCs); Phase 4 adds `20260101000400_synthesizer_journeys.sql` (research syntheses, journeys, RLS and RPCs).
-4. `cp .env.example .env.local` and fill in `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+3. Apply the migrations in `supabase/migrations/` (in order, six files): `supabase link --project-ref <ref> && supabase db push`, or paste each file's *contents* into the SQL editor. Phase 2 adds `20260101000200_research_planner.sql`; Phase 3 adds `20260101000300_personas_competitors.sql` (new project-brief columns, personas, competitor analyses, RLS and RPCs); Phase 4 adds `20260101000400_synthesizer_journeys.sql` (research syntheses, journeys, RLS and RPCs). `20260101000500_contact_messages.sql` creates a locked-down `contact_messages` table from the retired contact page; the app no longer writes to it (feedback goes to GitHub), but apply it so the schema matches `database.types.ts`.
+4. `cp .env.example .env.local` and fill in `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. The Feedback widget variables (`GITHUB_TOKEN`, `GITHUB_REPO`, optional `GITHUB_PROJECT_*`) are optional; without them the widget reports that it is unavailable.
 5. `npm run dev` → http://localhost:3000
 
 The app never uses the service-role key. Access control is Row Level Security plus server-side checks.
@@ -32,11 +34,18 @@ Import the repo, set the three env vars from `.env.example` (`NEXT_PUBLIC_SITE_U
 
 ## Structure
 
-- `src/app` routes: `(auth)`, `(app)` (authenticated shell), `auth/callback`
+- `src/app` routes: `(marketing)` (public site: home, features, pricing, about, privacy, terms), `(auth)` (sign in, sign up, password reset), `(app)` (authenticated shell), `auth/callback`, `api`
+- `src/components/auth/auth-aside.tsx` the photographic brand panel beside the sign-in and sign-up forms (`public/auth/panel.jpg`)
 - `src/lib/auth`, `src/lib/projects` schemas, queries, server actions
 - `src/config` navigation and research-tool registry (add a tool by flipping its `status`)
 - `src/lib/rate-limit.ts` pluggable limiter; swap in a shared store before shipping AI endpoints
 - `supabase/migrations` schema and RLS
+
+## Marketing site and Feedback widget
+
+- **Marketing site** (`src/app/(marketing)`): home, features, pricing, about, privacy and terms. It shows the real product honestly: one real app screenshot in a laptop frame (light and dark variants), authored module previews labelled as sample data, and no testimonials, statistics, integrations or prices. Free is the only live plan; Pro is shown as in development. Its palette is scoped under `.marketing` in `src/app/(marketing)/marketing.css`. Module copy lives in `src/config/marketing.ts`.
+- **Feedback widget:** a floating button on every public page and in the signed-in app. It posts a **public GitHub issue** (and adds it to a project board when configured) and collects no name or email. There is no contact page and no private contact route yet.
+- **Sign-in and sign-up panel:** from the `lg` breakpoint a photograph of a research team's affinity wall (handwritten quotes on sticky notes) sits beside the form, under a terracotta tint and a dark scrim for text contrast. Photo: "A bulletin board covered in sticky notes in an office" by Christian Brok on [Unsplash](https://unsplash.com/photos/FIWW1Cjj23I), under the Unsplash License. To change it, replace `public/auth/panel.jpg` and the credit in `auth-aside.tsx`.
 
 ## Research Planner (Phase 2)
 
@@ -127,4 +136,6 @@ The app and landing page share the "Working Ledger" tokens from Doxa's `DESIGN.m
 - **Themes:** Light / Dark / System via the sun/moon menu in every header. The saved choice is applied before first paint.
 - **Rules applied:** one filled primary per view; the accent as text is always `primary-text`; hovers are Oat washes; the sidebar marks the current page with a quiet wash, never an accent tint; sentence-case labels; tabular numerals for counts; flat at rest (only menus, dialogs and the drawer cast a shadow); 36px controls at 6px radius, 16px cards.
 - **Guarded by tests:** `tests/unit/design-tokens.test.ts` checks WCAG AA contrast for every text/background pair in both themes, light/dark token parity, and that components contain no hard-coded hex.
-- **Not applied:** Doxa's board-specific patterns (data-grid tables, vote chip, `?item=` drawer, roadmap) and its photographic auth panel, since they belong to that product's features.
+- **Auth panel:** the sign-in and sign-up screens use a photographic brand panel in the spirit of Doxa's, with Yedara's own photo (see above).
+- **Not applied:** Doxa's board-specific patterns (data-grid tables, vote chip, `?item=` drawer, roadmap), since they belong to that product's features.
+- **Design docs:** `PRODUCT.md` (who and what) and `DESIGN.md` (the public site's design system) are the working design context.

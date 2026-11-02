@@ -142,7 +142,7 @@ The authenticated app uses the "Working Ledger" tokens in `src/app/globals.css` 
 
 Marketing now shares the app's page ground (`#ffffff`), sand (`#f4f2ea`), hairline (`#e8ddc8`) and strong hairline (`#d6c7ab`), the primary orange, Manrope and the status colors. It still diverges in foreground `#333333` (app `#1c1917`), muted text `#5f5a54` (app `#6f6963`) and base type 16px/1.6 (app 14px/1.43). New public pages use the marketing values; new in-app screens use the app values.
 
-This document covers the public site only. App components (the side drawer, the Research Synthesizer table and tab treatment) are outside its scope.
+This document covers the public site, plus the sign-in and sign-up brand panel (see Auth panel under Components). Other app components (the side drawer, the Research Synthesizer table and tab treatment) are outside its scope.
 
 ## Colors
 
@@ -248,6 +248,9 @@ White ground with a hairline top border. Logo and tagline left; four link column
 ### Feedback widget
 A fixed bottom-right pill (foreground colour, `Feedback` with a message icon) on every public page and inside the signed-in app. It opens a non-modal 24rem card panel (`rounded-2xl`, card surface, `shadow-xl`) with three pill radios (Something is broken, An idea or request, Something else), a textarea and a full-width primary button; Escape closes it and returns focus to the pill. It states that feedback is posted publicly on GitHub and asks for no name or email. Other CTAs (the Pro plan, "Ask us", the footer) open it through `OpenFeedback`, which sets the type. There is no contact page.
 
+### Auth panel
+The brand panel beside the sign-in and sign-up forms (`src/components/auth/auth-aside.tsx`), shown from `lg` up at 58% width; below `lg` only the form shows. A full-bleed photograph of a research team's affinity wall (handwritten quotes on pink and yellow sticky notes, shallow depth of field), cropped to `object-[25%_50%]`. Over it: a Thread Orange layer at 35% with multiply blending, which warms the neon notes toward terracotta, and a vertical scrim from `#180902` at 62% through 38% to 86% so white type holds contrast anywhere on the image. On top, the white logo mark, a 1.6rem semibold quote ("Good decisions start with better questions, and better questions start with a plan."), the descriptor, and the copyright line. The photo is atmosphere, not proof: it shows notes and no faces, and is never labelled as a Yedara study. Provenance: Christian Brok, Unsplash, Unsplash License (credit in the component comment and README). The photo is shipped at 2000px wide, about 220 KB.
+
 ### Final CTA band
 Flat Thread Orange full-bleed band, centred: headline in primary-foreground, 90% white lede (48ch), white button plus ghost button. No gradient, image or pattern.
 
@@ -276,6 +279,7 @@ Quiet and one-time. On load the hero content rises 14px with a fade (0.8s, cubic
 - **Don't** add a second connective motif, gradient text, glows or decorative shadows to page furniture; the hero ground is dots only.
 - **Don't** use Thread Orange (#c74504) as text on a light ground.
 - **Don't** hard-code light-only hex values in marketing components; they break the dark theme.
+- **Don't** put a stock photograph on a marketing page as proof or as a stand-in for customers; the auth panel is the one photographic surface.
 - **Don't** import app-only values (#1c1917 text, 14px base) into marketing pages, or marketing values into the app.
 
 ## Not canonized (build carries, system does not inherit)

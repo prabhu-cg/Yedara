@@ -4,11 +4,13 @@ import { LogoMark } from "@/components/brand/logo-mark";
 import { siteConfig } from "@/config/site";
 
 /**
- * The brand panel on the sign-in and sign-up pages (from `lg` up): an abstract photograph
- * with a terracotta tint and a dark scrim so the white text stays readable on every part of it.
+ * The brand panel on the sign-in and sign-up pages (from `lg` up): a photograph of a research
+ * team's affinity wall (handwritten participant quotes clustered on sticky notes, the raw
+ * evidence Yedara keeps attached), with a terracotta tint and a dark scrim so the white text
+ * stays readable on every part of it.
  *
- * Photo: "Abstract, layered shapes with a gradient orange color" by Philip Oroni on Unsplash
- * (https://unsplash.com/photos/5q4zsTaVN4I), free to use under the Unsplash License.
+ * Photo: "A bulletin board covered in sticky notes in an office" by Christian Brok on Unsplash
+ * (https://unsplash.com/photos/FIWW1Cjj23I), free to use under the Unsplash License.
  */
 export function AuthAside() {
   return (
@@ -19,7 +21,7 @@ export function AuthAside() {
         fill
         priority
         sizes="58vw"
-        className="object-cover object-[70%_50%]"
+        className="object-cover object-[25%_50%]"
       />
       <div aria-hidden="true" className="absolute inset-0 bg-primary opacity-35 mix-blend-multiply" />
       <div
