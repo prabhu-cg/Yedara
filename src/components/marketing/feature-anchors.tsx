@@ -84,7 +84,7 @@ export function FeatureAnchors({ items }: { items: Item[] }) {
     <nav
       ref={navRef}
       aria-label="On this page"
-      className="relative flex flex-nowrap gap-2 overflow-x-auto py-3 [scrollbar-width:none] md:flex-wrap md:overflow-visible [&::-webkit-scrollbar]:hidden"
+      className="relative flex flex-nowrap gap-1.5 overflow-x-auto py-3 [scrollbar-width:none] md:flex-wrap md:overflow-visible [&::-webkit-scrollbar]:hidden"
     >
       <span
         aria-hidden
@@ -109,7 +109,7 @@ export function FeatureAnchors({ items }: { items: Item[] }) {
           }}
           style={{ "--i": i } as React.CSSProperties}
           className={cn(
-            "pill-in relative z-10 shrink-0 rounded-full border px-4 py-2 text-sm font-semibold whitespace-nowrap outline-none",
+            "pill-in relative z-10 shrink-0 rounded-full border px-3 py-2 text-[13px] font-semibold whitespace-nowrap outline-none",
             "transition-[color,border-color,background-color,transform] duration-200 focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.97]",
             active === item.slug
               ? "border-transparent text-accent-foreground"

@@ -787,6 +787,75 @@ export type Database = {
         };
         Relationships: [];
       };
+      empathy_maps: {
+        Row: {
+          id: string;
+          owner_id: string;
+          project_id: string;
+          persona_id: string | null;
+          title: string;
+          subject: string | null;
+          context: string | null;
+          not_researched: ("says" | "thinks" | "does" | "feels")[];
+          status: "draft" | "completed";
+          completed_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          owner_id?: string;
+          project_id: string;
+          persona_id?: string | null;
+          title: string;
+          subject?: string | null;
+          context?: string | null;
+          not_researched?: ("says" | "thinks" | "does" | "feels")[];
+          status?: "draft" | "completed";
+          completed_at?: string | null;
+        };
+        Update: {
+          project_id?: string;
+          persona_id?: string | null;
+          title?: string;
+          subject?: string | null;
+          context?: string | null;
+          not_researched?: ("says" | "thinks" | "does" | "feels")[];
+          status?: "draft" | "completed";
+          completed_at?: string | null;
+        };
+        Relationships: [];
+      };
+      empathy_items: {
+        Row: {
+          id: string;
+          map_id: string;
+          quadrant: "says" | "thinks" | "does" | "feels";
+          content: string;
+          evidence_note: string | null;
+          observation_id: string | null;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          map_id: string;
+          quadrant: "says" | "thinks" | "does" | "feels";
+          content: string;
+          evidence_note?: string | null;
+          observation_id?: string | null;
+          position?: number;
+        };
+        Update: {
+          quadrant?: "says" | "thinks" | "does" | "feels";
+          content?: string;
+          evidence_note?: string | null;
+          observation_id?: string | null;
+          position?: number;
+        };
+        Relationships: [];
+      };
       opportunity_candidates: {
         Row: {
           id: string;
@@ -842,6 +911,8 @@ export type Database = {
       save_affinity_layout: { Args: { p_synthesis_id: string; p_themes: Json; p_cards: Json }; Returns: undefined };
       reorder_journey_stages: { Args: { p_journey_id: string; p_ids: string[] }; Returns: undefined };
       duplicate_journey: { Args: { p_journey_id: string; p_state?: string | null }; Returns: string };
+      reorder_empathy_items: { Args: { p_map_id: string; p_ids: string[] }; Returns: undefined };
+      duplicate_empathy_map: { Args: { p_map_id: string }; Returns: string };
       reorder_research_plan_sections: {
         Args: { p_plan_id: string; p_keys: string[] };
         Returns: undefined;

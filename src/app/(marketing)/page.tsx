@@ -39,7 +39,7 @@ export default function HomePage() {
               className="group inline-flex items-center gap-2 rounded-full bg-primary-soft px-3.5 py-1.5 text-sm font-semibold text-primary-text transition-colors hover:bg-border"
             >
               <span aria-hidden className="size-2 rounded-full bg-primary" />
-              Five tools live
+              Six tools live
               <span aria-hidden className="text-primary-text/50">·</span>
               <span className="inline-flex items-center gap-1">
                 See what&apos;s inside <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
@@ -84,9 +84,9 @@ export default function HomePage() {
 
       <Section labelledBy="tools-heading">
         <div className="max-w-3xl">
-          <SectionHeading id="tools-heading">Six tools. Each does one job well.</SectionHeading>
+          <SectionHeading id="tools-heading">Seven tools. Each does one job well.</SectionHeading>
           <Lede className="mt-6">
-            Five are live today. The sixth, the Opportunity Analyzer, is in development, and the Journey Mapper already
+            Six are live today. The seventh, the Opportunity Analyzer, is in development, and the Journey Mapper already
             saves opportunities for it.
           </Lede>
         </div>

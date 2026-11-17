@@ -28,7 +28,7 @@ export function ModuleSection({
       id={m.slug}
       aria-labelledby={headingId}
       className={cn(
-        "grid scroll-mt-36 grid-cols-[minmax(0,1fr)] items-center gap-10 border-t border-border py-14 first:border-t-0 first:pt-0 lg:grid-cols-12 lg:gap-14 lg:py-20",
+        "grid scroll-mt-44 grid-cols-[minmax(0,1fr)] items-center gap-10 border-t border-border py-14 first:border-t-0 first:pt-0 lg:grid-cols-12 lg:gap-14 lg:py-20",
       )}
     >
       <div className={cn("min-w-0 lg:col-span-5", flip && "lg:order-2")}>

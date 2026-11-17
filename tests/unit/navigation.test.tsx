@@ -13,6 +13,7 @@ vi.mock("@/lib/auth/actions", () => ({ signOutAction: vi.fn() }));
 import { MobileHeader } from "@/components/layout/mobile-header";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
 import { isActive, navGroups } from "@/config/navigation";
+import { WORKFLOW, moduleBySlug } from "@/config/marketing";
 
 beforeEach(() => {
   pathname.current = "/dashboard";
@@ -27,13 +28,22 @@ describe("navigation structure", () => {
         "Research Planner",
         "Persona Builder",
         "Competitor Analyzer",
-        "Journey Mapper",
         "Research Synthesizer",
+        "Empathy Mapper",
+        "Journey Mapper",
         "Opportunity Analyzer",
       ],
       ["Templates"],
       ["Settings", "Billing"],
     ]);
+  });
+
+  it("groups the research tools under the website's phases, in the website's order", () => {
+    const tools = navGroups.find((g) => g.label === "Research tools")!;
+    expect(tools.sections?.map((s) => s.label)).toEqual(WORKFLOW.map((w) => w.phase));
+    expect(tools.sections?.map((s) => s.items.map((i) => i.label))).toEqual(WORKFLOW.map((w) => w.slugs.map((slug) => moduleBySlug(slug).name)));
+    // The flat list is the same items, so nothing is lost or duplicated.
+    expect(tools.items).toEqual(tools.sections?.flatMap((s) => s.items));
   });
 
   it("matches nested routes for prefix items only", () => {
@@ -52,7 +62,11 @@ describe("SidebarNav", () => {
     for (const label of ["Workspace", "Research tools", "Resources", "Account"]) {
       expect(within(nav).getByText(label)).toBeInTheDocument();
     }
-    expect(within(nav).getAllByRole("link")).toHaveLength(11); // every item except the disabled Billing
+    expect(within(nav).getAllByRole("link")).toHaveLength(12); // every item except the disabled Billing
+    // The research tools sit under their phases, as on the website.
+    for (const [phase, count] of [["Plan", 1], ["Research", 2], ["Understand", 3], ["Prioritise", 1]] as const) {
+      expect(within(within(nav).getByRole("group", { name: phase })).getAllByRole("link")).toHaveLength(count);
+    }
   });
 
   it("marks only the current page as active", () => {

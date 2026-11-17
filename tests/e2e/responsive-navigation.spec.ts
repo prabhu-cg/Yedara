@@ -83,7 +83,7 @@ test.describe("responsive navigation", () => {
 
   test("every research tool has an entry point, and unfinished ones say so", async ({ page }) => {
     await page.goto("/tools");
-    // Five tools are live; only the Opportunity Analyzer is still coming soon.
+    // Six tools are live; only the Opportunity Analyzer is still coming soon.
     await expect(page.getByText("Coming soon")).toHaveCount(1);
     for (const [slug, name] of [
       ["opportunity-analyzer", "Opportunity Analyzer"],
@@ -95,6 +95,7 @@ test.describe("responsive navigation", () => {
     for (const [slug, name] of [
       ["research-planner", "Research Planner"],
       ["persona-builder", "Persona Builder"],
+      ["empathy-mapper", "Empathy Mapper"],
       ["competitor-analyzer", "Competitor Analyzer"],
       ["journey-mapper", "Journey Mapper"],
       ["research-synthesizer", "Research Synthesizer"],

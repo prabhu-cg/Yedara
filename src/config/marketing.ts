@@ -1,4 +1,4 @@
-import { ClipboardList, Layers, Lightbulb, Route, Target, UserRound, type LucideIcon } from "lucide-react";
+import { ClipboardList, HeartHandshake, Layers, Lightbulb, Route, Target, UserRound, type LucideIcon } from "lucide-react";
 
 /** Everything the public site says about the product. Facts here mirror what the app does today. */
 
@@ -109,6 +109,27 @@ export const MODULES: MarketingModule[] = [
     phase: "Understand",
   },
   {
+    slug: "empathy-mapper",
+    name: "Empathy Mapper",
+    icon: HeartHandshake,
+    headline: "See what they say, think, do and feel.",
+    summary:
+      "The classic four-quadrant empathy map, where every note says whether it was observed, inferred or simply assumed.",
+    points: [
+      "Says and Does are observed; Thinks and Feels are inferred",
+      "Link a note to the observation behind it, or it stays marked Assumed",
+      "No persona needed, and an empty quadrant can be marked not yet researched",
+    ],
+    details: [
+      "A map is about a subject: a persona if you have one, or just a named person or group such as First-time home cook. You do not need a persona to make an empathy map.",
+      "The four quadrants follow the classic cross, with Says and Thinks above Does and Feels. Says and Does are what you saw and heard; Thinks and Feels are what you read into it, and the map labels them that way.",
+      "Each note can cite an observation from a Research Synthesis in the same project. A note with no link is shown as Assumed, never dressed up as evidence.",
+      "An empty quadrant can be marked not yet researched, so a gap is a decision and not an oversight. A map can be marked complete once every quadrant has a note or is marked that way. There is no export yet.",
+    ],
+    status: "available",
+    phase: "Understand",
+  },
+  {
     slug: "journey-mapper",
     name: "Journey Mapper",
     icon: Route,
@@ -165,7 +186,7 @@ export const WORKFLOW = [
   {
     phase: "Understand",
     line: "Turn notes into themes, insights and journeys.",
-    slugs: ["research-synthesizer", "journey-mapper"],
+    slugs: ["research-synthesizer", "empathy-mapper", "journey-mapper"],
   },
   {
     phase: "Prioritise",
@@ -194,6 +215,11 @@ export const CONNECTIONS = [
   },
   {
     from: "Observation",
+    to: "Empathy map",
+    text: "A note on an empathy map can cite the observation behind it. With no link it is labelled Assumed, so a guess never reads as a finding.",
+  },
+  {
+    from: "Observation",
     to: "Journey",
     text: "Pain points and opportunities in a journey link to the observation behind them, so the map answers “how do we know?”.",
   },
@@ -207,15 +233,15 @@ export const CONNECTIONS = [
 export const DIFFERENTIATORS = [
   {
     title: "Evidence stays attached",
-    text: "Observations, insights and journeys point at each other. Anyone reading a recommendation can follow it back to what a participant said.",
+    text: "Observations, insights, empathy maps and journeys point at each other. Anyone reading a recommendation can follow it back to what a participant said.",
   },
   {
     title: "Unknown is a valid answer",
-    text: "Competitor cells can be unknown, not publicly available or not applicable. Personas say whether they are research-backed or a hypothesis. Gaps are shown, not smoothed over.",
+    text: "Competitor cells can be unknown, not publicly available or not applicable. Personas say whether they are research-backed or a hypothesis, and an empathy map marks each note as evidence or assumed. Gaps are shown, not smoothed over.",
   },
   {
     title: "Nothing is made up for you",
-    text: "Yedara does not generate findings, quotes or personas. What you read in a report is what you entered, organised and cited.",
+    text: "Yedara does not generate findings, quotes, personas or empathy notes. What you read in a report is what you entered, organised and cited.",
   },
   {
     title: "Documents you can hand over",
@@ -246,7 +272,7 @@ export const FAQS = [
   },
   {
     q: "What can I export?",
-    a: "Research plans, personas, competitor analyses and synthesis reports export to PDF, Word and Markdown. Journeys have a presentation view but no export yet.",
+    a: "Research plans, personas, competitor analyses and synthesis reports export to PDF, Word and Markdown. Empathy maps and journeys have no export yet; journeys have a presentation view.",
   },
   {
     q: "Where do my research notes live?",
@@ -264,7 +290,7 @@ export const PLANS = {
     status: "Available now",
     blurb: "Everything Yedara can do today, for one account.",
     features: [
-      "Research Planner, Persona Builder, Competitor Analyzer, Research Synthesizer and Journey Mapper",
+      "Research Planner, Persona Builder, Competitor Analyzer, Research Synthesizer, Empathy Mapper and Journey Mapper",
       "Projects that share one brief across every tool",
       "PDF, Word and Markdown export",
       "No payment step to start",

@@ -22,7 +22,7 @@ const SECTIONS: LegalSection[] = [
     body: [
       [
         "Account information you provide: your name and email address, and optionally a job title and company. Passwords are handled by our authentication provider and are not readable by us.",
-        "Your research content: the projects, plans, personas, competitor analyses, observations, insights and journeys you create.",
+        "Your research content: the projects, plans, personas, competitor analyses, observations, insights, empathy maps and journeys you create.",
         "Feedback you send through the Feedback button: its type and text. It is posted as a public issue on GitHub, and Yedara doesn't ask for your name or email address with it.",
         "Basic technical information, such as IP address and timestamps, needed to operate and secure the service.",
       ],

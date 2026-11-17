@@ -9,7 +9,7 @@ const COLUMNS = [
   {
     title: "Product",
     links: [
-      ...MODULES.slice(0, 5).map((m) => ({ href: `/features#${m.slug}`, label: m.name })),
+      ...MODULES.filter((m) => m.status === "available").map((m) => ({ href: `/features#${m.slug}`, label: m.name })),
     ],
   },
   {

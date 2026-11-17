@@ -243,3 +243,30 @@ export async function addJourneyItem(page: Page, stageName: string, group: strin
   await box.getByRole("button", { name: /confirm$/ }).click();
   await expect(box.getByRole("textbox", { name: new RegExp(`^[A-Za-z ]+: ${escapeRegExp(text.slice(0, 40))}`) })).toBeVisible();
 }
+
+/* ---------------- Empathy Mapper ---------------- */
+
+export async function createEmpathyMap(
+  page: Page,
+  options: { title?: string; projectName: string; subject?: string; persona?: string },
+) {
+  await page.goto("/tools/empathy-mapper/new");
+  await page.getByLabel("Map title").fill(options.title ?? "Maya on a weeknight");
+  await page.getByRole("combobox", { name: "Project" }).selectOption({ label: options.projectName });
+  if (options.persona) await page.getByRole("combobox", { name: "Persona" }).selectOption({ label: options.persona });
+  if (options.subject) await page.getByRole("textbox", { name: /^(Subject|Name on the map)/ }).fill(options.subject);
+  await page.getByRole("button", { name: "Start mapping" }).click();
+  await expect(page).toHaveURL(/\/tools\/empathy-mapper\/[0-9a-f-]{36}$/);
+  await expect(page.locator("[data-quadrant-section=says]")).toBeVisible();
+  return page.url().split("/").pop()!.split("?")[0];
+}
+
+const ADD_LABELS = { says: "Add what they say", thinks: "Add what they think", does: "Add what they do", feels: "Add what they feel" } as const;
+
+/** Adds one note to a quadrant through its inline field. */
+export async function addEmpathyNote(page: Page, quadrant: keyof typeof ADD_LABELS, text: string) {
+  const section = page.locator(`[data-quadrant-section=${quadrant}]`);
+  await section.getByLabel(ADD_LABELS[quadrant]).fill(text);
+  await section.getByLabel(ADD_LABELS[quadrant]).press("Enter");
+  await expect(section.locator("[data-note]").filter({ hasText: text })).toBeVisible();
+}

@@ -13,6 +13,7 @@ import { projectTypeLabel } from "@/lib/projects/constants";
 import { getProject } from "@/lib/projects/queries";
 import { parseWorkParams } from "@/lib/projects/work-items";
 import { listPlans } from "@/lib/research-planner/queries";
+import { listEmpathyMaps } from "@/lib/empathy/queries";
 import { listJourneys } from "@/lib/journeys/queries";
 import { listSyntheses } from "@/lib/synthesizer/queries";
 
@@ -27,11 +28,12 @@ export default async function ProjectPage({ params, searchParams }: PageProps<"/
   const { view, type } = parseWorkParams(await searchParams);
   const project = await getProject(projectId);
   const archived = project.status === "archived";
-  const [plans, personas, analyses, syntheses, journeys] = await Promise.all([
+  const [plans, personas, analyses, syntheses, empathyMaps, journeys] = await Promise.all([
     listPlans({ projectId: project.id }),
     listPersonas({ projectId: project.id }),
     listAnalyses({ projectId: project.id }),
     listSyntheses({ projectId: project.id }),
+    listEmpathyMaps({ projectId: project.id }),
     listJourneys({ projectId: project.id }),
   ]);
 
@@ -123,7 +125,7 @@ export default async function ProjectPage({ params, searchParams }: PageProps<"/
         </p>
       )}
 
-      <ProjectWork projectId={project.id} archived={archived} plans={plans} personas={personas} analyses={analyses} syntheses={syntheses} journeys={journeys} view={view} type={type} />
+      <ProjectWork projectId={project.id} archived={archived} plans={plans} personas={personas} analyses={analyses} syntheses={syntheses} empathyMaps={empathyMaps} journeys={journeys} view={view} type={type} />
     </>
   );
 }

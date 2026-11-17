@@ -193,7 +193,15 @@ function serialised<T>(fn: () => Promise<T>): Promise<T> {
 }
 const asUserLocked: typeof asUser = (database, userId, fn) => serialised(() => asUser(database, userId, fn));
 
-const jsonParam = (value: unknown) => (value !== null && typeof value === "object" ? JSON.stringify(value) : value);
+/** Columns that are Postgres text[] (real PostgREST accepts a JSON array for them); every other array is a jsonb value. */
+const TEXT_ARRAY_COLUMNS = new Set(["not_researched"]);
+const pgTextArray = (values: unknown[]) => `{${values.map((v) => `"${String(v).replace(/(["\\])/g, "\\$1")}"`).join(",")}}`;
+const jsonParam = (value: unknown, column?: string) =>
+  column && TEXT_ARRAY_COLUMNS.has(column) && Array.isArray(value)
+    ? pgTextArray(value)
+    : value !== null && typeof value === "object"
+      ? JSON.stringify(value)
+      : value;
 
 async function handleRpc(req: IncomingMessage, res: ServerResponse, url: URL) {
   const fn = url.pathname.replace("/rest/v1/rpc/", "");
@@ -210,6 +218,8 @@ async function handleRpc(req: IncomingMessage, res: ServerResponse, url: URL) {
     },
     reorder_journey_stages: { sql: "select public.reorder_journey_stages($1::uuid, $2::uuid[])", params: [args.p_journey_id, args.p_ids] },
     duplicate_journey: { sql: "select public.duplicate_journey($1::uuid, $2::text) as r", params: [args.p_journey_id, args.p_state ?? null], scalar: true },
+    reorder_empathy_items: { sql: "select public.reorder_empathy_items($1::uuid, $2::uuid[])", params: [args.p_map_id, args.p_ids] },
+    duplicate_empathy_map: { sql: "select public.duplicate_empathy_map($1::uuid) as r", params: [args.p_map_id], scalar: true },
     reorder_research_plan_sections: {
       sql: "select public.reorder_research_plan_sections($1::uuid, $2::text[])",
       params: [args.p_plan_id, args.p_keys],
@@ -232,7 +242,7 @@ async function handleRpc(req: IncomingMessage, res: ServerResponse, url: URL) {
 async function handleRest(req: IncomingMessage, res: ServerResponse, url: URL) {
   if (url.pathname.startsWith("/rest/v1/rpc/")) return handleRpc(req, res, url);
   const table = url.pathname.replace("/rest/v1/", "");
-  if (!["profiles", "projects", "project_members", "project_settings", "research_plans", "research_plan_sections", "personas", "persona_sections", "persona_evidence", "competitor_analyses", "competitors", "competitor_criteria", "competitor_sources", "competitor_comparisons", "research_syntheses", "research_sources", "research_observations", "research_themes", "affinity_boards", "affinity_cards", "research_insights", "research_insight_evidence", "journeys", "journey_stages", "journey_items", "opportunity_candidates", "contact_messages"].includes(table)) {
+  if (!["profiles", "projects", "project_members", "project_settings", "research_plans", "research_plan_sections", "personas", "persona_sections", "persona_evidence", "competitor_analyses", "competitors", "competitor_criteria", "competitor_sources", "competitor_comparisons", "research_syntheses", "research_sources", "research_observations", "research_themes", "affinity_boards", "affinity_cards", "research_insights", "research_insight_evidence", "journeys", "journey_stages", "journey_items", "empathy_maps", "empathy_items", "opportunity_candidates", "contact_messages"].includes(table)) {
     return send(res, 404, { message: "not found" });
   }
   const user = userFromBearer(req);
@@ -259,7 +269,7 @@ async function handleRest(req: IncomingMessage, res: ServerResponse, url: URL) {
         const body = await readJson(req);
         const rows = Array.isArray(body) ? body : [body];
         const columns = Object.keys(rows[0]).filter((c) => COLUMN.test(c));
-        const values = rows.map((row) => `(${columns.map((c) => { params.push(jsonParam(row[c])); return `$${params.length}`; }).join(", ")})`);
+        const values = rows.map((row) => `(${columns.map((c) => { params.push(jsonParam(row[c], c)); return `$${params.length}`; }).join(", ")})`);
         sql = `insert into public.${table} (${columns.map((c) => `"${c}"`).join(", ")}) values ${values.join(", ")}`;
         const conflict = (url.searchParams.get("on_conflict") ?? "").split(",").filter((c) => COLUMN.test(c));
         if (conflict.length && prefer.includes("resolution=merge-duplicates")) {
@@ -270,7 +280,7 @@ async function handleRest(req: IncomingMessage, res: ServerResponse, url: URL) {
         if (prefer.includes("return=representation")) sql += " returning *";
       } else if (req.method === "PATCH") {
         const body = await readJson(req);
-        const sets = Object.keys(body).filter((c) => COLUMN.test(c)).map((c) => { params.push(jsonParam(body[c])); return `"${c}" = $${params.length}`; });
+        const sets = Object.keys(body).filter((c) => COLUMN.test(c)).map((c) => { params.push(jsonParam(body[c], c)); return `"${c}" = $${params.length}`; });
         sql = `update public.${table} set ${sets.join(", ")}${buildWhere(url, params)} returning *`;
       } else if (req.method === "DELETE") {
         sql = `delete from public.${table}${buildWhere(url, params)} returning *`;

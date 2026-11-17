@@ -8,7 +8,7 @@ import { MODULES } from "@/config/marketing";
 export const metadata: Metadata = {
   title: "Features",
   description:
-    "Six connected research tools: Research Planner, Persona Builder, Competitor Analyzer, Research Synthesizer, Journey Mapper and the upcoming Opportunity Analyzer.",
+    "Seven connected research tools: Research Planner, Persona Builder, Competitor Analyzer, Research Synthesizer, Empathy Mapper, Journey Mapper and the upcoming Opportunity Analyzer.",
   alternates: { canonical: "/features" },
   openGraph: { title: "Yedara features", url: "/features" },
 };
@@ -22,7 +22,7 @@ export default function FeaturesPage() {
             Everything in the workspace, and what it does not do.
           </h1>
           <Lede className="mt-7">
-            Five research tools are live and one is in development. They share a project, so what you learn in one is
+            Six research tools are live and one is in development. They share a project, so what you learn in one is
             available in the next.
           </Lede>
         </div>

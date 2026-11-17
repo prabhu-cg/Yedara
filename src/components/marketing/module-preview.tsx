@@ -1,5 +1,6 @@
 import { PreviewFigure } from "@/components/marketing/mockups/parts";
 import { CompetitorsPreview } from "@/components/marketing/mockups/competitors";
+import { EmpathyPreview } from "@/components/marketing/mockups/empathy";
 import { JourneyPreview } from "@/components/marketing/mockups/journey";
 import { OpportunityPreview } from "@/components/marketing/mockups/opportunity";
 import { PersonaPreview } from "@/components/marketing/mockups/persona";
@@ -11,6 +12,7 @@ const PREVIEWS: Record<string, () => React.JSX.Element> = {
   "persona-builder": PersonaPreview,
   "competitor-analyzer": CompetitorsPreview,
   "research-synthesizer": SynthesizerPreview,
+  "empathy-mapper": EmpathyPreview,
   "journey-mapper": JourneyPreview,
   "opportunity-analyzer": OpportunityPreview,
 };

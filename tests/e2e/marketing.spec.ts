@@ -115,7 +115,7 @@ test.describe("features page index", () => {
   test("the pills are a sticky index: clicking one scrolls to its tool and marks it current", async ({ page }) => {
     await page.goto("/features");
     const index = page.getByRole("navigation", { name: "On this page" });
-    await expect(index.getByRole("link")).toHaveCount(6);
+    await expect(index.getByRole("link")).toHaveCount(7);
     await index.getByRole("link", { name: "Journey Mapper" }).click();
     await expect(page).toHaveURL(/#journey-mapper$/);
     await expect(index.getByRole("link", { name: "Journey Mapper" })).toHaveAttribute("aria-current", "location");

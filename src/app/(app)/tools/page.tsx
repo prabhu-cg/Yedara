@@ -10,7 +10,7 @@ export default function ToolsPage() {
     <>
       <PageHeader
         title="Research tools"
-        description="Six tools that take you from planning to prioritised opportunities. They are being released one at a time."
+        description="Seven tools that take you from planning to prioritised opportunities. They are being released one at a time."
       />
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {researchTools.map((tool) => (

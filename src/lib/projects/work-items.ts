@@ -41,6 +41,7 @@ export function buildWorkItems(input: {
   personas: (Source & { name: string; avatar?: string })[];
   analyses: (Source & { title: string })[];
   syntheses?: (Source & { title: string })[];
+  empathyMaps?: (Source & { title: string })[];
   journeys?: (Source & { name: string })[];
 }): WorkItem[] {
   return [
@@ -48,6 +49,7 @@ export function buildWorkItems(input: {
     ...input.personas.map((p) => ({ ...toItem("persona", p.name, PERSONA_TOTAL_STEPS, p), avatar: p.avatar ?? "" })),
     ...input.analyses.map((a) => toItem("analysis", a.title, COMPETITOR_TOTAL_STEPS, a)),
     ...(input.syntheses ?? []).map((s) => toItem("synthesis", s.title, null, s)),
+    ...(input.empathyMaps ?? []).map((m) => toItem("empathy", m.title, null, m)),
     ...(input.journeys ?? []).map((j) => toItem("journey", j.name, null, j)),
   ].sort((a, b) => a.createdAt.localeCompare(b.createdAt)); // oldest first: the order the work was started, so editing never reshuffles it
 }
@@ -55,7 +57,7 @@ export function buildWorkItems(input: {
 export const WORK_VIEWS = ["cards", "table"] as const;
 export type WorkView = (typeof WORK_VIEWS)[number];
 
-export const WORK_FILTERS = ["all", "plan", "persona", "analysis", "synthesis", "journey"] as const;
+export const WORK_FILTERS = ["all", "plan", "persona", "analysis", "synthesis", "empathy", "journey"] as const;
 export type WorkFilter = (typeof WORK_FILTERS)[number];
 
 /** Read `?view=` and `?type=` defensively: anything unknown falls back to the default. */

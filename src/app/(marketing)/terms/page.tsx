@@ -20,7 +20,7 @@ const SECTIONS: LegalSection[] = [
     id: "the-service",
     title: "2. The service",
     body: [
-      "Yedara is a hosted UX research workspace for planning research, building personas, analysing competitors, synthesising findings and mapping journeys. It requires an account, and the content you add is stored on our servers rather than on your device.",
+      "Yedara is a hosted UX research workspace for planning research, building personas, analysing competitors, synthesising findings, mapping empathy and mapping journeys. It requires an account, and the content you add is stored on our servers rather than on your device.",
     ],
   },
   {

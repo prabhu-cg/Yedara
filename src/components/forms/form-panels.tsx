@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FolderPlus } from "lucide-react";
 import { EmptyState } from "@/components/layout/empty-state";
+import { NewEmpathyForm } from "@/components/empathy/new-empathy-form";
 import { NewJourneyForm } from "@/components/journeys/new-journey-form";
 import { NewSynthesisForm } from "@/components/synthesizer/new-synthesis-form";
 import { NewAnalysisForm } from "@/components/competitors/new-analysis-form";
@@ -81,6 +82,11 @@ export function NewAnalysisPanel({ defaultProjectId }: { defaultProjectId?: stri
 
 export function NewSynthesisPanel({ defaultProjectId }: { defaultProjectId?: string }) {
   return <WithProjects what="synthesis">{(projects) => <NewSynthesisForm projects={projects} defaultProjectId={defaultProjectId} />}</WithProjects>;
+}
+
+export async function NewEmpathyPanel({ defaultProjectId }: { defaultProjectId?: string }) {
+  const personas = await listPersonaOptions();
+  return <WithProjects what="empathy map">{(projects) => <NewEmpathyForm projects={projects} personas={personas} defaultProjectId={defaultProjectId} />}</WithProjects>;
 }
 
 export async function NewJourneyPanel({ defaultProjectId }: { defaultProjectId?: string }) {

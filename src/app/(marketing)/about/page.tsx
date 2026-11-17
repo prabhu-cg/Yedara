@@ -61,13 +61,13 @@ export default function AboutPage() {
       <DocSection title="What is live, and what is next">
         <p>
           <span className="font-semibold text-foreground">Live today:</span> the Research Planner, Persona Builder,
-          Competitor Analyzer, Research Synthesizer and Journey Mapper, with PDF, Word and Markdown export for the
+          Competitor Analyzer, Research Synthesizer, Empathy Mapper and Journey Mapper, with PDF, Word and Markdown export for the
           planner, personas, competitor analyses and syntheses. The{" "}
           <Link href="/features">features page</Link> says exactly what each one does and doesn&apos;t do.
         </p>
         <p>
           <span className="font-semibold text-foreground">Next:</span> the Opportunity Analyzer, which already receives
-          the opportunities you flag in the Journey Mapper, a journey export, and a Pro plan.
+          the opportunities you flag in the Journey Mapper, an export for journeys and empathy maps, and a Pro plan.
         </p>
       </DocSection>
 

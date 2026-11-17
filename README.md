@@ -10,7 +10,7 @@ Built in phases: Phase 1 delivers auth, project management and the app shell. Ph
 
 1. `npm install`
 2. Create a Supabase project. In **Authentication → URL Configuration** add `http://localhost:3000/auth/callback` (and your production URL) to the redirect allow-list.
-3. Apply the migrations in `supabase/migrations/` (in order, six files): `supabase link --project-ref <ref> && supabase db push`, or paste each file's *contents* into the SQL editor. Phase 2 adds `20260101000200_research_planner.sql`; Phase 3 adds `20260101000300_personas_competitors.sql` (new project-brief columns, personas, competitor analyses, RLS and RPCs); Phase 4 adds `20260101000400_synthesizer_journeys.sql` (research syntheses, journeys, RLS and RPCs). `20260101000500_contact_messages.sql` creates a locked-down `contact_messages` table from the retired contact page; the app no longer writes to it (feedback goes to GitHub), but apply it so the schema matches `database.types.ts`.
+3. Apply the migrations in `supabase/migrations/` (in order, seven files): `supabase link --project-ref <ref> && supabase db push`, or paste each file's *contents* into the SQL editor. Phase 2 adds `20260101000200_research_planner.sql`; Phase 3 adds `20260101000300_personas_competitors.sql` (new project-brief columns, personas, competitor analyses, RLS and RPCs); Phase 4 adds `20260101000400_synthesizer_journeys.sql` (research syntheses, journeys, RLS and RPCs). Phase 5 adds `20260101000600_empathy_maps.sql` (empathy maps and their notes, RLS and two RPCs). `20260101000500_contact_messages.sql` creates a locked-down `contact_messages` table from the retired contact page; the app no longer writes to it (feedback goes to GitHub), but apply it so the schema matches `database.types.ts`.
 4. `cp .env.example .env.local` and fill in `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. The Feedback widget variables (`GITHUB_TOKEN`, `GITHUB_REPO`, optional `GITHUB_PROJECT_*`) are optional; without them the widget reports that it is unavailable.
 5. `npm run dev` → http://localhost:3000
 
@@ -130,11 +130,22 @@ New tables: `research_syntheses`, `research_sources`, `research_observations`, `
 - Journey stages and items are reordered with buttons (stages) or by creation order (items), not drag and drop.
 - There is no journey export yet; use the presentation view or print the page.
 
+## Empathy Mapper (Phase 5)
+
+An empathy map records what a person **says, thinks, does and feels**, in the classic cross: Says and Thinks above Does and Feels. Says and Does are what you *observed* (the left column); Thinks and Feels are what you *infer* (the right).
+
+- **Subject, not persona:** a map is about a subject, either a persona from the same project (optional) or a typed label such as "First-time home cook". You do not need a persona to make one, and deleting a persona keeps the map and its subject.
+- **Evidence stays attached:** each note can cite an observation from a Research Synthesis. A note with no link is shown as **Assumed**, never as evidence.
+- **Unknown stays unknown:** an empty quadrant can be marked **not yet researched**. A map can be marked complete once every quadrant has a note or that mark. Adding a note to a marked quadrant clears the mark.
+- **Where it lives:** `/tools/empathy-mapper` (list, a "new" drawer, the map at `/tools/empathy-mapper/[mapId]`). It appears in the project's research list, Recent and the New menu, and shows its project as a link back to it.
+- **Data:** `empathy_maps` and `empathy_items` (migration `20260101000600_empathy_maps.sql`), owner-only under RLS; a cited observation must be one you own, and a linked persona must belong to the map's project. `duplicate_empathy_map` and `reorder_empathy_items` run as the caller.
+- **Not yet:** export, drag and drop (notes are reordered from each note's menu), and Pains and Gains.
+
 ## Design system
 
 The app and landing page share the "Butter" system from Doxa's `DESIGN.md` (documented in this repo's `DESIGN.md`): white paper on a pale butter desk, butter hairlines, one amber accent, Newsreader for headlines and DM Sans for everything else. The logo and favicon are filled with the CTA amber. There are exactly two themes, light (default) and dark, switched with a sun/moon toggle; there is no system option. Tokens live in `src/app/globals.css` (light and dark); components must use the semantic names (`bg-primary`, `text-primary-text`, `bg-muted`, `border-border`) and never raw hex.
 
-- **Themes:** Light / Dark / System via the sun/moon menu in every header. The saved choice is applied before first paint.
+- **Themes:** exactly two, light (the default) and dark, switched with the sun/moon toggle in every header. There is no system option. The saved choice is applied before first paint.
 - **Rules applied:** one filled primary per view; the accent as text is always `primary-text`; hovers are sand washes; selection (current nav item, tab) is the amber tint with ochre text; every button is a pill; sentence-case labels; tabular numerals for counts; flat at rest (only menus, dialogs and the drawer cast a shadow); 40px controls with 8px inputs and 20px cards.
 - **Guarded by tests:** `tests/unit/design-tokens.test.ts` checks WCAG AA contrast for every text/background pair in both themes, light/dark token parity, and that components contain no hard-coded hex.
 - **Auth panel:** the sign-in and sign-up screens use a photographic brand panel in the spirit of Doxa's, with Yedara's own photo (see above).

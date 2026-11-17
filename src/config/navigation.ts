@@ -7,7 +7,7 @@ import {
   Settings,
   type LucideIcon,
 } from "lucide-react";
-import { researchTools } from "@/config/tools";
+import { researchTools, TOOL_PHASES } from "@/config/tools";
 
 export type NavItem = {
   label: string;
@@ -19,7 +19,23 @@ export type NavItem = {
   badge?: string;
 };
 
-export type NavGroup = { label: string; items: NavItem[] };
+export type NavSection = { label: string; items: NavItem[] };
+/** `items` is always the flat list; `sections`, when present, is the same items grouped under sub-headings. */
+export type NavGroup = { label: string; items: NavItem[]; sections?: NavSection[] };
+
+const toolItem = (tool: (typeof researchTools)[number]): NavItem => ({
+  label: tool.name,
+  href: `/tools/${tool.slug}`,
+  icon: tool.icon,
+  matchPrefix: true,
+  badge: tool.status === "coming-soon" ? "Soon" : undefined,
+});
+
+/** The research tools grouped the way the website groups them: Plan, Research, Understand, Prioritise. */
+const toolSections: NavSection[] = TOOL_PHASES.map((phase) => ({
+  label: phase,
+  items: researchTools.filter((t) => t.phase === phase).map(toolItem),
+})).filter((section) => section.items.length > 0);
 
 export const navGroups: NavGroup[] = [
   {
@@ -32,13 +48,8 @@ export const navGroups: NavGroup[] = [
   },
   {
     label: "Research tools",
-    items: researchTools.map((tool) => ({
-      label: tool.name,
-      href: `/tools/${tool.slug}`,
-      icon: tool.icon,
-      matchPrefix: true,
-      badge: tool.status === "coming-soon" ? "Soon" : undefined,
-    })),
+    items: toolSections.flatMap((section) => section.items),
+    sections: toolSections,
   },
   {
     label: "Resources",
