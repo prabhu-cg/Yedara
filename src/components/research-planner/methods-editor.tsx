@@ -22,7 +22,7 @@ function MethodCard({ method, selected, onToggle }: { method: MethodInfo; select
   return (
     <li
       className={cn(
-        "flex flex-col rounded-xl border bg-card shadow-card transition-[border-color,box-shadow]",
+        "flex flex-col rounded-xl border bg-card transition-[border-color,box-shadow]",
         selected ? "border-primary ring-1 ring-primary" : "border-border hover:border-primary hover:shadow-raised",
       )}
     >

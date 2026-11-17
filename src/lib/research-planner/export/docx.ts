@@ -22,11 +22,11 @@ import { loadDocImage } from "@/lib/export/doc-image";
 import { LOGO_PNG_BASE64 } from "@/lib/research-planner/export/logo-png";
 
 const FONT = "Calibri";
-const PRIMARY = "C74504";
-const TEXT = "1C1917";
-const MUTED = "6F6963";
-const BORDER = "E8DDC8";
-const HEAD_FILL = "F4F2EA";
+const PRIMARY = "826400";
+const TEXT = "353335";
+const MUTED = "6B6B6B";
+const BORDER = "ECE5CC";
+const HEAD_FILL = "F8F4E4";
 /** A4 with 2.54cm margins leaves 9026 twips of content width. */
 const CONTENT_WIDTH = 9026;
 

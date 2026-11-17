@@ -20,7 +20,7 @@ export function RecentList({ items, now }: { items: RecentItem[]; now: string })
   const groups = React.useMemo(() => groupRecent(items, now, timeZone), [items, now, timeZone]);
 
   return (
-    <div className="overflow-x-auto rounded-card border border-border bg-card shadow-card">
+    <div className="overflow-x-auto rounded-card border border-border bg-card">
       <table className="w-full border-collapse text-left text-sm">
         <caption className="sr-only">Recent work, newest first</caption>
         <thead>

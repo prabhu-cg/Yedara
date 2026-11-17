@@ -7,12 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const itemClasses =
-  "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
+  "group flex items-center gap-3 rounded-full px-3.5 py-2 text-sm font-medium transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
 
-/**
- * The current page is shown by a quiet wash and weight, never an accent tint:
- * the screen already carries the accent on its primary button.
- */
+/** Selection is butter, not grey: the current page is the accent tint with ochre text; hover is sand. */
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
@@ -55,8 +52,8 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                       className={cn(
                         itemClasses,
                         active
-                          ? "bg-foreground/5 font-semibold text-foreground"
-                          : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground",
+                          ? "bg-accent font-semibold text-accent-foreground"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground",
                       )}
                     >
                       {content}

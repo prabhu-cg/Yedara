@@ -27,7 +27,7 @@ export default async function ComparePersonasPage({ searchParams }: PageProps<"/
         <EmptyState icon={GitCompareArrows} title="Nothing to compare yet" description="Create at least two personas first." action={<Button asChild variant="outline"><Link href="/tools/persona-builder/new">New persona</Link></Button>} />
       ) : (
         <>
-          <form method="get" className="mb-6 rounded-card border border-border bg-card p-5 shadow-card">
+          <form method="get" className="mb-6 rounded-card border border-border bg-card p-5">
             <fieldset>
               <legend className="mb-3 text-sm font-semibold">Personas to compare (up to 4)</legend>
               <ul className="grid gap-2 sm:grid-cols-2">

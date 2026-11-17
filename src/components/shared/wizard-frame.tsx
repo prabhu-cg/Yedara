@@ -3,6 +3,7 @@
 import Link from "next/link";
 import * as React from "react";
 import { ArrowLeft, ArrowRight, Lightbulb } from "lucide-react";
+import { ProjectChip } from "@/components/layout/project-chip";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { SaveStatusIndicator } from "@/components/research-planner/save-status";
@@ -31,6 +32,7 @@ export function GuidanceBody({ guidance }: { guidance: Guidance }) {
 export function WizardFrame({
   backHref,
   backLabel,
+  project,
   title,
   badges,
   saveStatus,
@@ -50,6 +52,8 @@ export function WizardFrame({
 }: {
   backHref: string;
   backLabel: string;
+  /** The parent project, shown as a link back to it. */
+  project?: { id: string; name: string } | null;
   title: string;
   badges?: React.ReactNode;
   saveStatus: SaveStatus;
@@ -74,9 +78,12 @@ export function WizardFrame({
   return (
     <div>
       <div className="mb-6 flex flex-col gap-4">
-        <Link href={backHref} className="inline-flex w-fit items-center gap-1.5 rounded-md text-sm font-semibold text-muted-foreground hover:text-foreground">
-          <ArrowLeft aria-hidden className="size-4" /> {backLabel}
-        </Link>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <Link href={backHref} className="inline-flex w-fit items-center gap-1.5 rounded-md text-sm font-semibold text-muted-foreground hover:text-foreground">
+            <ArrowLeft aria-hidden className="size-4" /> {backLabel}
+          </Link>
+          <ProjectChip project={project} />
+        </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 space-y-1.5">
             <h1 className="text-[28px] leading-tight font-bold [overflow-wrap:anywhere]">{title}</h1>

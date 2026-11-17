@@ -26,7 +26,7 @@ export function PersonaTypePicker({
             <label
               key={type}
               className={cn(
-                "flex cursor-pointer flex-col gap-2 rounded-xl border bg-card p-4 shadow-card transition-[border-color,box-shadow] has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50",
+                "flex cursor-pointer flex-col gap-2 rounded-xl border bg-card p-4 transition-[border-color,box-shadow] has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50",
                 selected ? "border-primary ring-1 ring-primary" : "border-border hover:border-primary hover:shadow-raised",
               )}
             >

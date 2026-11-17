@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectChip } from "@/components/layout/project-chip";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { ArrowLeft } from "lucide-react";
@@ -181,13 +182,12 @@ export function SynthesisWorkspace(props: {
   return (
     <div>
       <div className="mb-6 flex flex-col gap-4">
-        <Link href="/tools/research-synthesizer" className="inline-flex w-fit items-center gap-1.5 rounded-md text-sm font-semibold text-muted-foreground hover:text-foreground"><ArrowLeft aria-hidden className="size-4" /> Research syntheses</Link>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2"><Link href="/tools/research-synthesizer" className="inline-flex w-fit items-center gap-1.5 rounded-md text-sm font-semibold text-muted-foreground hover:text-foreground"><ArrowLeft aria-hidden className="size-4" /> Research syntheses</Link><ProjectChip project={props.project} /></div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 flex-1 space-y-2">
-            <Input aria-label="Synthesis title" value={title} maxLength={160} onChange={(e) => { setTitle(e.target.value); if (e.target.value.trim()) markDirty("title", e.target.value.trim()); }} className="h-auto max-w-2xl border-transparent bg-transparent px-0 text-xl leading-tight font-bold shadow-none hover:border-input focus-visible:bg-background sm:text-[28px] md:text-[28px]" />
+            <Input aria-label="Synthesis title" value={title} maxLength={160} onChange={(e) => { setTitle(e.target.value); if (e.target.value.trim()) markDirty("title", e.target.value.trim()); }} className="font-display h-auto max-w-2xl border-transparent bg-transparent px-0 text-xl leading-tight font-bold shadow-none hover:border-input focus-visible:bg-background sm:text-[28px] md:text-[28px]" />
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <Badge variant={status === "completed" ? "default" : "secondary"}>{status === "completed" ? "Completed" : "Draft"}</Badge>
-              {props.project && <Link href={`/projects/${props.project.id}`} className="hover:text-foreground hover:underline">{props.project.name}</Link>}
               <span className="tabular-nums">{observations.length} {observations.length === 1 ? "observation" : "observations"} · {history.present.themes.length} {history.present.themes.length === 1 ? "theme" : "themes"} · {insights.length} {insights.length === 1 ? "insight" : "insights"}</span>
             </div>
           </div>

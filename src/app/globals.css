@@ -4,45 +4,52 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design tokens: "The Working Ledger" (shared with Doxa, see DESIGN.md there).
- * Warm paper and one burnt-orange accent. Components must use these semantic
- * tokens (bg-primary, text-muted-foreground, border-border ...) and never raw hex.
+ * Design tokens: the "Butter" system (shared with Doxa, see DESIGN.md).
+ * White paper on a pale butter desk, butter hairlines, one amber accent.
+ * Components must use these semantic tokens (bg-primary, text-muted-foreground, border-border ...)
+ * and never raw hex.
  *
- *  - text on the accent colour uses `primary-text` (deep terracotta, AA on white and on the tint)
- *  - the one warm ground is `muted` / `surface` (Oat); hover washes are Oat, not the accent tint
- *  - depth is flat: hairline borders and tonal grounds; only overlays (menus, dialogs, drawer) cast a shadow
+ *  - amber `primary` is a FILL (buttons, selection, the logo); text that carries the accent is
+ *    ochre `primary-text`, and text on amber is charcoal `primary-foreground`, never white
+ *  - `surface` / `sidebar` is the desk (chrome); `background` / `card` is the paper (work); `muted` is sand (hover, tints)
+ *  - selection is butter (`accent`), hover is sand (`muted`)
+ *  - depth is flat: hairline borders and tonal grounds; only overlays and the device mockup cast a shadow
+ *  - light or dark, nothing else
  */
 :root {
   color-scheme: light;
   --background: #ffffff;
-  --foreground: #1c1917;
+  --foreground: #353335;
+  --ink: #4d4a4d;
   --card: #ffffff;
-  --card-foreground: #1c1917;
+  --card-foreground: #4d4a4d;
   --popover: #ffffff;
-  --popover-foreground: #1c1917;
-  --primary: #c74504;
-  --primary-foreground: #ffffff;
-  --secondary: #f4f2ea;
-  --secondary-foreground: #1c1917;
-  --muted: #f4f2ea;
-  --muted-foreground: #6f6963;
-  --accent: #fdefe7;
-  --accent-foreground: #a93a03;
+  --popover-foreground: #4d4a4d;
+  --primary: #e8b923;
+  --primary-foreground: #353335;
+  --secondary: #f8f4e4;
+  --secondary-foreground: #353335;
+  --muted: #f8f4e4;
+  --muted-foreground: #6b6b6b;
+  --accent: #faf4df;
+  --accent-foreground: #826400;
   --destructive: #b3261e;
-  --border: #e8ddc8;
-  --input: #e8ddc8;
-  --ring: #c74504;
-  --radius: 0.375rem;
-  --sidebar: #f4f2ea;
-  --sidebar-foreground: #1c1917;
-  --sidebar-border: #e8ddc8;
+  --border: #ece5cc;
+  --input: #8a7f6e;
+  --ring: #826400;
+  --radius: 0.5rem;
+  --sidebar: #fcfaf3;
+  --sidebar-foreground: #353335;
+  --sidebar-border: #ece5cc;
   --brand-ink: #444444;
-  --primary-hover: #a93a03;
-  --primary-soft: #fdefe7;
-  --primary-text: #a93a03;
-  --surface: #f4f2ea;
+  --charcoal: #353335;
+  --charcoal-foreground: #fcfaf3;
+  --primary-hover: #d4a615;
+  --primary-soft: #faf4df;
+  --primary-text: #826400;
+  --surface: #fcfaf3;
   --surface-raised: #ffffff;
-  --border-strong: #d6c7ab;
+  --border-strong: #dccfa6;
   --success: #146c43;
   --success-soft: #e6f4ec;
   --warning: #8a5a00;
@@ -54,34 +61,37 @@
 
 .dark {
   color-scheme: dark;
-  --background: #12100e;
-  --foreground: #faf7f2;
-  --card: #1c1916;
-  --card-foreground: #faf7f2;
-  --popover: #1c1916;
-  --popover-foreground: #faf7f2;
-  --primary: #c74504;
-  --primary-foreground: #ffffff;
-  --secondary: #27221e;
-  --secondary-foreground: #faf7f2;
-  --muted: #27221e;
-  --muted-foreground: #a8a097;
-  --accent: #26130a;
-  --accent-foreground: #ff8a5c;
+  --background: #141312;
+  --foreground: #faf8f2;
+  --ink: #e6e2da;
+  --card: #1c1b19;
+  --card-foreground: #e6e2da;
+  --popover: #1c1b19;
+  --popover-foreground: #e6e2da;
+  --primary: #e8b923;
+  --primary-foreground: #353335;
+  --secondary: #262420;
+  --secondary-foreground: #faf8f2;
+  --muted: #262420;
+  --muted-foreground: #a8a399;
+  --accent: #2a2410;
+  --accent-foreground: #f0c94a;
   --destructive: #ff9d95;
-  --border: #302a25;
-  --input: #302a25;
-  --ring: #ff8a5c;
-  --sidebar: #181512;
-  --sidebar-foreground: #faf7f2;
-  --sidebar-border: #302a25;
+  --border: #2e2b26;
+  --input: #7d7569;
+  --ring: #f0c94a;
+  --sidebar: #181716;
+  --sidebar-foreground: #faf8f2;
+  --sidebar-border: #2e2b26;
   --brand-ink: #e7e0d6;
-  --primary-hover: #dd5211;
-  --primary-soft: #26130a;
-  --primary-text: #ff8a5c;
-  --surface: #181512;
-  --surface-raised: #1c1916;
-  --border-strong: #453d35;
+  --charcoal: #353335;
+  --charcoal-foreground: #fcfaf3;
+  --primary-hover: #f0c94a;
+  --primary-soft: #2a2410;
+  --primary-text: #f0c94a;
+  --surface: #181716;
+  --surface-raised: #1c1b19;
+  --border-strong: #433e35;
   --success: #7ee2ab;
   --success-soft: #10281c;
   --warning: #f5c26b;
@@ -92,7 +102,8 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-newsreader), Georgia, serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -103,6 +114,7 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-brand-ink: var(--brand-ink);
+  --color-ink: var(--ink);
   --color-primary-hover: var(--primary-hover);
   --color-primary-soft: var(--primary-soft);
   --color-primary-text: var(--primary-text);
@@ -128,17 +140,17 @@
   --color-surface-raised: var(--surface-raised);
   --color-charcoal: var(--charcoal);
   --color-charcoal-foreground: var(--charcoal-foreground);
-  --color-charcoal-muted: var(--charcoal-muted);
-  --color-ember: var(--ember);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-border: var(--sidebar-border);
 
-  /* Elevation: cards rest on a soft shadow; interactive cards lift to "raised" on hover. */
-  --shadow-card: 0 1px 2px 0 #1010140a, 0 1px 3px 0 #1010140f;
-  --shadow-raised: 0 2px 4px -1px #1010140f, 0 8px 24px -6px #1010141f;
+  /* Elevation: flat at rest. Shadows belong to what leaves the page plane: drawers, dialogs, menus, the device mockup. */
+  --shadow-card: 0 1px 2px 0 #1b1a1a0a, 0 1px 3px 0 #1b1a1a0f;
+  --shadow-raised: 0 2px 4px -1px #1b1a1a0f, 0 8px 24px -6px #1b1a1a24;
+  --shadow-drawer: -12px 0 40px -12px #1b1a1a33;
+  --shadow-device: 0 2px 4px -1px #1b1a1a14, 0 40px 80px -24px #1b1a1a40;
 
-  /* Radii: 6px base. lg = controls, md = tabs/menu items, xl = panels, card = cards. */
+  /* Radii: 8px base. lg = inputs, xl = menus and popovers (~11px), card = cards, panels and dialogs (20px). Buttons and chips are pills. */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -146,7 +158,7 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-  --radius-card: 1rem;
+  --radius-card: 1.25rem;
 }
 
 @layer base {
@@ -157,10 +169,9 @@
     -webkit-text-size-adjust: 100%;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background font-sans text-ink antialiased;
     font-size: 14px;
     line-height: 1.43;
-    font-feature-settings: "cv11", "ss01";
   }
   h1,
   h2,
@@ -174,9 +185,61 @@
     background: var(--primary-soft);
     color: var(--foreground);
   }
+  /* Browser surfaces carry the palette too: caret, scrollbars. */
+  input,
+  textarea {
+    caret-color: var(--primary-text);
+  }
+  * {
+    scrollbar-color: var(--border-strong) transparent;
+  }
 }
 
-/* The band that introduces a page on public surfaces: a breath of the accent over the page ground. */
+/*
+ * The One Heading Rule: every h1, h2 and .font-display is Newsreader 500 at -0.02em, whatever weight
+ * class a page adds. Unlayered on purpose, so it beats the utility layer. `.font-sans` opts back out.
+ * DM Sans has no heavier voice here: bold and extra-bold both resolve to 600 (headings excluded).
+ */
+h1:not(.font-sans),
+h2:not(.font-sans),
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.doc-card h2 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: normal;
+}
+.font-bold:not(h1, h2, .font-display),
+.font-extrabold:not(h1, h2, .font-display) {
+  font-weight: 600;
+}
+
+/*
+ * Form actions (Cancel left of one primary on the right). Inside a drawer they become Doxa's footer bar: the desk
+ * ground with a hairline above, spanning the panel's full width and flush with its bottom edge. The drawer body has
+ * no bottom padding, so there is nothing to cancel out: the bar is pinned to the foot by `margin-top: auto` in the
+ * form's flex column, and stays on screen (`sticky`) when the form is taller than the panel.
+ */
+[data-drawer-body] .form-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  margin: auto -1.25rem 0;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+@media (min-width: 40rem) {
+  [data-drawer-body] .form-actions {
+    margin-inline: -2rem;
+    padding-inline: 2rem;
+  }
+}
+
+/* The band that introduces a page: a breath of the accent over the page ground. */
 .masthead {
   background: color-mix(in oklab, var(--primary) 5%, var(--background));
 }

@@ -13,19 +13,22 @@ const original = readFileSync(path.join(root, "public/brand/yedara-logo.svg"), "
 const icon = readFileSync(path.join(root, "src/app/icon.svg"), "utf8");
 
 describe("brand assets", () => {
-  it("the original logo is the two-wing mark in the brand colours", () => {
+  it("the original logo is the two-wing mark: a dark grey right wing and an amber left wing", () => {
     expect(pathData(original)).toHaveLength(2);
-    expect(original).toContain('fill="#C74504"');
+    expect(original).toContain('fill="#E8B923"');
     expect(original).toContain('fill="#444444"');
+    expect(original).not.toContain("#C74504");
   });
 
   it("the favicon carries exactly the original artwork", () => {
     expect(pathData(icon)).toEqual(pathData(original));
   });
 
-  it("the favicon lightens the dark wing for dark browser themes", () => {
+  it("the favicon lightens the dark grey wing for dark browser themes and keeps the amber wing", () => {
     expect(icon).toMatch(/prefers-color-scheme:\s*dark/);
-    expect(icon).toContain("#C74504");
+    expect(icon).toContain("#E8B923");
+    expect(icon).toContain("#444444");
+    expect(icon).not.toContain("#C74504");
   });
 
   it("the inline mark carries exactly the original artwork", () => {
@@ -45,7 +48,7 @@ describe("brand assets", () => {
     expect(svg).not.toHaveAttribute("fill", "none");
     const [ink, accent] = container.querySelectorAll("path");
     expect(ink).toHaveAttribute("fill", "#444444");
-    expect(accent).toHaveAttribute("fill", "#C74504");
+    expect(accent).toHaveAttribute("fill", "#E8B923");
     // ...and follows the theme through CSS variables.
     expect(ink.getAttribute("style")).toContain("var(--brand-ink");
     expect(accent.getAttribute("style")).toContain("var(--primary");
@@ -86,7 +89,7 @@ describe("favicon files", () => {
     for (const e of entries) expect(e.png.subarray(1, 4).toString()).toBe("PNG");
   });
 
-  it("shows both wings on a solid backing, so it reads as the full logo on dark tabs", async () => {
+  it("shows the amber and dark grey wings on a solid backing, so it reads as the full logo on dark tabs", async () => {
     const sharp = (await sharpPromise).default;
     for (const e of entries.filter((x) => x.width >= 32)) {
       const { data, info } = await sharp(e.png).raw().toBuffer({ resolveWithObject: true });
@@ -94,14 +97,11 @@ describe("favicon files", () => {
         const i = (Math.round(yf * info.height) * info.width + Math.round(xf * info.width)) * info.channels;
         return [...data.subarray(i, i + info.channels)];
       };
-      // A point inside each wing (the left is terracotta, the right is the ink) and the tile behind them.
-      const [lr, lg, lb, la] = at(0.33, 0.4);
-      const [rr, rg, rb, ra] = at(0.67, 0.4);
-      expect([lr, lg, lb, la]).toEqual([199, 69, 4, 255]);
-      expect([rr, rg, rb, ra]).toEqual([68, 68, 68, 255]);
-      // The gap between and around the wings is opaque white, never transparent.
-      expect(at(0.5, 0.22)[3]).toBe(255);
-      expect(at(0.12, 0.5).slice(0, 3)).toEqual([255, 255, 255]);
+      // A point inside each wing (the left is the CTA amber, the right the dark grey) and the tile behind them.
+      expect(at(0.33, 0.4)).toEqual([232, 185, 35, 255]);
+      expect(at(0.67, 0.4)).toEqual([68, 68, 68, 255]);
+      // The corner is opaque white, never transparent.
+      expect(at(0.05, 0.5)).toEqual([255, 255, 255, 255]);
     }
   });
 });

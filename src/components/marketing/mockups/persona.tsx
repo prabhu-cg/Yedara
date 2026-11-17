@@ -4,7 +4,7 @@ import { AppWindow, Tag } from "@/components/marketing/mockups/parts";
 function List({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <p className="text-xs font-bold tracking-wide text-muted-foreground uppercase">{title}</p>
+      <p className="text-xs font-semibold text-muted-foreground">{title}</p>
       <ul className="mt-1.5 space-y-1 text-[12px]">
         {items.map((item) => (
           <li key={item} className="flex gap-1.5">
@@ -22,11 +22,11 @@ export function PersonaPreview() {
     <AppWindow title="Persona Builder · Maya">
       <div className="p-4">
         <div className="flex items-start gap-3">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-charcoal text-sm font-bold text-charcoal-foreground">
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
             MP
           </span>
           <div className="min-w-0">
-            <p className="text-[15px] font-extrabold tracking-tight">Maya, the weeknight planner</p>
+            <p className="text-[15px] font-semibold tracking-tight">Maya, the weeknight planner</p>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
               <Tag tone="success">Research-backed</Tag>
               <Tag tone="outline">4 evidence items</Tag>

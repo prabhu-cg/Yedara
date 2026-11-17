@@ -383,7 +383,8 @@ test.describe("journey mapper: lists, copies and access", () => {
     await page.goto("/tools/journey-mapper");
     const card = page.getByRole("article").filter({ hasText: "First week with Budgeto" });
     await expect(card).toContainText("3 stages");
-    await expect(card).toContainText("Current state");
+    // The state is shown on the journey itself, never as a second status tag on the card.
+    await expect(card).not.toContainText("Current state");
     await page.getByRole("button", { name: "Actions for First week with Budgeto" }).click();
     await page.getByRole("menuitem", { name: "Copy as future state" }).click();
     await expect(page).toHaveURL(/\/tools\/journey-mapper\/[0-9a-f-]{36}(\?.*)?$/);

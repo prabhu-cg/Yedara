@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { ArrowLeft, ArrowRight, Lightbulb } from "lucide-react";
 import { toast } from "sonner";
+import { ProjectChip } from "@/components/layout/project-chip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
@@ -462,15 +463,17 @@ export function PlannerWizard(props: PlannerWizardProps) {
     // Leaving any field saves immediately instead of waiting out the debounce.
     <div onBlurCapture={() => autosave.hasUnsaved() && void autosave.flush()}>
       <div className="mb-6 flex flex-col gap-4">
-        <Link href={LIST_HREF} className="inline-flex w-fit items-center gap-1.5 rounded-md text-sm font-semibold text-muted-foreground hover:text-foreground">
-          <ArrowLeft aria-hidden className="size-4" /> Research plans
-        </Link>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <Link href={LIST_HREF} className="inline-flex w-fit items-center gap-1.5 rounded-md text-sm font-semibold text-muted-foreground hover:text-foreground">
+            <ArrowLeft aria-hidden className="size-4" /> Research plans
+          </Link>
+          <ProjectChip project={project ? { id: project.id, name: project.name } : null} />
+        </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 space-y-1.5">
             <h1 className="text-[28px] leading-tight font-bold [overflow-wrap:anywhere]">{title.trim() || "Untitled research plan"}</h1>
             <p className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <Badge variant={status === "completed" ? "default" : "secondary"}>{status === "completed" ? "Completed" : "Draft"}</Badge>
-              {project && <span>{project.name}</span>}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">

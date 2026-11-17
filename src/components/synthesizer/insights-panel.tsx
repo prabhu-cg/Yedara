@@ -105,7 +105,7 @@ function InsightForm({ initial, observations, themes, refs, submitLabel, onSubmi
         <TextareaField label="Recommended action" optional rows={2} maxLength={1000} value={v.recommendedAction} onChange={(e) => setV({ ...v, recommendedAction: e.target.value })} />
       </div>
       <FormAlert message={error} />
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <div className="form-actions flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
         <SubmitButton pending={pending} pendingLabel="Saving…">{submitLabel}</SubmitButton>
       </div>

@@ -446,12 +446,12 @@ export function PersonaWizard(props: PersonaWizardProps) {
       <WizardFrame
         backHref={LIST_HREF}
         backLabel="Personas"
+        project={project ? { id: project.id, name: project.name } : null}
         title={name.trim() || "Untitled persona"}
         badges={
           <>
             <PersonaTypeBadge type={type} />
             <Badge variant={status === "completed" ? "default" : "secondary"}>{status === "completed" ? "Completed" : "Draft"}</Badge>
-            {project && <span>{project.name}</span>}
           </>
         }
         saveStatus={autosave.status}

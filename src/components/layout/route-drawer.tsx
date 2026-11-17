@@ -4,10 +4,11 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Dialog as DrawerPrimitive } from "radix-ui";
-import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DrawerShell } from "@/components/ui/side-drawer";
 
-const CLOSE_MS = 200;
+/** The slide-out takes 180ms (see DrawerShell); wait for it before the route goes away. */
+const CLOSE_MS = 190;
 
 type DrawerApi = {
   /** Slide the drawer out, go back to the page underneath, then run `after`. */
@@ -61,28 +62,9 @@ export function RouteDrawer({
   return (
     <DrawerContext.Provider value={api}>
       <DrawerPrimitive.Root open={open} onOpenChange={(next) => !next && close()}>
-        <DrawerPrimitive.Portal>
-          <DrawerPrimitive.Overlay className="fixed inset-0 z-50 bg-black/30 backdrop-blur-[2px] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
-          <DrawerPrimitive.Content
-            className="fixed inset-y-0 right-0 z-50 flex h-full w-[min(40rem,100vw)] flex-col border-l border-border bg-background shadow-raised outline-none duration-200 data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=open]:animate-in data-[state=open]:slide-in-from-right"
-          >
-            <header className="flex items-start justify-between gap-4 border-b border-border px-5 py-4 sm:px-6">
-              <div className="min-w-0 space-y-1">
-                <DrawerPrimitive.Title className="text-xl leading-tight font-bold [overflow-wrap:anywhere]">{title}</DrawerPrimitive.Title>
-                {description ? (
-                  <DrawerPrimitive.Description className="text-sm leading-6 text-muted-foreground">{description}</DrawerPrimitive.Description>
-                ) : (
-                  <DrawerPrimitive.Description className="sr-only">{title}</DrawerPrimitive.Description>
-                )}
-              </div>
-              <DrawerPrimitive.Close className="inline-flex size-9 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
-                <X aria-hidden className="size-4" />
-                <span className="sr-only">Close</span>
-              </DrawerPrimitive.Close>
-            </header>
-            <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-6">{children}</div>
-          </DrawerPrimitive.Content>
-        </DrawerPrimitive.Portal>
+          <DrawerShell title={title} description={description} size="md">
+            {children}
+          </DrawerShell>
       </DrawerPrimitive.Root>
     </DrawerContext.Provider>
   );

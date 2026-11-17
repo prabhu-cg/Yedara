@@ -4,19 +4,17 @@ import { WorkKindTag } from "@/components/projects/work-kind-tag";
 import { Badge } from "@/components/ui/badge";
 import { PersonaAvatar } from "@/components/personas/persona-avatar";
 import { JourneyActionsMenu } from "@/components/journeys/journey-actions-menu";
-import { JOURNEY_STATE_LABELS } from "@/lib/journeys/constants";
 import type { JourneyListItem } from "@/lib/journeys/queries";
 import { formatRelativeTime } from "@/lib/format";
 
 export function JourneyCard({ journey, showTool }: { journey: JourneyListItem; showTool?: boolean }) {
   const completed = journey.status === "completed";
   return (
-    <article className="relative flex h-full w-full flex-col rounded-card border border-border bg-card shadow-card transition-[border-color,box-shadow] focus-within:border-primary focus-within:shadow-raised focus-within:ring-[3px] focus-within:ring-ring/50 hover:border-primary hover:shadow-raised">
+    <article className="relative flex h-full w-full flex-col rounded-card border border-border bg-card transition-[border-color,box-shadow] focus-within:border-primary focus-within:shadow-raised focus-within:ring-[3px] focus-within:ring-ring/50 hover:border-primary hover:shadow-raised">
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pr-10">
           {showTool && <WorkKindTag kind="journey" />}
           <Badge variant={completed ? "default" : "secondary"}>{completed ? "Completed" : "Draft"}</Badge>
-          <Badge variant="outline">{JOURNEY_STATE_LABELS[journey.state]}</Badge>
         </div>
         <h3 className="text-base font-semibold [overflow-wrap:anywhere]">
           <Link href={`/tools/journey-mapper/${journey.id}`} className="outline-none after:absolute after:inset-0 after:rounded-card hover:text-primary-text">

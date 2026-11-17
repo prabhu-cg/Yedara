@@ -129,7 +129,7 @@ export function CompetitorsManager({
         const own = sources.filter((s) => s.competitor_id === c.id);
         const heading = c.name.trim() || UNNAMED_COMPETITOR;
         return (
-          <section key={c.id} aria-label={`Competitor ${index + 1}: ${heading}`} className="space-y-5 rounded-card border border-border bg-card p-4 shadow-card sm:p-5">
+          <section key={c.id} aria-label={`Competitor ${index + 1}: ${heading}`} className="space-y-5 rounded-card border border-border bg-card p-4 sm:p-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex min-w-0 items-center gap-2">
                 <h3 className="text-base font-semibold [overflow-wrap:anywhere]">{heading}</h3>

@@ -115,7 +115,7 @@ const TABLE_KINDS: ItemKind[] = ["action", "goal", "thought", "touchpoint", "cha
 /** The same journey as rows and columns: one row per stage, easy to scan and copy. */
 export function JourneyTable({ stages, items }: { stages: StageRow[]; items: ItemRow[] }) {
   return (
-    <div role="region" aria-label="Journey table" tabIndex={0} className="overflow-x-auto rounded-card border border-border bg-card shadow-card outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
+    <div role="region" aria-label="Journey table" tabIndex={0} className="overflow-x-auto rounded-card border border-border bg-card outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
       <table className="w-full min-w-[72rem] border-collapse text-left text-sm">
         <caption className="sr-only">Journey stages and their contents</caption>
         <thead>

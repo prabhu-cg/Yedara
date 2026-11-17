@@ -13,21 +13,23 @@ export const metadata: Metadata = {
 export default function PricingPage() {
   return (
     <>
-      <header className={`${FRAME} pt-16 pb-12 sm:pt-24`}>
-        <h1 className="max-w-4xl text-[clamp(2.5rem,6vw,4.5rem)] leading-[1] font-extrabold tracking-[-0.04em]">
+      <header className="bg-surface">
+      <div className={`${FRAME} pt-16 pb-12 sm:pt-24`}>
+        <h1 className="max-w-4xl text-5xl leading-none sm:text-6xl">
           Free today. Pro when it&apos;s ready.
         </h1>
         <Lede className="mt-7">
           Yedara has one plan you can use now. A Pro plan is in development; it has no price yet because it
           isn&apos;t for sale.
         </Lede>
+      </div>
       </header>
 
-      <div className={`${FRAME} pb-20 sm:pb-28`}>
+      <div className={`${FRAME} border-t border-border py-16 sm:py-20`}>
         <PlanPanels />
       </div>
 
-      <Section tone="sand" labelledBy="pro-heading">
+      <Section tone="desk" labelledBy="pro-heading">
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <SectionHeading id="pro-heading">Shape Pro with us.</SectionHeading>

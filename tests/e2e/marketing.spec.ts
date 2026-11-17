@@ -4,9 +4,9 @@ const PAGES: [string, RegExp][] = [
   ["/", /Better insights\./],
   ["/features", /Everything in the workspace/],
   ["/pricing", /Free today\. Pro when it/],
-  ["/about", /Research is only useful/],
-  ["/privacy", /Privacy policy/],
-  ["/terms", /Terms of service/],
+  ["/about", /About Yedara/],
+  ["/privacy", /Privacy Policy/],
+  ["/terms", /Terms of Service/],
 ];
 
 test.describe("marketing site", () => {
@@ -87,15 +87,13 @@ test.describe("marketing site", () => {
   test("has light and dark themes, switchable from the header", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
     await page.goto("/");
-    const marketing = page.locator(".marketing").first();
-    await expect(marketing).toHaveCSS("background-color", "rgb(255, 255, 255)");
-    if ((page.viewportSize()?.width ?? 0) < 768) await page.getByRole("button", { name: "Open menu" }).click();
-    await page.getByRole("button", { name: "Change theme" }).filter({ visible: true }).first().click();
-    await page.getByRole("menuitemradio", { name: "Dark" }).click();
+    const body = page.locator("body");
+    await expect(body).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    await page.getByRole("button", { name: "Dark theme" }).filter({ visible: true }).first().click();
     await expect(page.locator("html")).toHaveClass(/dark/);
-    await expect(marketing).toHaveCSS("background-color", "rgb(18, 16, 14)");
+    await expect(body).toHaveCSS("background-color", "rgb(20, 19, 18)");
     await page.reload();
-    await expect(marketing).toHaveCSS("background-color", "rgb(18, 16, 14)");
+    await expect(body).toHaveCSS("background-color", "rgb(20, 19, 18)");
   });
 
   test("serves sitemap.xml, robots.txt and a social card", async ({ request }) => {
@@ -110,5 +108,38 @@ test.describe("marketing site", () => {
     const og = await request.get(ogPath);
     expect(og.status()).toBe(200);
     expect(og.headers()["content-type"]).toContain("image/png");
+  });
+});
+
+test.describe("features page index", () => {
+  test("the pills are a sticky index: clicking one scrolls to its tool and marks it current", async ({ page }) => {
+    await page.goto("/features");
+    const index = page.getByRole("navigation", { name: "On this page" });
+    await expect(index.getByRole("link")).toHaveCount(6);
+    await index.getByRole("link", { name: "Journey Mapper" }).click();
+    await expect(page).toHaveURL(/#journey-mapper$/);
+    await expect(index.getByRole("link", { name: "Journey Mapper" })).toHaveAttribute("aria-current", "location");
+    await expect(page.locator("#journey-mapper")).toBeInViewport();
+    // It stays on screen, under the site header, while you read.
+    const top = await index.evaluate((el) => el.closest(".sticky")!.getBoundingClientRect().top);
+    expect(top).toBeGreaterThanOrEqual(60);
+    expect(top).toBeLessThanOrEqual(68);
+  });
+
+  test("a deep link starts on its pill and follows manual scrolling", async ({ page }) => {
+    await page.goto("/features#persona-builder");
+    const index = page.getByRole("navigation", { name: "On this page" });
+    await expect(index.getByRole("link", { name: "Persona Builder" })).toHaveAttribute("aria-current", "location");
+    await page.evaluate(() => document.getElementById("research-synthesizer")!.scrollIntoView({ behavior: "instant" }));
+    await expect(index.getByRole("link", { name: "Research Synthesizer" })).toHaveAttribute("aria-current", "location");
+  });
+
+  test("with reduced motion the index still works and does not animate", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/features");
+    const scroll = await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior);
+    expect(scroll).toBe("auto");
+    await page.getByRole("link", { name: "Competitor Analyzer" }).first().click();
+    await expect(page.locator("#competitor-analyzer")).toBeInViewport();
   });
 });

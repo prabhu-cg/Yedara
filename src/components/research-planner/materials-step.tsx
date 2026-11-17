@@ -71,7 +71,7 @@ export function MaterialsStep({
           const meta = info[key];
           const content = contents[key];
           return (
-            <li key={key} className="rounded-card border border-border bg-card shadow-card">
+            <li key={key} className="rounded-card border border-border bg-card">
               {meta?.exists && content ? (
                 <details className="group">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-card p-4 outline-none focus-visible:ring-2 focus-visible:ring-ring">

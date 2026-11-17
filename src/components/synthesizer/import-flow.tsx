@@ -120,7 +120,7 @@ export function ImportFlow({ synthesisId, mode, onImported, onCancel }: { synthe
           <TextField label="Tags" optional className="sm:col-span-2" placeholder="pricing, onboarding" hint="Separate with commas. Added to every card." value={meta.tags} onChange={(e) => setMeta({ ...meta, tags: e.target.value })} />
         </div>
         <FormAlert message={error} />
-        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+        <div className="form-actions flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
           <Button type="button" variant="outline" onClick={() => { setStep("input"); setError(null); }}>Back</Button>
           <SubmitButton pending={pending} pendingLabel="Adding…" disabled={statements.length === 0}>Add {statements.length} {statements.length === 1 ? "observation" : "observations"}</SubmitButton>
         </div>
@@ -166,7 +166,7 @@ export function ImportFlow({ synthesisId, mode, onImported, onCancel }: { synthe
         </fieldset>
       )}
       <FormAlert message={error} />
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <div className="form-actions flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
         <Button type="button" onClick={review}>Review</Button>
       </div>

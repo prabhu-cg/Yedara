@@ -47,7 +47,7 @@ export function NewPersonaForm({ projects, defaultProjectId }: { projects: { id:
         {projects.map((p) => <option key={p.id} value={p.id}>{p.name}{p.client ? ` (${p.client})` : ""}</option>)}
       </SelectField>
       <PersonaTypePicker value={type} onChange={setType} />
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <div className="form-actions flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <CancelButton href="/tools/persona-builder" />
         <SubmitButton pending={pending} pendingLabel="Creating…">Start building</SubmitButton>
       </div>

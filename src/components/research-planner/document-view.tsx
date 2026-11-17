@@ -75,7 +75,7 @@ export function BlocksView({ blocks }: { blocks: Block[] }) {
 /** On-screen preview of the exported document (same model as the PDF/DOCX/Markdown). */
 export function DocumentView({ doc }: { doc: PlanDocument }) {
   return (
-    <article aria-label="Document preview" className="mx-auto max-w-3xl rounded-card border border-border bg-background p-6 sm:p-10 shadow-card">
+    <article aria-label="Document preview" className="mx-auto max-w-3xl rounded-card border border-border bg-background p-6 sm:p-10">
       <header className="mb-8 border-b border-border pb-8">
         {doc.image && (
           <figure className="mb-6 flex items-center gap-4">

@@ -20,13 +20,13 @@ export function Logo({
       href={href}
       aria-label={`${siteConfig.name} home`}
       className={cn(
-        "inline-flex items-center gap-2.5 rounded-lg font-bold text-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
+        "inline-flex items-center gap-2.5 rounded-lg text-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
         className,
       )}
     >
       <LogoMark className={markClassName} />
       <span className="flex flex-col leading-tight">
-        <span className="text-[15px] tracking-tight">{siteConfig.name}</span>
+        <span className="font-display text-xl tracking-tight">{siteConfig.name}</span>
         {tagline && <span className="text-xs font-medium text-muted-foreground">{siteConfig.tagline}</span>}
       </span>
     </Link>

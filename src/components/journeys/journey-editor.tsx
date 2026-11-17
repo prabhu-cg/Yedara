@@ -143,7 +143,7 @@ export function JourneyEditor(p: Props) {
           const stageItems = p.items.filter((i) => i.stage_id === stage.id);
           return (
             <li key={stage.id} data-stage={stage.id}>
-              <section aria-label={`Stage ${index + 1}: ${stage.name}`} className="rounded-card border border-border bg-card p-4 shadow-card sm:p-5">
+              <section aria-label={`Stage ${index + 1}: ${stage.name}`} className="rounded-card border border-border bg-card p-4 sm:p-5">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary-soft text-sm font-bold text-primary-text tabular-nums">{index + 1}</span>
                   <Input aria-label={`Name of stage ${index + 1}`} aria-invalid={!stage.name.trim()} value={stage.name} maxLength={JOURNEY_LIMITS.stageName} onChange={(e) => edit(stage, { name: e.target.value })} className="min-w-40 flex-1 text-base font-bold" />

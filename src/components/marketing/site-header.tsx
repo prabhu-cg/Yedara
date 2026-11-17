@@ -27,12 +27,12 @@ export function SiteHeader() {
 
   const linkClass = (href: string) =>
     cn(
-      "rounded-md px-3 py-2 text-[15px] font-semibold text-foreground/80 transition-colors hover:text-foreground",
-      pathname === href && "text-foreground underline decoration-primary decoration-2 underline-offset-8",
+      "rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+      pathname === href && "bg-accent font-semibold text-accent-foreground hover:bg-accent hover:text-accent-foreground",
     );
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/92 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md">
       <div className={cn(FRAME, "flex h-16 items-center justify-between gap-4")}>
         <Logo markClassName="size-8" className="text-base" />
 
@@ -51,10 +51,10 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-2 md:flex">
           <ThemeMenu />
-          <Button asChild variant="ghost" size="lg" className="font-semibold">
+          <Button asChild variant="ghost">
             <Link href="/login">Sign in</Link>
           </Button>
-          <Button asChild size="lg" className="font-semibold">
+          <Button asChild>
             <Link href="/signup">Start free</Link>
           </Button>
         </div>
@@ -83,17 +83,17 @@ export function SiteHeader() {
                 <Link
                   href={item.href}
                   aria-current={pathname === item.href ? "page" : undefined}
-                  className="block rounded-md px-1 py-3 text-lg font-semibold aria-[current=page]:text-primary-text"
+                  className="block rounded-full px-3.5 py-3 text-lg font-medium aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground"
                 >
                   {item.label}
                 </Link>
               </li>
             ))}
             <li className="mt-2 grid grid-cols-2 gap-2 border-t border-border pt-4">
-              <Button asChild variant="outline" size="lg">
+              <Button asChild variant="outline">
                 <Link href="/login">Sign in</Link>
               </Button>
-              <Button asChild size="lg">
+              <Button asChild>
                 <Link href="/signup">Start free</Link>
               </Button>
             </li>

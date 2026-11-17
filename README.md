@@ -45,7 +45,7 @@ Import the repo, set the three env vars from `.env.example` (`NEXT_PUBLIC_SITE_U
 
 - **Marketing site** (`src/app/(marketing)`): home, features, pricing, about, privacy and terms. It shows the real product honestly: one real app screenshot in a laptop frame (light and dark variants), authored module previews labelled as sample data, and no testimonials, statistics, integrations or prices. Free is the only live plan; Pro is shown as in development. Its palette is scoped under `.marketing` in `src/app/(marketing)/marketing.css`. Module copy lives in `src/config/marketing.ts`.
 - **Feedback widget:** a floating button on every public page and in the signed-in app. It posts a **public GitHub issue** (and adds it to a project board when configured) and collects no name or email. There is no contact page and no private contact route yet.
-- **Sign-in and sign-up panel:** from the `lg` breakpoint a photograph of a research team's affinity wall (handwritten quotes on sticky notes) sits beside the form, under a terracotta tint and a dark scrim for text contrast. Photo: "A bulletin board covered in sticky notes in an office" by Christian Brok on [Unsplash](https://unsplash.com/photos/FIWW1Cjj23I), under the Unsplash License. To change it, replace `public/auth/panel.jpg` and the credit in `auth-aside.tsx`.
+- **Sign-in and sign-up panel:** from the `lg` breakpoint a photograph of a research team's affinity wall (handwritten quotes on sticky notes) sits beside the form, under a flat charcoal scrim for text contrast. Photo: "A bulletin board covered in sticky notes in an office" by Christian Brok on [Unsplash](https://unsplash.com/photos/FIWW1Cjj23I), under the Unsplash License. To change it, replace `public/auth/panel.jpg` and the credit in `auth-aside.tsx`.
 
 ## Research Planner (Phase 2)
 
@@ -132,10 +132,10 @@ New tables: `research_syntheses`, `research_sources`, `research_observations`, `
 
 ## Design system
 
-The app and landing page share the "Working Ledger" tokens from Doxa's `DESIGN.md`: warm white and Oat grounds, parchment hairlines, warm ink, and a single terracotta accent, in Manrope throughout. Tokens live in `src/app/globals.css` (light and dark); components must use the semantic names (`bg-primary`, `text-primary-text`, `bg-muted`, `border-border`) and never raw hex.
+The app and landing page share the "Butter" system from Doxa's `DESIGN.md` (documented in this repo's `DESIGN.md`): white paper on a pale butter desk, butter hairlines, one amber accent, Newsreader for headlines and DM Sans for everything else. The logo and favicon are filled with the CTA amber. There are exactly two themes, light (default) and dark, switched with a sun/moon toggle; there is no system option. Tokens live in `src/app/globals.css` (light and dark); components must use the semantic names (`bg-primary`, `text-primary-text`, `bg-muted`, `border-border`) and never raw hex.
 
 - **Themes:** Light / Dark / System via the sun/moon menu in every header. The saved choice is applied before first paint.
-- **Rules applied:** one filled primary per view; the accent as text is always `primary-text`; hovers are Oat washes; the sidebar marks the current page with a quiet wash, never an accent tint; sentence-case labels; tabular numerals for counts; flat at rest (only menus, dialogs and the drawer cast a shadow); 36px controls at 6px radius, 16px cards.
+- **Rules applied:** one filled primary per view; the accent as text is always `primary-text`; hovers are sand washes; selection (current nav item, tab) is the amber tint with ochre text; every button is a pill; sentence-case labels; tabular numerals for counts; flat at rest (only menus, dialogs and the drawer cast a shadow); 40px controls with 8px inputs and 20px cards.
 - **Guarded by tests:** `tests/unit/design-tokens.test.ts` checks WCAG AA contrast for every text/background pair in both themes, light/dark token parity, and that components contain no hard-coded hex.
 - **Auth panel:** the sign-in and sign-up screens use a photographic brand panel in the spirit of Doxa's, with Yedara's own photo (see above).
 - **Not applied:** Doxa's board-specific patterns (data-grid tables, vote chip, `?item=` drawer, roadmap), since they belong to that product's features.

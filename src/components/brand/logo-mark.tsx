@@ -10,10 +10,11 @@ import { cn } from "@/lib/utils";
 /**
  * The Yedara mark (from Yedara_logo.svg).
  *
- * Each wing carries its own colour: the original brand value as the `fill` attribute (so the
- * logo can never render invisible), overridden by the theme variable so it follows light/dark.
- * It deliberately does not rely on generated utility classes. `white` is for the dark brand
- * panel, where both wings sit on a photograph.
+ * The left wing is the CTA amber (the primary-button colour, the same in light and dark); the right
+ * wing is dark grey, lightened in dark mode so it stays visible. Each wing carries its brand value as
+ * the `fill` attribute (so the logo can never render invisible), overridden by the theme variable.
+ * It deliberately does not rely on generated utility classes. `white` is for the photographic brand
+ * panel, where both wings sit on a charcoal scrim.
  */
 export function LogoMark({
   className,

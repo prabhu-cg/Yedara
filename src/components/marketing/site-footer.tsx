@@ -38,7 +38,7 @@ const COLUMNS = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-background">
+    <footer className="border-t border-border bg-surface">
       <div className={`${FRAME} py-14`}>
         <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr]">
           <div>
@@ -50,7 +50,7 @@ export function SiteFooter() {
           <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
             {COLUMNS.map((column) => (
               <div key={column.title}>
-                <h2 className="text-sm font-bold">{column.title}</h2>
+                <h2 className="font-sans text-sm font-semibold text-foreground">{column.title}</h2>
                 <ul className="mt-4 space-y-3">
                   {column.links.map((link) => (
                     <li key={link.href + link.label}>

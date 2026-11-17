@@ -3,8 +3,9 @@ import { LOGO_ACCENT_HEX, LOGO_INK_HEX, LOGO_VIEWBOX, LOGO_WING_ACCENT, LOGO_WIN
 import type { Block, ListItem, PlanDocument } from "@/lib/research-planner/document";
 import { loadDocImage } from "@/lib/export/doc-image";
 
-// Same palette as the app (light theme): accent, warm ink, Stone, parchment hairline, Oat.
-const C = { primary: "#C74504", text: "#1C1917", muted: "#6F6963", border: "#E8DDC8", fill: "#F4F2EA" };
+// The Butter palette, light theme: ochre accent text, charcoal ink, sand fill, butter hairline.
+// The Butter palette. Accent text is ochre (amber fails as text on white).
+const C = { primary: "#826400", text: "#353335", muted: "#6B6B6B", border: "#ECE5CC", fill: "#F8F4E4" };
 
 // Avoid mid-word hyphenation; it makes technical text harder to read.
 Font.registerHyphenationCallback((word) => [word]);

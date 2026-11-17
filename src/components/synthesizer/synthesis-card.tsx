@@ -9,7 +9,7 @@ import { formatRelativeTime } from "@/lib/format";
 export function SynthesisCard({ synthesis, showTool }: { synthesis: SynthesisListItem; showTool?: boolean }) {
   const completed = synthesis.status === "completed";
   return (
-    <article className="relative flex h-full w-full flex-col rounded-card border border-border bg-card shadow-card transition-[border-color,box-shadow] focus-within:border-primary focus-within:shadow-raised focus-within:ring-[3px] focus-within:ring-ring/50 hover:border-primary hover:shadow-raised">
+    <article className="relative flex h-full w-full flex-col rounded-card border border-border bg-card transition-[border-color,box-shadow] focus-within:border-primary focus-within:shadow-raised focus-within:ring-[3px] focus-within:ring-ring/50 hover:border-primary hover:shadow-raised">
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pr-10">
           {showTool && <WorkKindTag kind="synthesis" />}

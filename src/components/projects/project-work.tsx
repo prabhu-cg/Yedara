@@ -43,7 +43,7 @@ function StatusCell({ item }: { item: WorkItem }) {
 // `relative` on the scroller: the screen-reader-only text inside is absolutely positioned and must be clipped here too.
 function WorkTable({ items }: { items: WorkItem[] }) {
   return (
-    <div className="relative overflow-x-auto rounded-card border border-border bg-card shadow-card">
+    <div className="relative overflow-x-auto rounded-card border border-border bg-card">
       <table className="w-full border-collapse text-left text-sm">
         <caption className="sr-only">Research in this project</caption>
         <thead>

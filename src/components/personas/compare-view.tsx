@@ -30,7 +30,7 @@ export function CompareView({ personas }: { personas: ComparablePersona[] }) {
         </section>
       )}
 
-      <div className="overflow-x-auto rounded-card border border-border bg-card shadow-card" tabIndex={0} role="region" aria-label="Persona comparison table">
+      <div className="overflow-x-auto rounded-card border border-border bg-card" tabIndex={0} role="region" aria-label="Persona comparison table">
         <table className="w-full min-w-[40rem] border-collapse text-left text-sm">
           <caption className="sr-only">Comparison of {personas.map((p) => p.name).join(", ")}</caption>
           <thead>

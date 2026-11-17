@@ -120,7 +120,7 @@ export default async function DashboardPage() {
                 <li key={status}>
                   <Link
                     href={`/projects?status=${status}`}
-                    className="flex flex-col gap-2 rounded-xl border border-border bg-card p-4 shadow-card transition-[border-color,box-shadow] hover:border-primary hover:shadow-raised outline-none focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                    className="flex flex-col gap-2 rounded-xl border border-border bg-card p-4 transition-[border-color,box-shadow] hover:border-primary hover:shadow-raised outline-none focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-ring/50"
                   >
                     <StatusBadge status={status} className="w-fit" />
                     <span className="text-[28px] leading-none font-bold tabular-nums">{statusCounts[status]}</span>

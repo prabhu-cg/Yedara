@@ -507,11 +507,11 @@ export function AnalysisWizard(props: AnalysisWizardProps) {
       <WizardFrame
         backHref={LIST_HREF}
         backLabel="Competitor analyses"
+        project={project ? { id: project.id, name: project.name } : null}
         title={title.trim() || "Untitled analysis"}
         badges={
           <>
             <Badge variant={status === "completed" ? "default" : "secondary"}>{status === "completed" ? "Completed" : "Draft"}</Badge>
-            {project && <span>{project.name}</span>}
           </>
         }
         saveStatus={autosave.status}

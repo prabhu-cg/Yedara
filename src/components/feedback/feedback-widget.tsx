@@ -79,11 +79,11 @@ export function FeedbackWidget() {
         <section
           role="dialog"
           aria-labelledby="feedback-title"
-          className="max-h-[calc(100dvh-6rem)] w-[min(24rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-border bg-card p-5 shadow-xl"
+          className="feedback-panel flex max-h-[calc(100dvh-6rem)] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-card border border-border bg-card shadow-raised"
         >
-          <div className="mb-4 flex items-start justify-between gap-4">
+          <div className="flex items-start justify-between gap-4 border-b border-border bg-surface px-5 py-4">
             <div>
-              <h2 id="feedback-title" className="text-lg font-extrabold tracking-tight">
+              <h2 id="feedback-title" className="text-xl leading-tight">
                 Send feedback
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">Found a problem or have an idea? Tell us.</p>
@@ -92,14 +92,15 @@ export function FeedbackWidget() {
               type="button"
               onClick={close}
               aria-label="Close feedback"
-              className="-mt-1 -mr-2 rounded-lg p-2 text-foreground hover:bg-muted"
+              className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-border-strong bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none"
             >
-              <X className="size-5" aria-hidden />
+              <X className="size-4" aria-hidden />
             </button>
           </div>
 
+          <div className="min-h-0 flex-1 overflow-y-auto">
           {status === "sent" ? (
-            <div ref={confirmationRef} tabIndex={-1} role="status" className="rounded-xl bg-muted p-4 outline-none">
+            <div ref={confirmationRef} tabIndex={-1} role="status" className="m-5 rounded-xl bg-muted p-4 outline-none">
               <p className="text-lg font-bold">Thank you</p>
               <p className="mt-1 leading-relaxed text-muted-foreground">Your feedback has been sent to the Yedara team.</p>
               <button
@@ -114,7 +115,8 @@ export function FeedbackWidget() {
               </button>
             </div>
           ) : (
-            <form onSubmit={submit} className="space-y-5">
+            <form onSubmit={submit}>
+              <div className="space-y-5 px-5 pt-5 pb-5">
               <fieldset>
                 <legend className="text-sm font-bold">What kind of feedback is it?</legend>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -122,8 +124,8 @@ export function FeedbackWidget() {
                     <label
                       key={key}
                       className={cn(
-                        "cursor-pointer rounded-lg border px-3 py-2 text-sm font-semibold has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50",
-                        type === key ? "border-primary bg-muted" : "border-border hover:border-border-strong",
+                        "cursor-pointer rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/40",
+                        type === key ? "border-primary bg-accent text-accent-foreground" : "border-border-strong hover:bg-muted",
                       )}
                     >
                       <input
@@ -178,11 +180,15 @@ export function FeedbackWidget() {
                 </p>
               )}
 
-              <Button type="submit" disabled={sending} className="w-full font-bold">
-                {sending ? "Sending…" : "Send feedback"}
-              </Button>
+              </div>
+              <div className="flex justify-end border-t border-border bg-surface px-5 py-4">
+                <Button type="submit" disabled={sending}>
+                  {sending ? "Sending…" : "Send feedback"}
+                </Button>
+              </div>
             </form>
           )}
+          </div>
         </section>
       )}
       <button

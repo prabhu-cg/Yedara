@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 /** How the tools hand work to each other. The spine is the evidence thread from the hero. */
 export function ConnectedWorkflow() {
   return (
-    <Section tone="sand" labelledBy="overview-heading">
+    <Section tone="desk" labelledBy="overview-heading">
       <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
           <SectionHeading id="overview-heading">One project. One thread of evidence.</SectionHeading>
@@ -19,7 +19,7 @@ export function ConnectedWorkflow() {
             Most research tools stop at the document. In Yedara, the plan, the people, the market, the notes and the
             journey all live in one project, and what you learn in one place is still traceable in the next.
           </Lede>
-          <p className="mt-8 text-2xl font-extrabold tracking-tight">{siteConfig.tagline}</p>
+          <p className="font-display mt-8 text-2xl text-primary-text">{siteConfig.tagline}</p>
         </div>
         <ol className="lg:col-span-7">
           {CONNECTIONS.map((c, i) => (
@@ -27,9 +27,9 @@ export function ConnectedWorkflow() {
               {i < CONNECTIONS.length - 1 && (
                 <span aria-hidden className="absolute top-8 -bottom-1 left-[0.8125rem] w-0.5 bg-primary/40" />
               )}
-              <span aria-hidden className="relative z-10 mt-0.5 size-7 rounded-full border-[6px] border-primary bg-muted" />
+              <span aria-hidden className="relative z-10 mt-0.5 size-7 rounded-full border-[6px] border-primary bg-surface" />
               <div>
-                <h3 className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xl font-extrabold tracking-tight">
+                <h3 className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xl font-semibold tracking-tight">
                   {c.from}
                   <ArrowRight className="size-4 text-primary-text" aria-label="to" />
                   {c.to}
@@ -44,9 +44,9 @@ export function ConnectedWorkflow() {
   );
 }
 
-export function WorkflowBand() {
+export function WorkflowBand({ tone = "desk" }: { tone?: "desk" | "paper" }) {
   return (
-    <Section tone="sand" labelledBy="workflow-heading">
+    <Section tone={tone} labelledBy="workflow-heading">
       <SectionHeading id="workflow-heading" className="max-w-3xl">
         Plan, research, understand, then prioritise.
       </SectionHeading>
@@ -57,7 +57,7 @@ export function WorkflowBand() {
         {WORKFLOW.map((step) => (
           <li key={step.phase} className="relative border-t-2 border-primary pt-7">
             <span aria-hidden className="absolute -top-[7px] left-0 size-3 rounded-full bg-primary" />
-            <h3 className="text-[2rem] leading-none font-extrabold tracking-[-0.03em]">{step.phase}</h3>
+            <h3 className="font-display text-3xl leading-none">{step.phase}</h3>
             <p className="mt-3 text-[15px] text-muted-foreground">{step.line}</p>
             <ul className="mt-5 space-y-2">
               {step.slugs.map((slug) => {
@@ -66,12 +66,12 @@ export function WorkflowBand() {
                   <li key={slug}>
                     <Link
                       href={`/features#${slug}`}
-                      className="inline-flex items-center gap-2 rounded-md font-bold underline decoration-primary decoration-2 underline-offset-4 hover:text-primary-text"
+                      className="inline-flex items-center gap-2 rounded-md font-semibold underline decoration-primary decoration-2 underline-offset-4 hover:text-primary-text"
                     >
                       {m.name}
                     </Link>
                     {m.status === "in-development" && (
-                      <span className="mt-1.5 block w-fit rounded-full border border-primary px-2 py-0.5 text-xs font-bold whitespace-nowrap text-primary-text">
+                      <span className="mt-1.5 block w-fit rounded-full border border-primary px-2 py-0.5 text-xs font-semibold whitespace-nowrap text-primary-text">
                         In development
                       </span>
                     )}
@@ -102,7 +102,7 @@ export function Differentiators() {
         <dl className="lg:col-span-7">
           {DIFFERENTIATORS.map((d) => (
             <div key={d.title} className="border-t border-border-strong py-7 first:border-t-0 first:pt-0">
-              <dt className="text-xl font-extrabold tracking-tight">{d.title}</dt>
+              <dt className="text-xl font-semibold tracking-tight">{d.title}</dt>
               <dd className="mt-2 max-w-[56ch] text-muted-foreground">{d.text}</dd>
             </div>
           ))}
@@ -117,25 +117,25 @@ function PlanPanel({ plan, tone, compact }: { plan: (typeof PLANS)[keyof typeof 
   return (
     <div
       className={cn(
-        "flex flex-col rounded-3xl border p-7 sm:p-9",
-        free ? "border-primary bg-card shadow-[0_18px_40px_-20px_#c7450466]" : "border-dashed border-border-strong bg-transparent",
+        "flex flex-col rounded-card border p-7 sm:p-9",
+        free ? "border-primary bg-card" : "border-dashed border-border-strong bg-transparent",
       )}
     >
       <div className="flex items-center justify-between gap-3">
-        <h3 className="text-2xl font-extrabold tracking-tight">{plan.name}</h3>
-        <Badge variant={free ? "success" : "default"}>{plan.status}</Badge>
+        <h3 className="font-display text-3xl">{plan.name}</h3>
+        <Badge variant={free ? "default" : "secondary"}>{plan.status}</Badge>
       </div>
       <p className="mt-3 text-muted-foreground">{plan.blurb}</p>
       <ul className={cn("mt-6 space-y-3", compact && "mb-2")}>
         {plan.features.map((f) => (
           <li key={f} className="flex gap-3 text-[15px] leading-snug">
-            <Check aria-hidden className={cn("mt-0.5 size-4 shrink-0", free ? "text-success" : "text-muted-foreground")} strokeWidth={3} />
+            <Check aria-hidden className={cn("mt-0.5 size-4 shrink-0", free ? "text-primary-text" : "text-muted-foreground")} strokeWidth={3} />
             {f}
           </li>
         ))}
       </ul>
       <div className="mt-auto pt-8">
-        <Button asChild size="lg" variant={free ? "default" : "outline"} className="w-full font-bold sm:w-fit">
+        <Button asChild size="lg" variant={free ? "default" : "outline"} className="w-full sm:w-fit">
           {plan.cta.href ? (
             <Link href={plan.cta.href}>{plan.cta.label}</Link>
           ) : (
@@ -158,7 +158,7 @@ export function PlanPanels({ compact }: { compact?: boolean }) {
 
 export function PricingPreview() {
   return (
-    <Section tone="sand" labelledBy="pricing-heading">
+    <Section tone="desk" labelledBy="pricing-heading">
       <div className="max-w-2xl">
         <SectionHeading id="pricing-heading">Start free. Pro is still being shaped.</SectionHeading>
         <Lede className="mt-6">
@@ -169,7 +169,7 @@ export function PricingPreview() {
         <PlanPanels />
       </div>
       <p className="mt-8">
-        <Link href="/pricing" className="inline-flex items-center gap-1.5 rounded-md font-bold text-primary-text underline-offset-4 hover:underline">
+        <Link href="/pricing" className="inline-flex items-center gap-1.5 rounded-md font-semibold text-primary-text underline-offset-4 hover:underline">
           See the pricing page <ArrowRight className="size-4" aria-hidden />
         </Link>
       </p>
@@ -183,11 +183,11 @@ export function Faq({ limit }: { limit?: number }) {
     <div className="faq divide-y divide-border-strong border-y border-border-strong">
       {items.map((item) => (
         <details key={item.q} className="group">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-6 rounded-md py-5 text-lg font-bold tracking-tight [&::-webkit-details-marker]:hidden">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-6 rounded-md py-5 text-lg font-semibold tracking-tight [&::-webkit-details-marker]:hidden">
             {item.q}
             <span
               aria-hidden
-              className="faq-icon flex size-8 shrink-0 items-center justify-center rounded-full border border-border-strong transition-transform duration-200"
+              className="faq-icon flex size-8 shrink-0 items-center justify-center rounded-full border border-border-strong bg-card transition-transform duration-200"
             >
               <Plus className="size-4" />
             </span>
@@ -207,7 +207,7 @@ export function FaqSection() {
           <SectionHeading id="faq-heading">Questions, answered plainly.</SectionHeading>
           <p className="mt-5 text-muted-foreground">
             Something missing?{" "}
-            <OpenFeedback className="font-bold text-primary-text underline underline-offset-4" feedbackType="other">
+            <OpenFeedback className="font-semibold text-primary-text underline underline-offset-4" feedbackType="other">
               Ask us
             </OpenFeedback>
             .
@@ -223,26 +223,21 @@ export function FaqSection() {
 
 export function FinalCta() {
   return (
-    <section aria-labelledby="final-cta-heading" className="on-primary bg-primary text-primary-foreground">
+    <section aria-labelledby="final-cta-heading" className="border-t border-border bg-background">
       <div className={cn(FRAME, "py-20 text-center sm:py-24")}>
-        <h2 id="final-cta-heading" className="text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.05] font-extrabold tracking-[-0.03em]">
+        <h2 id="final-cta-heading" className="text-4xl leading-[1.1] sm:text-5xl">
           Know. Explore. Understand.
         </h2>
-        <p className="mx-auto mt-5 max-w-[48ch] text-lg text-primary-foreground/90">
+        <p className="mx-auto mt-5 max-w-[48ch] text-lg text-muted-foreground">
           Better insights. Stronger decisions. Create a free workspace and bring your next study into one place.
         </p>
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <Button asChild size="lg" className="h-11 bg-primary-foreground px-6 text-base font-bold text-primary hover:bg-primary-foreground/90">
+          <Button asChild size="lg" className="px-8 text-base">
             <Link href="/signup">
               Start free <ArrowRight />
             </Link>
           </Button>
-          <Button
-            asChild
-            size="lg"
-            variant="ghost"
-            className="h-11 border-white/70 px-6 text-base font-bold text-primary-foreground hover:bg-white/10 hover:text-primary-foreground"
-          >
+          <Button asChild size="lg" variant="outline" className="px-8 text-base">
             <Link href="/features">Explore the features</Link>
           </Button>
         </div>

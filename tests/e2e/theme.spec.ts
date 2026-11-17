@@ -2,104 +2,89 @@ import { expect, test, type Page } from "@playwright/test";
 import { createProject, signUp } from "./helpers";
 
 const LIGHT_BG = "rgb(255, 255, 255)";
-const DARK_BG = "rgb(18, 16, 14)";
+const DARK_BG = "rgb(20, 19, 18)";
+const AMBER = "rgb(232, 185, 35)";
 
-async function chooseTheme(page: Page, name: "Light" | "Dark" | "System") {
-  const trigger = page.getByRole("button", { name: "Change theme" }).filter({ visible: true }).first();
-  const item = page.getByRole("menuitemradio", { name });
-  await expect(async () => {
-    if (!(await item.isVisible())) await trigger.click();
-    await expect(item).toBeVisible({ timeout: 1000 });
-  }).toPass({ timeout: 10_000 });
-  await item.click();
-}
+const toggle = (page: Page) => page.getByRole("button", { name: "Dark theme" }).filter({ visible: true }).first();
 
 test.describe("theme", () => {
-  test("follows the system preference until the user chooses", async ({ page }) => {
+  test("is light by default and ignores the system preference", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "dark" });
     await page.goto("/login");
-    await expect(page.locator("html")).toHaveClass(/dark/);
-    await expect(page.locator("body")).toHaveCSS("background-color", DARK_BG);
-
-    await page.emulateMedia({ colorScheme: "light" });
-    await page.goto("/login");
     await expect(page.locator("html")).not.toHaveClass(/dark/);
+    await expect(page.locator("body")).toHaveCSS("background-color", LIGHT_BG);
   });
 
-  test("lets the user pick Light, Dark or System and remembers the choice", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "light" });
+  test("flips between exactly two themes and remembers the choice", async ({ page }) => {
     await page.goto("/login");
-    await expect(page.locator("body")).toHaveCSS("background-color", LIGHT_BG);
-
-    await chooseTheme(page, "Dark");
+    await expect(toggle(page)).toHaveAttribute("aria-pressed", "false");
+    await toggle(page).click();
     await expect(page.locator("html")).toHaveClass(/dark/);
     await expect(page.locator("body")).toHaveCSS("background-color", DARK_BG);
+    await expect(toggle(page)).toHaveAttribute("aria-pressed", "true");
 
-    // Persists across a reload and other pages, with the theme applied before first paint.
+    // Persists across a reload and other pages, applied before first paint.
     await page.reload({ waitUntil: "domcontentloaded" });
     await expect(page.locator("html")).toHaveClass(/dark/);
     await page.goto("/signup");
     await expect(page.locator("html")).toHaveClass(/dark/);
 
-    // An explicit choice beats the system preference.
-    await page.emulateMedia({ colorScheme: "dark" });
-    await chooseTheme(page, "Light");
+    await toggle(page).click();
     await expect(page.locator("html")).not.toHaveClass(/dark/);
-    await page.reload();
-    await expect(page.locator("html")).not.toHaveClass(/dark/);
-
-    // Back to System: follows the OS again.
-    await chooseTheme(page, "System");
-    await expect(page.locator("html")).toHaveClass(/dark/);
-    await expect(page.evaluate(() => localStorage.getItem("yedara-theme"))).resolves.toBeNull();
+    await expect(page.evaluate(() => localStorage.getItem("yedara-theme"))).resolves.toBe("light");
   });
 
-  test("the choice is marked in the menu", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "light" });
+  test("there is no system option", async ({ page }) => {
     await page.goto("/login");
-    await chooseTheme(page, "Dark");
-    await page.getByRole("button", { name: "Change theme" }).filter({ visible: true }).first().click();
-    await expect(page.getByRole("menuitemradio", { name: "Dark" })).toHaveAttribute("aria-checked", "true");
-    await expect(page.getByRole("menuitemradio", { name: "Light" })).toHaveAttribute("aria-checked", "false");
+    await toggle(page).click();
+    await expect(page.getByRole("menuitemradio")).toHaveCount(0);
+    await expect(page.getByText("System", { exact: true })).toHaveCount(0);
   });
 
   test("works inside the signed-in app", async ({ page }) => {
     await signUp(page);
-    await chooseTheme(page, "Dark");
+    await toggle(page).click();
     await expect(page.locator("html")).toHaveClass(/dark/);
     await page.goto("/projects");
     await expect(page.locator("html")).toHaveClass(/dark/);
-    // Sidebar / header grounds follow the theme; nothing is left white.
     await expect(page.locator("body")).toHaveCSS("background-color", DARK_BG);
-    await chooseTheme(page, "Light");
+    await toggle(page).click();
     await expect(page.locator("body")).toHaveCSS("background-color", LIGHT_BG);
   });
 });
 
 test.describe("shared visual language", () => {
-  test("primary buttons use the accent, and darken to the deep terracotta on hover where hover exists", async ({ page }) => {
+  test("primary buttons are amber pills with charcoal text, and darken on hover where hover exists", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
     await page.goto("/login");
     const cta = page.getByRole("button", { name: "Sign in" });
-    await expect(cta).toHaveCSS("background-color", "rgb(199, 69, 4)");
-    await expect(cta).toHaveCSS("border-top-left-radius", "6px");
-    await expect(cta).toHaveCSS("height", "36px");
-    // Tailwind only applies hover styles on devices that can hover, so check it on desktop.
+    await expect(cta).toHaveCSS("background-color", AMBER);
+    await expect(cta).toHaveCSS("color", "rgb(53, 51, 53)");
+    await expect(cta).toHaveCSS("border-top-left-radius", /^(9999|3\.35544e\+07)px$/);
+    await expect(cta).toHaveCSS("height", "40px");
     if ((page.viewportSize()?.width ?? 0) >= 1024) {
       await cta.hover();
-      await expect(cta).toHaveCSS("background-color", "rgb(169, 58, 3)");
+      await expect(cta).toHaveCSS("background-color", "rgb(212, 166, 21)");
     }
   });
 
-  test("the current sidebar item is a quiet wash, not an accent tint", async ({ page }) => {
+  test("the current sidebar item is butter: the accent tint with ochre text", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
     await signUp(page);
     test.skip((page.viewportSize()?.width ?? 0) < 1024, "the desktop sidebar is hidden below lg");
     const current = page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Dashboard" });
     await expect(current).toHaveAttribute("aria-current", "page");
-    await expect(current).toHaveCSS("color", "rgb(28, 25, 23)");
-    await expect(current).not.toHaveCSS("background-color", "rgb(253, 239, 231)");
+    await expect(current).toHaveCSS("color", "rgb(130, 100, 0)");
+    await expect(current).toHaveCSS("background-color", "rgb(250, 244, 223)");
     await expect(current).toHaveCSS("font-weight", "600");
+    await expect(current).toHaveCSS("border-top-left-radius", /^(9999|3\.35544e\+07)px$/);
+  });
+
+  test("headings are Newsreader and the body is DM Sans", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveCSS("font-family", /Newsreader/);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveCSS("font-weight", "500");
+    await expect(page.locator("body")).toHaveCSS("font-family", /DM Sans/);
   });
 
   test("sign-in and sign-up are split screens with the brand panel on large screens", async ({ page }) => {
@@ -118,27 +103,27 @@ test.describe("shared visual language", () => {
       } else {
         await expect(panel).toBeHidden();
       }
-      // The form column is on the Oat ground with the product mark above the form, at every size.
+      // The form column is on the desk ground with the product mark above the form, at every size.
       await expect(page.getByRole("heading", { level: 1, name: "Yedara" })).toBeVisible();
-      await expect(page.locator("main")).toHaveCSS("background-color", "rgb(244, 242, 234)");
+      await expect(page.locator("main")).toHaveCSS("background-color", "rgb(252, 250, 243)");
     }
     await page.goto("/login");
-    const card = page.getByLabel("Email").locator("xpath=ancestor::div[contains(@class,'rounded-2xl')][1]");
-    await expect(card).toHaveCSS("border-top-left-radius", "10.8px");
+    const card = page.getByLabel("Email").locator("xpath=ancestor::div[contains(@class,'rounded-card')][1]");
+    await expect(card).toHaveCSS("border-top-left-radius", "20px");
   });
 
-  test("controls are 36px tall with a 6px radius", async ({ page }) => {
+  test("inputs are 40px tall with an 8px radius", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
     await page.goto("/login");
     const input = page.getByLabel("Email");
-    await expect(input).toHaveCSS("height", "36px");
-    await expect(input).toHaveCSS("border-top-left-radius", "6px");
-    await expect(page.getByRole("button", { name: "Sign in" })).toHaveCSS("height", "36px");
+    await expect(input).toHaveCSS("height", "40px");
+    await expect(input).toHaveCSS("border-top-left-radius", "8px");
+    await expect(page.getByRole("button", { name: "Sign in" })).toHaveCSS("height", "40px");
   });
 });
 
 test.describe("brand identity", () => {
-  test("serves the logo as favicon, shortcut icon and touch icon", async ({ page, request }) => {
+  test("serves the logo as favicon, shortcut icon and touch icon: amber left wing, dark grey right wing", async ({ page, request }) => {
     await page.goto("/");
     await expect(page.locator('link[rel="icon"][href*="icon.svg"]')).toHaveCount(1);
     await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);
@@ -146,7 +131,10 @@ test.describe("brand identity", () => {
     const svg = await request.get("/icon.svg");
     expect(svg.status()).toBe(200);
     expect(svg.headers()["content-type"]).toContain("image/svg+xml");
-    expect(await svg.text()).toContain("#C74504");
+    const text = await svg.text();
+    expect(text).toContain("#E8B923");
+    expect(text).toContain("#444444");
+    expect(text).not.toContain("#C74504");
 
     const ico = await request.get("/favicon.ico");
     expect(ico.status()).toBe(200);
@@ -165,85 +153,51 @@ test.describe("brand identity", () => {
     await expect(page.locator("main").getByText("Know. Explore. Understand.")).toBeVisible();
   });
 
-  test("both wings still draw when the stylesheet is stale or missing", async ({ page }) => {
-    // Regression: the grey wing was coloured only by a generated class, so a stale stylesheet made it invisible.
+  test("the left wing is the CTA amber and the right wing dark grey, even when the stylesheet is stale or missing", async ({ page }) => {
     await page.route("**/*.css", (route) => route.abort());
     await page.goto("/");
     const wings = page.locator("header").first().getByRole("link", { name: "Yedara home" }).locator("svg path");
     await expect(wings).toHaveCount(2);
     await expect(wings.first()).toHaveCSS("fill", "rgb(68, 68, 68)");
-    await expect(wings.nth(1)).toHaveCSS("fill", "rgb(199, 69, 4)");
+    await expect(wings.nth(1)).toHaveCSS("fill", AMBER);
   });
 
-  test("the mark's dark wing lightens in dark mode so it stays visible", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "light" });
+  test("in dark mode the dark wing lightens so it stays visible, and the amber wing is unchanged", async ({ page }) => {
     await page.goto("/login");
+    await toggle(page).click();
     const logoPaths = page.locator("main a[href='/'] svg path");
-    const wing = logoPaths.first();
-    await expect(wing).toHaveCSS("fill", "rgb(68, 68, 68)");
-    await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto("/login");
     await expect(logoPaths.first()).toHaveCSS("fill", "rgb(231, 224, 214)");
-    await expect(logoPaths.nth(1)).toHaveCSS("fill", "rgb(199, 69, 4)");
+    await expect(logoPaths.nth(1)).toHaveCSS("fill", AMBER);
   });
 });
 
 test.describe("cards in the app", () => {
-  const shadowOf = (loc: import("@playwright/test").Locator) => loc.evaluate((el) => getComputedStyle(el).boxShadow);
-  const canHover = (page: import("@playwright/test").Page) => (page.viewportSize()?.width ?? 0) >= 1024;
+  const canHover = (page: Page) => (page.viewportSize()?.width ?? 0) >= 1024;
 
-  test("record cards use the 16px card radius, rest on a shadow, and lift with a brand border on hover", async ({ page }) => {
+  test("record cards use the 20px card radius, sit flat at rest, and take an amber border on hover", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
     await signUp(page);
     await createProject(page, { name: "Elevation project" });
     await page.goto("/projects");
     const card = page.getByRole("article").filter({ hasText: "Elevation project" });
-    await expect(card).toHaveCSS("border-top-left-radius", "16px");
-    await expect(card).toHaveCSS("border-top-color", "rgb(232, 221, 200)");
-    const resting = await shadowOf(card);
-    expect(resting).not.toBe("none");
+    await expect(card).toHaveCSS("border-top-left-radius", "20px");
+    await expect(card).toHaveCSS("border-top-color", "rgb(236, 229, 204)");
+    await expect(card).toHaveCSS("box-shadow", "none");
     if (canHover(page)) {
       await card.hover();
-      await expect(card).toHaveCSS("border-top-color", "rgb(199, 69, 4)");
-      await expect.poll(() => shadowOf(card)).not.toBe(resting);
+      await expect(card).toHaveCSS("border-top-color", AMBER);
     }
     // Keyboard focus gets the same treatment as hover.
     await card.getByRole("link", { name: "Elevation project" }).focus();
-    await expect(card).toHaveCSS("border-top-color", "rgb(199, 69, 4)");
+    await expect(card).toHaveCSS("border-top-color", AMBER);
   });
 
-  test("tiles use the 8.4px radius, and static cards the 16px radius with a resting shadow", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "light" });
-    await signUp(page);
-    await createProject(page, { name: "Tiles project" });
-    await page.goto("/dashboard");
-    const tool = page.getByRole("link", { name: /Persona Builder/ }).last();
-    await expect(tool).toHaveCSS("border-top-left-radius", "8.4px");
-    expect(await shadowOf(tool)).not.toBe("none");
-    const statusTile = page.getByRole("link", { name: /Planning\s*1/ });
-    await expect(statusTile).toHaveCSS("border-top-left-radius", "8.4px");
-    if (canHover(page)) {
-      await tool.hover();
-      await expect(tool).toHaveCSS("border-top-color", "rgb(199, 69, 4)");
-    }
-
-    await page.goto("/settings/profile");
-    const card = page.locator("main .rounded-card").first();
-    await expect(card).toHaveCSS("border-top-left-radius", "16px");
-    expect(await shadowOf(card)).not.toBe("none");
-  });
-
-  test("elevation also shows in dark mode and cards keep their brand hover", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
+  test("dark cards sit on the warm card ground", async ({ page }) => {
     await signUp(page);
     await createProject(page, { name: "Dark project" });
+    await toggle(page).click();
     await page.goto("/projects");
     const card = page.getByRole("article").filter({ hasText: "Dark project" });
-    await expect(card).toHaveCSS("background-color", "rgb(28, 25, 22)");
-    expect(await shadowOf(card)).not.toBe("none");
-    if (canHover(page)) {
-      await card.hover();
-      await expect(card).toHaveCSS("border-top-color", "rgb(199, 69, 4)");
-    }
+    await expect(card).toHaveCSS("background-color", "rgb(28, 27, 25)");
   });
 });

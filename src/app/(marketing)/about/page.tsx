@@ -1,87 +1,101 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FRAME, Lede, Section, SectionHeading } from "@/components/marketing/frame";
-import { FinalCta } from "@/components/marketing/sections";
-import { DIFFERENTIATORS } from "@/config/marketing";
+import { DocSection, LegalPageShell } from "@/components/marketing/legal";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Why Yedara exists: research tools that keep evidence attached, say what is unknown, and never invent findings.",
+    "What Yedara is, how it is built, what is live and what is next, and who built it and why.",
   alternates: { canonical: "/about" },
   openGraph: { title: "About Yedara", url: "/about" },
 };
 
+const STACK: [string, string][] = [
+  ["Framework", "Next.js (App Router), React 19, TypeScript (strict)"],
+  ["Styling", "Tailwind CSS v4, shadcn-style components on Radix primitives"],
+  ["Icons & Type", "Lucide, Newsreader and DM Sans"],
+  ["Forms & Validation", "React Hook Form with Zod schemas"],
+  ["Data", "PostgreSQL on Supabase, with row-level security on every table"],
+  ["Identity", "Supabase Auth, with each account's projects checked on every request"],
+  ["Exports", "PDF, Word and Markdown, generated from one document model"],
+  ["Hosting", "Vercel"],
+];
+
 export default function AboutPage() {
   return (
-    <>
-      <header className={`${FRAME} pt-16 pb-16 sm:pt-24`}>
-        <h1 className="max-w-4xl text-[clamp(2.5rem,6vw,4.5rem)] leading-[1] font-extrabold tracking-[-0.04em]">
-          Research is only useful if people believe it.
-        </h1>
-        <Lede className="mt-7 max-w-[62ch]">
-          Yedara is a connected UX research workspace for designers, researchers, agencies and product teams. It exists
-          so the person who ran the study can show, step by step, how a note from a participant became a decision.
-        </Lede>
-      </header>
+    <LegalPageShell badge="V1" title="About Yedara" subtitle={siteConfig.tagline}>
+      <DocSection title="What it is">
+        <p>
+          Yedara is a connected UX research workspace for designers, researchers, agencies and product teams. A typical
+          study lives in a plan document, a folder of notes, a board someone screenshotted and a slide deck. By the time
+          a recommendation reaches a stakeholder, the trail back to what a participant actually said has gone cold.
+        </p>
+        <p>
+          Yedara is built around the whole chain: plan, understand your users, analyse competitors, synthesise what you
+          heard, map the journey and find the opportunities. Everything sits in one project and points at each other,
+          so the question &ldquo;how do we know?&rdquo; always has an answer you can click.
+        </p>
+        <p>
+          It is honest about what it doesn&apos;t know. Nothing is generated or invented, personas say whether they are
+          research-backed, a hypothesis or a proto-persona, and an unknown cell in a matrix is a research gap, not a
+          weakness.
+        </p>
+      </DocSection>
 
-      <Section tone="sand" labelledBy="problem-heading">
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-5">
-            <SectionHeading id="problem-heading">Why we built it</SectionHeading>
-          </div>
-          <div className="space-y-5 text-lg text-muted-foreground lg:col-span-7">
-            <p>
-              A typical study lives in a plan document, a folder of notes, a board someone screenshotted and a slide
-              deck. By the time a recommendation reaches a stakeholder, the trail back to what a participant actually
-              said has gone cold.
-            </p>
-            <p>
-              Yedara keeps that trail. The plan, personas, competitor matrix, observations, insights and journeys sit in
-              one project and point at each other, so the question &ldquo;how do we know?&rdquo; always has an answer
-              you can click.
-            </p>
-          </div>
-        </div>
-      </Section>
-
-      <Section labelledBy="principles-heading">
-        <SectionHeading id="principles-heading" className="max-w-3xl">
-          What we hold ourselves to
-        </SectionHeading>
-        <dl className="mt-14 grid gap-x-16 gap-y-12 md:grid-cols-2">
-          {DIFFERENTIATORS.map((d) => (
-            <div key={d.title}>
-              <dt className="text-xl font-extrabold tracking-tight">{d.title}</dt>
-              <dd className="mt-2 max-w-[48ch] text-muted-foreground">{d.text}</dd>
+      <DocSection title="How it is built">
+        <dl className="mb-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+          {STACK.map(([k, v]) => (
+            <div key={k}>
+              <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">{k}</dt>
+              <dd className="mt-1 text-foreground">{v}</dd>
             </div>
           ))}
         </dl>
-      </Section>
+        <p>
+          Yedara is private by default: every project belongs to one account, and every request that touches it
+          re-verifies who is asking, rather than trusting an ID supplied by the browser.
+        </p>
+      </DocSection>
 
-      <Section tone="sand" labelledBy="who-heading">
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-5">
-            <SectionHeading id="who-heading">Who it&apos;s for</SectionHeading>
-          </div>
-          <div className="space-y-5 text-lg text-muted-foreground lg:col-span-7">
-            <p>
-              Freelance designers, independent researchers, startups, agencies and product teams who run their own
-              studies and have to justify what comes out of them to a client or a roadmap meeting.
-            </p>
-            <p>
-              Where we are today: five tools are live, the Opportunity Analyzer is in development, and projects are
-              private to one account. See{" "}
-              <Link href="/features" className="font-bold text-primary-text underline underline-offset-4">
-                the features
-              </Link>{" "}
-              for exactly what each does.
-            </p>
-          </div>
-        </div>
-      </Section>
+      <DocSection title="What is live, and what is next">
+        <p>
+          <span className="font-semibold text-foreground">Live today:</span> the Research Planner, Persona Builder,
+          Competitor Analyzer, Research Synthesizer and Journey Mapper, with PDF, Word and Markdown export for the
+          planner, personas, competitor analyses and syntheses. The{" "}
+          <Link href="/features">features page</Link> says exactly what each one does and doesn&apos;t do.
+        </p>
+        <p>
+          <span className="font-semibold text-foreground">Next:</span> the Opportunity Analyzer, which already receives
+          the opportunities you flag in the Journey Mapper, a journey export, and a Pro plan.
+        </p>
+      </DocSection>
 
-      <FinalCta />
-    </>
+      <DocSection title="Who built Yedara, and why">
+        <p>
+          Yedara was built by me, Prabhu Raja, a senior designer with 15+ years of experience across enterprise and B2B
+          software. I work on enterprise products, design systems and digital experiences, with a simple aim:
+          designing clarity from complexity.
+        </p>
+        <p>
+          I built it because most research tools stop at the document. Notes, themes and slides drift apart, and nobody
+          can show how a participant&apos;s words became a recommendation. Yedara keeps that trail: evidence stays attached
+          from the raw observation to the insight to the journey, and never gets invented along the way.
+        </p>
+        <p>
+          It is an independent project. I scoped, designed and built it myself, with AI in the loop, as part of how I
+          now take products from idea to shipped. You can see more of my work at{" "}
+          <a href="https://prabhuraja.vercel.app" target="_blank" rel="noopener noreferrer">
+            prabhuraja.vercel.app
+          </a>
+          .
+        </p>
+        <p>
+          Feedback, feature requests, or just want to say hello:{" "}
+          <a href="mailto:prabhu_cg@proton.me">prabhu_cg@proton.me</a>. The Feedback button on every page works too,
+          but it posts a public issue, so leave out personal details.
+        </p>
+      </DocSection>
+    </LegalPageShell>
   );
 }

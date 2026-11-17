@@ -153,7 +153,7 @@ export function ReviewStep({
               const isEditing = editing === section.key;
               const title = SECTION_TITLES[section.key];
               return (
-                <li key={section.key} className="rounded-card border border-border bg-card shadow-card" aria-label={title}>
+                <li key={section.key} className="rounded-card border border-border bg-card" aria-label={title}>
                   <div className="flex flex-wrap items-center justify-between gap-2 p-4">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-semibold">{title}</h3>

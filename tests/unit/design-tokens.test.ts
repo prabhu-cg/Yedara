@@ -29,6 +29,9 @@ const TEXT_PAIRS: [string, string][] = [
   ["foreground", "muted"],
   ["foreground", "card"],
   ["foreground", "sidebar"],
+  ["ink", "background"],
+  ["ink", "card"],
+  ["primary-text", "surface"],
   ["muted-foreground", "background"],
   ["muted-foreground", "muted"],
   ["muted-foreground", "card"],
@@ -51,18 +54,25 @@ describe("design tokens", () => {
     expect(Object.keys(light).length).toBeGreaterThan(30);
   });
 
-  it("use the shared brand values", () => {
+  it("use the Butter values: amber fill, ochre text, charcoal on amber, butter desk", () => {
     expect(light).toMatchObject({
-      primary: "#c74504",
-      "primary-hover": "#a93a03",
-      "primary-soft": "#fdefe7",
+      primary: "#e8b923",
+      "primary-foreground": "#353335",
+      "primary-hover": "#d4a615",
+      "primary-text": "#826400",
+      "primary-soft": "#faf4df",
       background: "#ffffff",
-      muted: "#f4f2ea",
-      foreground: "#1c1917",
-      "muted-foreground": "#6f6963",
-      border: "#e8ddc8",
+      surface: "#fcfaf3",
+      muted: "#f8f4e4",
+      foreground: "#353335",
+      "muted-foreground": "#6b6b6b",
+      border: "#ece5cc",
     });
-    expect(dark).toMatchObject({ background: "#12100e", card: "#1c1916", sidebar: "#181512", border: "#302a25" });
+    expect(dark).toMatchObject({ background: "#141312", card: "#1c1b19", sidebar: "#181716", border: "#2e2b26", primary: "#e8b923" });
+  });
+
+  it("keeps the amber the same in both themes, so the logo and CTA never change colour", () => {
+    expect(dark.primary).toBe(light.primary);
   });
 
   describe.each([
@@ -78,14 +88,19 @@ describe("design tokens", () => {
     });
   });
 
-  it("defines the card elevation tokens", () => {
-    expect(css).toMatch(/--shadow-card:\s*0 1px 2px 0 #1010140a, 0 1px 3px 0 #1010140f/);
-    expect(css).toMatch(/--shadow-raised:\s*0 2px 4px -1px #1010140f, 0 8px 24px -6px #1010141f/);
+  it("defines the device and overlay shadows", () => {
+    expect(css).toMatch(/--shadow-device:/);
+    expect(css).toMatch(/--shadow-drawer:/);
   });
 
-  it("uses the unified radii: 6px controls, 16px cards", () => {
-    expect(css).toMatch(/--radius:\s*0\.375rem/);
-    expect(css).toMatch(/--radius-card:\s*1rem/);
+  it("uses the Butter radii: 8px inputs, 20px cards (buttons are pills)", () => {
+    expect(css).toMatch(/--radius:\s*0\.5rem/);
+    expect(css).toMatch(/--radius-card:\s*1\.25rem/);
+  });
+
+  it("loads Newsreader for display and DM Sans for everything else", () => {
+    expect(css).toMatch(/--font-sans:\s*var\(--font-dm-sans\)/);
+    expect(css).toMatch(/--font-display:\s*var\(--font-newsreader\)/);
   });
 
   // layout.tsx is excluded: the `themeColor` meta (browser chrome) cannot use CSS variables.

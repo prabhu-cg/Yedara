@@ -41,7 +41,7 @@ function ObservationForm({ initial, sources, submitLabel, pending, error, errors
         <TextField label="Tags" optional placeholder="pricing, onboarding" hint="Separate with commas." value={v.tags} onChange={(e) => setV({ ...v, tags: e.target.value })} />
       </div>
       <FormAlert message={error} />
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <div className="form-actions flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
         <SubmitButton pending={pending} pendingLabel="Saving…">{submitLabel}</SubmitButton>
       </div>
@@ -163,7 +163,7 @@ export function MaterialPanel({ synthesisId, sources, observations, insights, ed
       </section>
 
       <div className="space-y-4">
-        <div role="tablist" aria-label="Research material views" className="inline-flex items-center gap-0.5 rounded-lg bg-muted p-0.5" onKeyDown={(e) => {
+        <div role="tablist" aria-label="Research material views" className="inline-flex items-center gap-0.5 rounded-full border border-border bg-background p-0.5" onKeyDown={(e) => {
           if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
           e.preventDefault();
           setView((v) => (v === "observations" ? "sources" : "observations"));
@@ -171,7 +171,7 @@ export function MaterialPanel({ synthesisId, sources, observations, insights, ed
         }}>
           {([["observations", "Observations", observations.length], ["sources", "Sources", sources.length]] as const).map(([id, label, count]) => (
             <button key={id} type="button" role="tab" id={`material-tab-${id}`} aria-selected={view === id} aria-controls={`material-panel-${id}`} tabIndex={view === id ? 0 : -1} data-material-view onClick={() => setView(id)}
-              className={cn("inline-flex h-8 items-center gap-2 rounded-md px-3 text-sm font-medium outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50", view === id ? "bg-background font-semibold text-foreground shadow-card" : "text-muted-foreground hover:text-foreground")}>
+              className={cn("inline-flex h-8 items-center gap-2 rounded-full px-3.5 text-sm font-medium outline-none transition-colors duration-200 focus-visible:ring-[3px] focus-visible:ring-ring/40", view === id ? "bg-accent font-semibold text-accent-foreground ring-1 ring-primary/50 ring-inset" : "text-muted-foreground hover:bg-muted hover:text-foreground")}>
               {label}
               <span className="text-xs text-muted-foreground tabular-nums">{count}</span>
             </button>

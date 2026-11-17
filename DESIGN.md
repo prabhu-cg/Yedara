@@ -1,294 +1,170 @@
 ---
-name: Yedara Marketing Site
-description: A white page with warm sand bands, hairline borders and one burnt-orange voice, showing real app screenshots and an evidence thread through a conventional SaaS skeleton.
+name: Yedara
+description: Know. Explore. Understand. White paper on a pale butter desk, one amber accent and a serif voice for headlines. The "Butter" system, shared with Doxa, applied to a connected UX research workspace and its marketing site.
 colors:
-  page: "#ffffff"
-  card-white: "#ffffff"
-  sand: "#f4f2ea"
-  hairline: "#e8ddc8"
-  hairline-strong: "#d6c7ab"
-  ink: "#333333"
-  ink-muted: "#5f5a54"
-  thread-orange: "#c74504"
-  thread-orange-hover: "#a93a03"
-  thread-orange-text: "#a93a03"
-  thread-tint: "#fdefe7"
-  charcoal: "#333333"
-  charcoal-text: "#faf9f6"
-  ember: "#f28c38"
+  accent: "#e8b923"
+  accent-hover: "#d4a615"
+  accent-text: "#826400"
+  accent-tint: "#faf4df"
+  on-accent: "#353335"
+  background: "#ffffff"
+  desk: "#fcfaf3"
+  sand: "#f8f4e4"
+  ink: "#4d4a4d"
+  ink-strong: "#353335"
+  ink-muted: "#6b6b6b"
+  hairline: "#ece5cc"
+  hairline-strong: "#dccfa6"
+  control-border: "#8a7f6e"
   success: "#146c43"
-  success-soft: "#e6f4ec"
   warning: "#8a5a00"
-  warning-soft: "#fdf3e0"
-  destructive: "#b3261e"
-  destructive-soft: "#fdeceb"
   info: "#1f5f9e"
-  info-soft: "#ebf3fb"
+  destructive: "#b3261e"
 typography:
   display:
-    fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(2.5rem, 6.2vw, 4.75rem)"
-    fontWeight: 800
-    lineHeight: 1.04
-    letterSpacing: "-0.04em"
+    fontFamily: "Newsreader, Georgia, serif"
+    fontSize: "4.5rem"
+    fontWeight: 500
+    lineHeight: 1
+    letterSpacing: "-0.02em"
   headline:
-    fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(1.875rem, 4.2vw, 3rem)"
-    fontWeight: 800
-    lineHeight: 1.08
-    letterSpacing: "-0.03em"
+    fontFamily: "Newsreader, Georgia, serif"
+    fontSize: "28px"
+    fontWeight: 500
+    lineHeight: 1.25
+    letterSpacing: "-0.02em"
   title:
-    fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1.25rem"
-    fontWeight: 800
-    lineHeight: 1.4
-    letterSpacing: "-0.025em"
+    fontFamily: "DM Sans, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "15px"
+    fontWeight: 600
   body:
-    fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1rem"
+    fontFamily: "DM Sans, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "14px"
     fontWeight: 400
-    lineHeight: 1.6
-  lede:
-    fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1.125rem"
-    fontWeight: 400
-    lineHeight: 1.625
+    lineHeight: 1.43
   label:
-    fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "0.75rem"
-    fontWeight: 700
-    lineHeight: 1.33
+    fontFamily: "DM Sans, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "12px"
+    fontWeight: 600
 rounded:
-  sm: "4px"
-  md: "6px"
-  lg: "8px"
-  xl: "12px"
-  panel: "16px"
-  plan: "24px"
-  full: "9999px"
+  input: "8px"
+  menu: "11px"
+  card: "20px"
+  pill: "9999px"
 spacing:
-  section-y: "112px"
-  section-y-mobile: "80px"
-  gutter: "32px"
-  gutter-sm: "24px"
-  gutter-mobile: "20px"
-  frame: "1152px"
+  page-gutter: "32px"
+  container-app: "1400px"
+  container-marketing: "1152px"
 components:
   button-primary:
-    backgroundColor: "{colors.thread-orange}"
-    textColor: "#ffffff"
-    rounded: "{rounded.lg}"
-    height: "48px"
-    padding: "0 28px"
-  button-primary-hover:
-    backgroundColor: "{colors.thread-orange-hover}"
-  button-hero:
-    backgroundColor: "{colors.thread-orange}"
-    textColor: "#ffffff"
-    rounded: "{rounded.full}"
-    height: "48px"
-    padding: "0 32px"
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.on-accent}"
+    rounded: "{rounded.pill}"
+    height: "40px"
   button-outline:
-    backgroundColor: "{colors.page}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.lg}"
-    height: "48px"
-    padding: "0 28px"
-  button-on-primary:
-    backgroundColor: "#ffffff"
-    textColor: "{colors.thread-orange}"
-    rounded: "{rounded.lg}"
-    height: "44px"
-    padding: "0 24px"
-  obs-chip:
-    backgroundColor: "{colors.thread-tint}"
-    textColor: "{colors.thread-orange-text}"
-    rounded: "{rounded.md}"
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.ink-strong}"
+    rounded: "{rounded.pill}"
+    height: "40px"
+  input-control:
+    backgroundColor: "{colors.background}"
+    rounded: "{rounded.input}"
+    height: "40px"
+  card:
+    backgroundColor: "{colors.background}"
+    rounded: "{rounded.card}"
+    padding: "20px"
+  badge-soft:
+    backgroundColor: "{colors.accent-tint}"
+    textColor: "{colors.accent-text}"
+    rounded: "{rounded.pill}"
     height: "20px"
-    padding: "0 6px"
-  obs-chip-hot:
-    backgroundColor: "{colors.thread-orange}"
-    textColor: "#ffffff"
-  app-window:
-    backgroundColor: "{colors.card-white}"
-    rounded: "{rounded.panel}"
-  plan-panel:
-    backgroundColor: "{colors.card-white}"
-    rounded: "{rounded.plan}"
-    padding: "36px"
+  nav-item-current:
+    backgroundColor: "{colors.accent-tint}"
+    textColor: "{colors.accent-text}"
+    rounded: "{rounded.pill}"
+  band-desk:
+    backgroundColor: "{colors.desk}"
+    padding: "80px 24px"
 ---
 
-# Design System: Yedara Marketing Site
+# Design System: Yedara
 
 ## Overview
 
-**Creative North Star: "The Evidence Thread"**
+**Creative North Star: "White Paper on a Butter Desk"**
 
-Research tools show boxes; Yedara shows the thread. The public site is a calm, conventional SaaS skeleton, following the Tynovo reference's layout and colour use: a white page, sand bands, warm hairlines, and orange spent on actions. The one signature is the evidence thread: a single orange line linking one tool to the next in the overview timeline, and the observation ID (O7) that travels through the authored previews.
+Yedara uses the Butter system, the same tokens as Doxa. **Desk** (`--surface`, `--sidebar`, #fcfaf3) is chrome: the app sidebar, marketing bands, the hero, the footer, the auth form ground and the legal pages. **Paper** (`--background`, `--card`, #ffffff) is what people work with: cards, forms, the affinity board, the drawer. **Amber** (`--primary`, #e8b923) is a fill that marks what is actionable or selected: the primary button, the logo and favicon, the persona initials in previews, the left wing of the logo, the 3px rule atop the mobile header. Amber is never small text; text that carries the accent is ochre (`--primary-text`, #826400), which is also the focus colour. Text on amber is charcoal (`--primary-foreground`, #353335), never white. Newsreader carries headlines; DM Sans carries everything else.
 
-The mood is plain-spoken, warm and specific. Surfaces are flat, separated by hairline borders and tonal bands (white and sand). Display type is heavy Manrope set tight. Proof is real or labelled: the hero shows a real screenshot of the app in a laptop frame; module previews are small authored app windows with invented, labelled sample data. No testimonials, stats or invented prices. The site extends the incumbent Yedara brand (burnt orange, Manrope, warm neutrals) and does not reinvent it.
+Two modes share the language. The marketing site persuades: desk and white bands alternate, the hero headline carries one ochre phrase, and a CSS laptop holding real captures of the Research Synthesizer straddles the desk/white split. The app operates: flat, hairline, tonal.
 
-**Key Characteristics:**
-- Two-ground rhythm: white page (default) and sand bands (`#f4f2ea`, hairline top and bottom), closed by one flat orange band.
-- One accent, orange, spent on actions, the thread and the final band.
-- Manrope 800 for all display and titles; weight and scale carry hierarchy.
-- Light and dark themes: a theme switch in the header, and the hero swaps light and dark app screenshots.
-- Centred hero: pill badge, headline with a PointerHighlight word, rounded CTA plus text link, laptop-framed screenshot on a dot texture.
-- Observation chips (O3, O7, O12) recur inside previews.
+**Key Characteristics**
 
-## Relationship to the app tokens
-
-The authenticated app uses the "Working Ledger" tokens in `src/app/globals.css` (`:root` and `.dark`), same semantic names (`--background`, `--primary`, `--border`, `--muted`, ...). The marketing site does not fork components: `.marketing` in `src/app/(marketing)/marketing.css` re-points those same semantic variables, so shared `Button`, `Badge` and the Tailwind semantic utilities render in the marketing palette. A `.dark .marketing` block supplies the dark values. Marketing adds `--charcoal`, `--charcoal-foreground`, `--charcoal-muted` and `--ember`, defined only under `.marketing`.
-
-Marketing now shares the app's page ground (`#ffffff`), sand (`#f4f2ea`), hairline (`#e8ddc8`) and strong hairline (`#d6c7ab`), the primary orange, Manrope and the status colors. It still diverges in foreground `#333333` (app `#1c1917`), muted text `#5f5a54` (app `#6f6963`) and base type 16px/1.6 (app 14px/1.43). New public pages use the marketing values; new in-app screens use the app values.
-
-This document covers the public site, plus the sign-in and sign-up brand panel (see Auth panel under Components). Other app components (the side drawer, the Research Synthesizer table and tab treatment) are outside its scope.
+- One amber voice, a fill. Ochre when the accent is text. Charcoal on amber. The logo and favicon are two wings: the left is the primary-button amber (#E8B923), the right is dark grey (#444444, lightened to #E7E0D6 in dark mode and in dark browser tabs so it stays visible). The amber is the same in both themes.
+- Newsreader 500 (one static weight, no optical-size axis) for every `h1`, `h2` and `.font-display`, enforced by one unlayered rule in `globals.css`; DM Sans for everything else. Bold and extra-bold both resolve to 600 outside headings.
+- Shape: every button is a pill; inputs 8px; menus about 11px; cards, panels and dialogs 20px (`rounded-card`).
+- Selection is butter, not grey: current tab, nav item and segmented option are `--accent` with `--accent-foreground`; hover is sand (`--muted`).
+- Drawers and dialogs: chrome on the desk ground, content on paper, hairlines between (see Drawers and Dialogs).
+- **Light or dark, nothing else.** No system option. A sun/moon pill (`ThemeMenu`) flips between exactly two themes; key `yedara-theme`, default light, set before paint by an inline script. Dark is a warm charcoal ramp (#141312 ground, #1c1b19 cards, #181716 desk), never neutral grey.
+- Flat at rest: depth is ground plus a 1px hairline. Shadows belong to overlays and to the one picture of a device (`--shadow-device`). Entity cards take an amber border on hover.
+- Motion is feedback and one hero entrance; reduced motion keeps the meaning without the travel.
 
 ## Colors
 
-A warm-neutral palette on white with a single burnt-orange voice.
+- **Butter Amber** (`--primary`, #e8b923; hover #d4a615, dark hover #f0c94a): primary button, logo, favicon, current-step dots, the hero badge dot.
+- **Ochre** (`--primary-text`, `--accent-foreground`, `--ring`; #826400, dark #f0c94a): links, current nav text, focus ring, checks and icons on white.
+- **Amber Tint** (`--primary-soft`, `--accent`; #faf4df, dark #2a2410): selected row/tab/nav item, soft badges, icon tiles, text selection.
+- **Paper / Desk / Sand:** #ffffff / #fcfaf3 / #f8f4e4 (dark #1c1b19 / #181716 / #262420).
+- **Ink** #4d4a4d body, **Ink Strong** #353335 headings, **Ink Muted** #6b6b6b meta (dark #e6e2da / #faf8f2 / #a8a399).
+- **Hairline** #ece5cc every border; **Hairline Strong** #dccfa6 outline buttons and menus; **Control Border** #8a7f6e field outlines (3:1).
+- Semantic `success`, `warning`, `info`, `destructive` and `-soft` grounds; destructive actions are an outline button with red text, never a solid red block.
 
-### Primary
-- **Thread Orange** (#c74504): filled buttons, the evidence thread, the hot observation chip, focus ring, selection, the Free plan border, the flat final CTA band.
-- **Deep Terracotta** (#a93a03): button hover and all orange used as text on white, sand or tint (links, the PointerHighlight word, check marks). Orange text on a light ground always uses this, never Thread Orange.
-- **Thread Tint** (#fdefe7): resting observation chips and accent washes.
+**The One Voice Rule.** Amber is the only brand accent and it is a fill. Accent as text is ochre; never use the fill colour as small text and never put white on amber. This covers icons and check marks: on white they use `text-primary-text`, and tinted tiles use `bg-primary-soft`.
 
-### Secondary
-- **Ember** (#f28c38): the token remains and drives the focus outline inside a charcoal-tone section, but no page band uses it now.
-
-### Neutral
-- **Page White** (#ffffff): page ground, header, footer, cards, app windows, plan panel.
-- **Sand** (#f4f2ea): band ground (`tone="sand"` sections), app window title bar, muted chips, input and pill fills.
-- **Hairline** (#e8ddc8) and **Strong Hairline** (#d6c7ab): all borders; strong for dividers inside content (FAQ, differentiators), inputs and the dot texture.
-- **Charcoal Ink** (#333333): body text, the laptop bezel and module icon tiles.
-- **Quiet Ink** (#5f5a54): secondary copy, captions, ledes.
-- **Charcoal Text** (#faf9f6): type on charcoal tiles.
-- Status pairs (success #146c43, warning #8a5a00, info #1f5f9e, destructive #b3261e, each with a `-soft` tint) appear only inside mockups and badges as data states.
-
-### Dark theme
-`.dark .marketing` re-points the same names: ground `#12100e`, text `#faf7f2`, cards `#1c1916`, sand `#1f1b18`/`#1a1714`, hairlines `#302a25` and `#453d35`, orange text and ring lifted to `#ff8a5c`, hover `#dd5211`. Thread Orange fills stay `#c74504`. Full values are in the sidecar.
-
-### Named Rules
-**The One Voice Rule.** Orange is the only chromatic accent. Fills are Thread Orange, text is Deep Terracotta (light) or `#ff8a5c` (dark). Ember is not placed on a page band.
-**The One Thread Rule.** The 2px orange line (primary at 40%) joining 28px node rings in the overview timeline is the only connective graphic. Do not add other connector motifs.
+**The Token Only Rule.** No literal brand hex, `bg-white` or hard-coded cream in components; use `primary`, `surface`, `card`, `muted`. Tests enforce this (exempt: `layout.tsx` theme-color, the auth photo scrim, the social card, PDF/DOCX exports, which have no CSS).
 
 ## Typography
 
-**Display Font:** Manrope (with ui-sans-serif, system-ui, sans-serif)
-**Body Font:** Manrope, same family
-**Label/Mono Font:** none; numerals in chips use `tabular-nums`.
+Newsreader 500 for display and headlines, DM Sans for the work. Hierarchy comes from the face switch, weight (400, 600, 500 on controls and nav) and a few fixed sizes.
 
-**Character:** One family, contrast made from weight (800 against 400/600) and tight tracking at scale. Friendly geometric shapes keep a research tool from feeling clinical.
+- **Display** (Newsreader 500, 48px / 72px from `sm`, line-height 1): the marketing hero `h1`, with one ochre phrase.
+- **Headline** (Newsreader 500, 28px, 1.25): app page titles. Marketing section titles are 36px, 48px from `sm`.
+- **Title** (DM Sans 600, 15px): card titles, h3 in the app. Big marketing h3s (module names, workflow phases, plan names) are `font-display`.
+- **Body** (400, 14px) in the app, 16px on marketing; leads are 18px in `ink-muted`.
+- **Label** (600, 12px, sentence case): badges, meta, column headers.
 
-### Hierarchy
-- **Display** (800, clamp(2.5rem, 6.2vw, 4.75rem), 1.04, -0.04em): the home h1 only, centred. The final CTA headline is clamp(2rem, 4.6vw, 3.25rem) at 1.05, -0.03em.
-- **Headline** (800, clamp(1.875rem, 4.2vw, 3rem), 1.08, -0.03em): every section h2, via `SectionHeading`. Balanced wrapping.
-- **Title** (800, 1.25rem to 1.75rem, tight tracking): h3, differentiator terms, plan names, module names; workflow phase names go to 2rem at -0.03em.
-- **Body** (400, 1rem, 1.6): paragraphs. Ledes are 1.125rem (up to 1.25rem in hero) in Quiet Ink, capped at 56 to 60ch.
-- **Label** (700, 0.75rem): observation chips, tags, sample-data pill. Mockup interiors use 12 to 13px.
+Sentence case everywhere: no uppercase, no letter-spaced labels. `tabular-nums` on counts. Section eyebrows are not used; the heading carries its own weight.
 
 ## Layout
 
-A single 1152px centred frame (`FRAME`: max-width 1152px, gutters 20px, 24px from sm, 32px from lg). Sections pad 80px vertically on mobile and 112px from sm. Pages alternate white and sand grounds and end on the flat orange band. The hero is centred in a max 4xl column; below it the laptop mockup (max 1040px) sits on the same axis. Text and illustration split on a 12-column grid at lg (typically 5 and 7 columns, gap 64px); left columns can be sticky (top 7rem). The overview timeline is a grid with a 1.75rem node column and a 1fr text column, line and node in flow. Everything collapses to one column below lg; the header swaps to a menu button below md, with the theme switch kept visible. Body measure is held to 46 to 62ch.
+The signed-in app is a 288px desk sidebar beside a white content area capped at 1400px with 16/24/32px gutters. Marketing is `max-w-[1152px]` with 64 to 80px section rhythm; bands alternate `desk` and white, separated by a hairline (`border-t`). The hero sits on desk, then a hard split (desk above, white below, not a gradient) behind the laptop. The closing CTA is a white band, not an amber one.
 
 ## Elevation & Depth
 
-Flat by default: depth is conveyed by hairline borders and the white and sand grounds. Shadows are rare and soft, reserved for objects that read as pictures of the product.
-
-### Shadow Vocabulary
-- **App window** (`box-shadow: 0 2px 4px -1px #1010140f, 0 18px 40px -14px #10101433`): the authored module previews.
-- **Raised** (`0 2px 4px -1px #1010140f, 0 8px 24px -6px #1010141f`): the hot observation card inside a preview.
-- **Laptop base** (`0 26px 40px -20px #10101459`): the hinge/base of the hero laptop mockup.
-- **Sticky header** has no shadow, only a hairline bottom border and 92% page ground with backdrop blur.
-
-### Named Rules
-**The Flat-Page Rule.** Page furniture (sections, FAQ, lists, nav, footer) is never shadowed. Only product pictures and the highlighted card inside them lift.
-
-## Shapes
-
-Soft but not bubbly. Controls and chips are 6 to 8px; cards inside previews 8 to 12px; app windows 16px; plan panels 24px; the hero CTA, pills and step markers fully round. Borders are 1px hairline; the Pro plan panel uses a dashed strong hairline to signal "not on sale yet", and the Free panel a 1px orange border. Workflow steps use a 2px orange top rule with a 12px dot. The laptop frame has a 1.1rem (1.6rem from sm) lid radius and a notch.
+Flat and tonal. Only drawers (`--shadow-drawer`/`--shadow-raised` over a scrim), dialogs, menus and the laptop (`--shadow-device`) cast a shadow.
 
 ## Components
 
-### Buttons
-Shared `Button`, restyled by the `.marketing` tokens.
-- **Shape:** gently rounded (8px radius); the hero CTA only is a full pill.
-- **Primary:** Thread Orange fill, white text, 700 weight; plan CTAs 48px tall with 28px side padding; hero CTA 48px tall, 32px side padding, fully round, with an arrow; header buttons 40px. One filled primary per view, apart from the final band.
-- **Hover / Focus:** fill darkens to Deep Terracotta; focus-visible is a 2px ring-colour outline offset 3px (white inside the orange band); active nudges 1px down.
-- **Outline / Ghost / Text link:** outline is white fill with hairline border, sand on hover; ghost has no border ("Sign in"); the hero's secondary action is a plain 15px semibold Quiet Ink text link that underlines on hover.
-- **On primary:** in the final band, a white fill with Thread Orange text (44px tall, 24px padding), and a ghost with a 70% white border.
-
-### Hero badge
-A pill (full radius, sand fill, hairline border) holding an inner white pill with an orange dot and "Five tools live", then a "See what's inside" link with an arrow. See Not canonized.
-
-### PointerHighlight (signature)
-One headline word picked out the way a design tool selects it: Deep Terracotta text, a 2px primary-at-55% outline (6px radius), four 8px square corner handles and a pointer. Used on a single word in the h1 only.
-
-### Laptop mockup (signature)
-A MacBook-style frame around a real 2880x1800 app screenshot: charcoal bezel (2.2% padding), notch, hairline-gradient base 110% wide. Light and dark screenshots swap with the theme (`app-board.png`, `app-board-dark.png`); the image is never stretched. Captioned beneath in Quiet Ink 14px.
-
-### Hero ground
-`.hero-aura`: a fine dot texture (Strong Hairline dots, 1.4px, 24px grid) masked to fade toward the edges and bottom. No stripes, glow or gradient.
-
-### Observation chip (signature)
-A 20px-tall, 6px-radius, 12px bold tabular label of an ID such as O7. Resting: Thread Tint with Deep Terracotta text. Hot (the traced observation): Thread Orange with white text. Always paired with a source line ("P3 · interview").
-
-### App window preview (signature)
-Page White, 16px radius, strong hairline border, the app-window shadow. A sand title bar holds the logo mark, the study title and a "Sample data" pill. Wrapped in a `figure` with a visible caption, hidden from assistive tech. Interior cards are 8px radius, 1px hairline, 12px text; the hot card gets an orange border.
-
-### Cards / Containers
-Plan panels: 24px radius, 28 to 36px padding, Page White with orange border and a soft orange-tinted shadow for Free; transparent with dashed border for Pro. Elsewhere content is not carded: lists use top hairline dividers (FAQ, differentiators, module articles). Module names sit beside a 40px charcoal icon tile (12px radius).
-
-### Navigation
-Sticky 64px header, page ground at 92% with blur and hairline bottom border. Links 15px semibold in 80% ink, darkening on hover; the current page gets ink text with a 2px orange underline offset 8px. Right side: theme switch, ghost Sign in, primary Start free. Mobile: theme switch plus icon button toggling a stacked list with 18px links and a two-up Sign in / Start free row.
-
-### Footer
-White ground with a hairline top border. Logo and tagline left; four link columns (Product, Company, Legal, Account) right, 15px Quiet Ink links that underline on hover; a hairline-topped, centred 14px copyright line.
-
-### Feedback widget
-A fixed bottom-right pill (foreground colour, `Feedback` with a message icon) on every public page and inside the signed-in app. It opens a non-modal 24rem card panel (`rounded-2xl`, card surface, `shadow-xl`) with three pill radios (Something is broken, An idea or request, Something else), a textarea and a full-width primary button; Escape closes it and returns focus to the pill. It states that feedback is posted publicly on GitHub and asks for no name or email. Other CTAs (the Pro plan, "Ask us", the footer) open it through `OpenFeedback`, which sets the type. There is no contact page.
-
-### Auth panel
-The brand panel beside the sign-in and sign-up forms (`src/components/auth/auth-aside.tsx`), shown from `lg` up at 58% width; below `lg` only the form shows. A full-bleed photograph of a research team's affinity wall (handwritten quotes on pink and yellow sticky notes, shallow depth of field), cropped to `object-[25%_50%]`. Over it: a Thread Orange layer at 35% with multiply blending, which warms the neon notes toward terracotta, and a vertical scrim from `#180902` at 62% through 38% to 86% so white type holds contrast anywhere on the image. On top, the white logo mark, a 1.6rem semibold quote ("Good decisions start with better questions, and better questions start with a plan."), the descriptor, and the copyright line. The photo is atmosphere, not proof: it shows notes and no faces, and is never labelled as a Yedara study. Provenance: Christian Brok, Unsplash, Unsplash License (credit in the component comment and README). The photo is shipped at 2000px wide, about 220 KB.
-
-### Persona portrait (app)
-Used inside the signed-in app, not on the public site. A circular crop (`rounded-full`, hairline border, `object-cover`) of one of 12 self-hosted 256px stock portraits, or the persona's initials on `primary-soft` when none is chosen. Sizes: 64px on the persona header, 80px on the document-preview cover, 44px on persona cards, 28px in the project table, Recent and Compare chooser, 40px in Compare headers and the journey presentation, 20px in the journey header and cards. Wherever the name sits beside it the image is decorative (`alt=""`); only the persona header and the preview cover carry a description. The picker is a native radio group of 56px circles (initials first), with a 2px primary ring and a check on the selected one. The only text is the caption "Illustrative stock photo. Not a real participant." under the preview cover and in the exports; photographers are not credited in the UI. A stock portrait is never used as proof on a marketing page.
-
-### Final CTA band
-Flat Thread Orange full-bleed band, centred: headline in primary-foreground, 90% white lede (48ch), white button plus ghost button. No gradient, image or pattern.
-
-### FAQ
-Native `details` rows between strong hairlines; question in 18px bold, a 32px round plus icon rotating to a cross when open; answers in Quiet Ink at 62ch.
-
-### Badges and tags
-Pill-shaped, 18px tall, 12px semibold, in muted, orange-tint, success, warning or outlined tones. "In development" is an orange-outlined pill.
-
-### Motion
-Quiet and one-time. On load the hero content rises 14px with a fade (0.8s, cubic-bezier(0.16, 1, 0.3, 1), the laptop delayed 0.12s). Gated by `prefers-reduced-motion: no-preference`; content is visible by default. Hover transitions are color only; the FAQ icon rotates over 200ms.
+- **Buttons:** full pill, DM Sans 600 14px. 40px default, 36px `sm`, 48px `lg`, 28px `xs`. Primary amber with charcoal text and hover `accent-hover`; used once per view. Outline: white ground, hairline-strong border, sand hover. Ghost and secondary use sand. Destructive is outline with red text. Focus is a 3px ochre ring at 40%; press scales to 0.98.
+- **Inputs:** 40px, 8px radius, white ground, control-border outline, focus turns the border ochre with a 3px ring at 30%.
+- **Badges:** 20px pills, 12px 600. Soft (tint + ochre), secondary (sand), outline, plus semantic.
+- **Cards:** 20px, 1px hairline, white, flat at rest; clickable entity cards take an amber border on hover/focus.
+- **Navigation:** marketing header is sticky white at 90% with blur and a hairline; links are pills, current is `accent` with ochre semibold. The app sidebar items are pills with the same current/hover rules.
+- **Logo:** `LogoMark`, two wings. Left wing `--primary` amber (#E8B923), right wing `--brand-ink` dark grey (#444444, #E7E0D6 in dark). `variant="white"` (right wing at 70%) only on the photographic auth panel. `src/app/icon.svg` carries the same two colours and lightens the grey wing under `prefers-color-scheme: dark`; `favicon.ico` and `apple-icon.png` sit the mark on a white tile so it reads on any tab.
+- **Laptop (`LaptopMockup`):** charcoal bezel, notch, aluminium deck, `--shadow-device`, holding `public/marketing/app-board.png` and `app-board-dark.png` (2880 by 1800, swapped by theme) of a fictional "Pantry onboarding study". Retake both whenever the app chrome changes, and keep the caption that says it is sample data.
+- **Segmented control (`Segmented`, the Synthesizer view switcher):** a pill track on paper with a hairline; options are pills; the current option is butter (`--accent`, ochre text, a 1px amber inset ring so it reads against the track); hover is sand. Never sand on sand.
+- **Features index (`FeatureAnchors`):** the six tool pills stick under the site header (top 64px) while you read the tools and release when they end. One butter highlight with an amber hairline glides between the pills (transform and width, 500ms exponential ease-out) as you click or scroll; the section crossing the upper third of the viewport is current (`aria-current="location"`). Click smooth-scrolls (`html:has(.marketing) { scroll-behavior: smooth }`); the highlight moves at once and the scroll-spy is paused for 1.1s so it never flickers through the tools in between. The pills rise in once, staggered 55ms; the target tool's icon tile flashes amber and settles (`article:target .module-tile`, 1.1s). On phones the row scrolls sideways and keeps the current pill centred. Without JavaScript they are plain `#anchor` links. Reduced motion: no smooth scroll, no entrance, no scale; the highlight still moves (150ms) and the arrival is a colour fade only.
+- **Legal and About pages:** one layout, the same as Doxa. `LegalPageShell`: desk ground, a `max-w-3xl` column (`px-4 py-16 sm:px-6 sm:py-20`), an optional small soft badge (About only: "V1"), a Newsreader `h1` (36px, 48px from `sm`), a 16px subtitle (About) or a 14px "Last updated" line (Privacy, Terms; titles are Title Case), then the whole document in one white 20px card with a hairline (`doc-card`, 14px muted text, `p-6 sm:p-8`). Section `h2`s are DM Sans 16px 600 in ink strong; Privacy and Terms are flat `h2`, `p` and `ul`; links are ochre and underlined.
+- **How it is built (About):** a two-column definition grid, as in Doxa: each term is a 12px 600 uppercase tracked label in muted ink (the one place uppercase labels are allowed, to match Doxa), each value 14px in ink strong, `gap-x-6 gap-y-4`, followed by a paragraph on how access is checked.
+- **Drawers (`DrawerShell`, used by `SideDrawer` and `RouteDrawer`):** right-hand, 448px (`sm`), 576px (`md`, the default and the create/edit routes) or 768px (`lg`, insights); full width below `sm`. A 20px rounded left edge, a hairline, `--shadow-drawer`, over a flat 40% scrim with no blur. The header is a desk bar with a hairline beneath (`px-8 py-6`): the title in Newsreader 24px (two lines at most), a 14px muted description and a 36px outlined pill close. The body is paper (`px-8 py-8`). Form actions marked `.form-actions` become the footer bar: desk ground, a hairline above, flush to the foot of the panel and the full width, Cancel (outline) left of the one primary on the right. It slides in over 220ms and out over 180ms; the scrim fades 180ms in and 150ms out. The panel takes focus itself, so it is `outline-none`. The mobile navigation sheet shares the scrim, shadow, close pill and timing.
+- **Dialogs (`AlertDialog`):** only destructive confirmations interrupt. 20px, `max-w-md`, `--shadow-raised`, flat 40% scrim. A Newsreader 20px title, a 14px muted description, then a desk footer bar with a hairline holding Cancel (outline) and the action as the destructive outline button (red text, `destructive-soft` hover). It fades and scales from 97% over 180ms and out over 120ms.
+- **Project chip (`ProjectChip`):** every research tool page (plan, persona, competitor analysis, synthesis, journey) shows its parent project as an outline pill link, "Project" in muted ink then the name in 600, with a folder icon in ochre, beside the back link. It links to the project page, so it is always clear which project the work belongs to and one click returns there. Hover is sand.
+- **Toasts:** bottom centre, not bottom right. The drawer footer's primary button and the Feedback button live at the bottom right, and a toast under a resting pointer never times out (Sonner pauses a hovered toast).
+- **Feedback panel:** the same dialog language: 20px, desk header with a Newsreader 20px title and the outlined pill close, paper body, desk footer bar with the one primary; the feedback types are pill radios in butter when chosen.
+- **Auth panel:** from `lg` (58% wide) a photograph under one flat charcoal scrim (#353335 at 80%, no tint, no gradient) so the white logo, quote and copyright stay readable. The form side is desk.
 
 ## Do's and Don'ts
 
-### Do:
-- **Do** use the semantic utilities (`bg-muted`, `text-muted-foreground`, `border-border-strong`, `text-primary-text`) so the `.marketing` scope, light and dark, controls the palette.
-- **Do** use Deep Terracotta (#a93a03) for any orange text on white, sand or tint.
-- **Do** show the product honestly: a real screenshot in the laptop mockup for the hero, authored app windows with invented, labelled sample data and a visible caption elsewhere.
-- **Do** keep h1/h2/h3 in Manrope 800 with the tight tracking listed above and balanced wrapping.
-- **Do** alternate white and sand grounds, and close with the flat orange band.
-- **Do** supply a light and a dark asset for any screenshot, and test both themes.
-- **Do** show unfinished things honestly ("In development", "Pro is still being shaped"); no prices, stats, testimonials or integrations that do not exist.
+**Do** use `primary-text` for accent text; charcoal on amber; pills for buttons; 8px inputs; 20px cards; accent tint for selection and sand for hover; alternate desk and white bands; retake the captures when the chrome changes; keep both themes' amber identical.
 
-### Don't:
-- **Don't** place Ember (#f28c38) on a page band; the final band is Thread Orange.
-- **Don't** add a second connective motif, gradient text, glows or decorative shadows to page furniture; the hero ground is dots only.
-- **Don't** use Thread Orange (#c74504) as text on a light ground.
-- **Don't** hard-code light-only hex values in marketing components; they break the dark theme.
-- **Don't** put a stock photograph on a marketing page as proof or as a stand-in for customers; the auth panel is the one photographic surface.
-- **Don't** import app-only values (#1c1917 text, 14px base) into marketing pages, or marketing values into the app.
-
-## Not canonized (build carries, system does not inherit)
-
-- The hero badge ("Five tools live / See what's inside") is a pill label sitting above the h1, which works as a kicker. It is a defect the build carries; new pages do not place a small label above a heading.
-- Small uppercase tracked labels ("Tools" sidebar title, panel titles in `mockups/persona.tsx`) mirror product UI inside previews; not a heading pattern for the page.
-- The Free plan's orange-tinted glow shadow (`0_18px_40px_-20px_#c7450466`) and arbitrary sizes such as `text-[12px]`, `text-[13px]`, `text-[15px]` are one-offs.
-- Dead CSS in `marketing.css`: `.thread-line` / `thread-grow` (the hero thread was removed), and the `tone="charcoal"` Section variant with its Ember focus rule, are unused by any page.
-- `--charcoal` and `--ember` are referenced in `globals.css` `@theme` but defined only under `.marketing`, so those utilities resolve to nothing outside it.
+**Don't** put the current segmented option and its track on the same tone; blur a scrim; give a drawer or dialog a white header; use a solid red block for a destructive action; add a system theme option; use amber as small text or white on amber; add a second accent, a gradient or a glow; use grey foreground-opacity washes for hover or selection; add shadows to resting cards, rows or badges; add a second filled primary to a view; put a heading in `font-bold` to change it (the One Heading Rule overrides it); hard-code hex in components.

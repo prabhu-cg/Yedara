@@ -28,7 +28,7 @@ export function OpportunitiesPanel({ candidates, onRemoved }: { candidates: Cand
         <ul className="space-y-3">
           {candidates.map((c) => (
             <li key={c.id} data-candidate={c.id}>
-              <article className="flex items-start gap-3 rounded-card border border-border bg-card p-4 shadow-card">
+              <article className="flex items-start gap-3 rounded-card border border-border bg-card p-4">
                 <div className="min-w-0 flex-1 space-y-2">
                   <div className="flex flex-wrap items-center gap-2 text-xs">
                     <Badge variant={c.origin_kind === "pain_point" ? "warning" : "success"}>{ITEM_KIND_INFO[c.origin_kind].label}</Badge>

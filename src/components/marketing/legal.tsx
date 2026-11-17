@@ -1,53 +1,82 @@
-import { FRAME } from "@/components/marketing/frame";
-
-export const LEGAL_UPDATED = "1 November 2026";
+export const LEGAL_UPDATED = "17 November 2026";
 
 export type LegalSection = { id: string; title: string; body: (string | string[])[] };
 
-/** Long-form legal text: one readable column with a contents list. Arrays render as bullet lists. */
-export function LegalDocument({ title, intro, sections }: { title: string; intro: string; sections: LegalSection[] }) {
+/**
+ * About, Privacy and Terms share one layout, the same as Doxa: the desk ground, a `max-w-3xl` column, an
+ * optional small soft badge, a Newsreader title, a subtitle or "Last updated" line, then the whole
+ * document in one white 20px card with a hairline.
+ */
+export function LegalPageShell({
+  badge,
+  title,
+  subtitle,
+  updated,
+  children,
+}: {
+  badge?: string;
+  title: string;
+  subtitle?: string;
+  updated?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className={`${FRAME} pt-16 pb-24 sm:pt-24`}>
-      <header className="max-w-3xl">
-        <h1 className="text-[clamp(2.25rem,5.5vw,3.75rem)] leading-[1.02] font-extrabold tracking-[-0.035em]">{title}</h1>
-        <p className="mt-4 text-sm font-semibold text-muted-foreground">Last updated {LEGAL_UPDATED}</p>
-        <p className="mt-6 text-lg text-muted-foreground">{intro}</p>
-      </header>
-      <div className="mt-14 grid gap-12 lg:grid-cols-12">
-        <nav aria-label="Contents" className="lg:col-span-3">
-          <ol className="space-y-2 text-[15px] lg:sticky lg:top-28">
-            {sections.map((s) => (
-              <li key={s.id}>
-                <a href={`#${s.id}`} className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
-                  {s.title}
-                </a>
-              </li>
-            ))}
-          </ol>
-        </nav>
-        <div className="max-w-[68ch] space-y-12 lg:col-span-9">
-          {sections.map((s) => (
-            <section key={s.id} id={s.id} aria-labelledby={`${s.id}-h`} className="scroll-mt-28">
-              <h2 id={`${s.id}-h`} className="text-2xl font-extrabold tracking-tight">
-                {s.title}
-              </h2>
-              <div className="mt-4 space-y-4 leading-relaxed">
-                {s.body.map((block, i) =>
-                  Array.isArray(block) ? (
-                    <ul key={i} className="list-disc space-y-2 pl-5 marker:text-primary-text">
-                      {block.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p key={i}>{block}</p>
-                  ),
-                )}
-              </div>
-            </section>
-          ))}
+    <div className="bg-surface">
+      <div className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
+        <header>
+          {badge && (
+            <span className="mb-3 inline-flex items-center rounded-full bg-primary-soft px-2.5 py-0.5 text-xs font-semibold text-primary-text">
+              {badge}
+            </span>
+          )}
+          <h1 className="text-4xl text-foreground sm:text-5xl">{title}</h1>
+          {subtitle && <p className="mt-3 text-base text-muted-foreground">{subtitle}</p>}
+          {updated && <p className="mt-3 text-sm text-muted-foreground">Last updated {updated}</p>}
+        </header>
+        <div className="doc-card mt-10 rounded-card border bg-card p-6 text-sm leading-relaxed text-muted-foreground sm:p-8 [&_a]:font-medium [&_a]:text-primary-text [&_a]:underline [&_a]:underline-offset-4 [&_a:hover]:no-underline [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-base [&_h2]:text-foreground [&_h2:first-child]:mt-0 [&_li+li]:mt-1.5 [&_p+p]:mt-3 [&_p+ul]:mt-3 [&_section+section]:mt-8 [&_section>h2]:mt-0 [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5 [&_ul+p]:mt-3">
+          {children}
         </div>
       </div>
     </div>
+  );
+}
+
+/** A titled section inside the document card, used by About. Its title is DM Sans 16px 600 (`.doc-card h2`). */
+export function DocSection({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section>
+      <h2>{title}</h2>
+      {children}
+    </section>
+  );
+}
+
+/** Long-form legal text from data, as flat headings, paragraphs and bullet lists like Doxa's. */
+export function LegalSections({ sections }: { sections: LegalSection[] }) {
+  return (
+    <>
+      {sections.map((s) => (
+        <LegalBlock key={s.id} section={s} />
+      ))}
+    </>
+  );
+}
+
+function LegalBlock({ section }: { section: LegalSection }) {
+  return (
+    <>
+      <h2>{section.title}</h2>
+      {section.body.map((block, i) =>
+        Array.isArray(block) ? (
+          <ul key={i}>
+            {block.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        ) : (
+          <p key={i}>{block}</p>
+        ),
+      )}
+    </>
   );
 }

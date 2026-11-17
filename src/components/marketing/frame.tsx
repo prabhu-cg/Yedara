@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils";
 
-/** The page column shared by every marketing section. */
+/** The page column shared by every marketing section (1152px). */
 export const FRAME = "mx-auto w-full max-w-[1152px] px-5 sm:px-6 lg:px-8";
 
+/** Bands alternate: `desk` (the butter ground) and `paper` (white), separated by a hairline. */
 export function Section({
   children,
   className,
@@ -12,7 +13,7 @@ export function Section({
 }: {
   children: React.ReactNode;
   className?: string;
-  tone?: "paper" | "sand" | "charcoal";
+  tone?: "paper" | "desk";
   id?: string;
   labelledBy?: string;
 }) {
@@ -20,19 +21,14 @@ export function Section({
     <section
       id={id}
       aria-labelledby={labelledBy}
-      className={cn(
-        "scroll-mt-20",
-        tone === "sand" && "border-y border-border bg-muted",
-        tone === "charcoal" && "on-charcoal bg-charcoal text-charcoal-foreground",
-        className,
-      )}
+      className={cn("scroll-mt-20 border-t border-border", tone === "desk" ? "bg-surface" : "bg-background", className)}
     >
-      <div className={cn(FRAME, "py-20 sm:py-28")}>{children}</div>
+      <div className={cn(FRAME, "py-16 sm:py-20")}>{children}</div>
     </section>
   );
 }
 
-/** Display heading for a section. Weight and scale carry the hierarchy; there is no eyebrow. */
+/** Section title: Newsreader (set by the One Heading Rule), 36px, 48px from `sm`. */
 export function SectionHeading({
   id,
   children,
@@ -43,10 +39,7 @@ export function SectionHeading({
   className?: string;
 }) {
   return (
-    <h2
-      id={id}
-      className={cn("text-[clamp(1.875rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-[-0.03em]", className)}
-    >
+    <h2 id={id} className={cn("text-4xl leading-[1.1] sm:text-5xl", className)}>
       {children}
     </h2>
   );

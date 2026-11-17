@@ -50,7 +50,7 @@ function BoardCard({ cardId, columnId, c }: { cardId: string; columnId: string; 
   const label = c.refOf(obs.id);
   const current = c.state.cards[cardId]?.themeId ?? "";
   return (
-    <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} data-card={cardId} data-observation={obs.id} className={cn("rounded-[0.6em] border border-border bg-card p-[0.75em] shadow-card", isDragging && "opacity-40")}>
+    <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} data-card={cardId} data-observation={obs.id} className={cn("rounded-[0.6em] border border-border bg-card p-[0.75em]", isDragging && "opacity-40")}>
       <div className="flex items-start gap-[0.5em]">
         <button ref={setActivatorNodeRef} type="button" {...attributes} {...listeners} aria-label={`Drag card ${label}`} className="mt-[0.1em] shrink-0 cursor-grab touch-none rounded p-[0.15em] text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring active:cursor-grabbing">
           <GripVertical aria-hidden className="size-4" />

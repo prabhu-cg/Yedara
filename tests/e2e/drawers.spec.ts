@@ -89,3 +89,61 @@ test.describe("new and edit forms open in a right-hand drawer", () => {
     }
   });
 });
+
+test.describe("drawer and dialog chrome", () => {
+  for (const [route, link] of [
+    ["/tools/persona-builder", /new persona/i],
+    ["/tools/research-planner", /new (research )?plan|create your first/i],
+    ["/projects", /new project/i],
+  ] as const) {
+    test(`the footer bar sits flush on the bottom edge of the ${route} drawer, whatever the height`, async ({ page }) => {
+      await signUp(page);
+      await createProject(page, { name: "Flush project" });
+      await page.goto(route);
+      await page.getByRole("link", { name: link }).first().click();
+      await expect(drawer(page)).toBeVisible();
+      for (const height of [900, 560]) {
+        await page.setViewportSize({ width: page.viewportSize()!.width, height });
+        await expect
+          .poll(async () => {
+            const panel = await drawer(page).boundingBox();
+            const footer = await drawer(page).locator(".form-actions").boundingBox();
+            return Math.round(panel!.y + panel!.height - (footer!.y + footer!.height));
+          })
+          .toBe(0);
+      }
+    });
+  }
+
+  test("the drawer header is a desk bar with a Newsreader title and an outlined pill close", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await signUp(page);
+    await page.goto("/projects");
+    await page.getByRole("link", { name: /new project/i }).first().click();
+    const title = drawer(page).getByRole("heading", { name: "Create a project" });
+    await expect(title).toHaveCSS("font-family", /Newsreader/);
+    await expect(title).toHaveCSS("font-size", "24px");
+    await expect(drawer(page).getByRole("button", { name: "Close" })).toHaveCSS("height", "36px");
+    await expect(drawer(page).locator("header")).toHaveCSS("background-color", "rgb(252, 250, 243)");
+  });
+
+  test("a delete confirmation is a 20px dialog with a desk footer bar and an outline destructive action", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await signUp(page);
+    await createProject(page, { name: "Doomed" });
+    await page.goto("/projects");
+    await page.getByRole("button", { name: "Actions for Doomed" }).click();
+    await page.getByRole("menuitem", { name: "Delete" }).click();
+    const dialog = page.getByRole("alertdialog");
+    await expect(dialog).toHaveCSS("border-top-left-radius", "20px");
+    await expect(dialog.getByRole("heading", { name: "Delete this project?" })).toHaveCSS("font-family", /Newsreader/);
+    await expect(dialog.getByRole("button", { name: "Delete project" })).toHaveCSS("color", "rgb(179, 38, 30)");
+    await expect(dialog.getByRole("button", { name: "Delete project" })).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    // No button is left wearing a focus ring when it opens; Tab reaches Cancel first.
+    await expect(dialog.getByRole("button", { name: "Cancel" })).not.toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(dialog.getByRole("button", { name: "Cancel" })).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
+  });
+});

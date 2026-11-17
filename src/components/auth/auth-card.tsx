@@ -14,9 +14,9 @@ export function AuthCard({
 }) {
   return (
     <div className="w-full space-y-6">
-      <Card className="rounded-2xl">
+      <Card>
         <CardHeader className="space-y-2">
-          <CardTitle>{title}</CardTitle>
+          <CardTitle className="font-display text-xl font-medium">{title}</CardTitle>
           {description && <CardDescription>{description}</CardDescription>}
         </CardHeader>
         <CardContent>{children}</CardContent>

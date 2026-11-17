@@ -27,6 +27,10 @@ test.describe("research synthesizer: research material", () => {
     await expect(card.getByText("pricing", { exact: true })).toHaveCount(1);
     await expect(card).toContainText("O1");
 
+    // Toasts sit at the foot of the screen and, on a phone, can cover the row; let them clear before reaching under them.
+    // (Sonner holds a toast while the pointer is over it, so move the pointer off first.)
+    await page.mouse.move(1, 1);
+    await expect(page.locator("[data-sonner-toast]")).toHaveCount(0, { timeout: 15_000 });
     await card.getByRole("button", { name: "Edit observation O1" }).click();
     const form = page.getByRole("form", { name: "Save observation" });
     await form.getByLabel("What was observed or said").fill("Could not find the pricing page after two minutes");

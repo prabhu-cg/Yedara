@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectChip } from "@/components/layout/project-chip";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { ArrowLeft, CheckCircle2, ChevronRight, RotateCcw } from "lucide-react";
@@ -120,16 +121,15 @@ export function JourneyWorkspace(props: {
   return (
     <div>
       <div className="mb-6 flex flex-col gap-4">
-        <Link href="/tools/journey-mapper" className="inline-flex w-fit items-center gap-1.5 rounded-md text-sm font-semibold text-muted-foreground hover:text-foreground"><ArrowLeft aria-hidden className="size-4" /> Journey maps</Link>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2"><Link href="/tools/journey-mapper" className="inline-flex w-fit items-center gap-1.5 rounded-md text-sm font-semibold text-muted-foreground hover:text-foreground"><ArrowLeft aria-hidden className="size-4" /> Journey maps</Link><ProjectChip project={props.project} /></div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 flex-1 space-y-2">
-            <Input aria-label="Journey name" aria-invalid={!meta.name.trim()} value={meta.name} maxLength={160} onChange={(e) => changeMeta({ name: e.target.value })} className="h-auto max-w-2xl border-transparent bg-transparent px-0 text-xl leading-tight font-bold shadow-none hover:border-input focus-visible:bg-background sm:text-[28px] md:text-[28px]" />
+            <Input aria-label="Journey name" aria-invalid={!meta.name.trim()} value={meta.name} maxLength={160} onChange={(e) => changeMeta({ name: e.target.value })} className="font-display h-auto max-w-2xl border-transparent bg-transparent px-0 text-xl leading-tight font-bold shadow-none hover:border-input focus-visible:bg-background sm:text-[28px] md:text-[28px]" />
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <Badge variant={status === "completed" ? "default" : "secondary"}>{status === "completed" ? "Completed" : "Draft"}</Badge>
-              <Badge variant="outline">{JOURNEY_STATE_LABELS[meta.state]}</Badge>
-              <span>{JOURNEY_TYPE_LABELS[meta.journeyType]}</span>
+              {/* One status tag (Draft or Completed). The state is plain text, not a second tag. */}
+              <span>{JOURNEY_TYPE_LABELS[meta.journeyType]} · {JOURNEY_STATE_LABELS[meta.state]}</span>
               {persona && <><span aria-hidden>·</span><span className="inline-flex items-center gap-1.5"><PersonaAvatar avatarId={persona.avatar ?? ""} name={persona.name} decorative className="size-5 text-[9px]" />Persona: {persona.name}</span></>}
-              {props.project && <><span aria-hidden>·</span><Link href={`/projects/${props.project.id}`} className="hover:text-foreground hover:underline">{props.project.name}</Link></>}
               <span aria-hidden>·</span><span className="tabular-nums">{stages.length} {stages.length === 1 ? "stage" : "stages"}</span>
             </div>
           </div>

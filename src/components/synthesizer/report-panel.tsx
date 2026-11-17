@@ -37,7 +37,7 @@ export function ReportPanel({ report, onReport, doc, status, onToggleComplete, o
             </Button>
           </div>
         </div>
-        <div className="rounded-card border border-border bg-card p-5 shadow-card sm:p-6"><DocumentView doc={doc} /></div>
+        <div className="rounded-card border border-border bg-card p-5 sm:p-6"><DocumentView doc={doc} /></div>
       </div>
     </div>
   );

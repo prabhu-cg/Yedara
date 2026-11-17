@@ -180,7 +180,7 @@ export function ProjectForm({ mode, defaultValues, projectId, archived }: Props)
         </SelectField>
       </div>
 
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <div className="form-actions flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <CancelButton href={cancelHref} />
         <SubmitButton
           pending={isSubmitting}

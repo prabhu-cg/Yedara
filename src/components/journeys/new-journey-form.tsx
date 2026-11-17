@@ -62,7 +62,7 @@ export function NewJourneyForm({ projects, personas, defaultProjectId }: { proje
         </SelectField>
       </div>
       <TextareaField label="Scenario" optional rows={3} maxLength={2000} placeholder="The situation this journey follows, e.g. a freelancer sets up invoicing for the first time." value={scenario} onChange={(e) => setScenario(e.target.value)} />
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <div className="form-actions flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <CancelButton href="/tools/journey-mapper" />
         <SubmitButton pending={pending} pendingLabel="Creating…">Start mapping</SubmitButton>
       </div>

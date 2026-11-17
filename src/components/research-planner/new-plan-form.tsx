@@ -70,7 +70,7 @@ export function NewPlanForm({
           </option>
         ))}
       </SelectField>
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <div className="form-actions flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <CancelButton href="/tools/research-planner" />
         <SubmitButton pending={isSubmitting} pendingLabel="Creating…">
           Start planning

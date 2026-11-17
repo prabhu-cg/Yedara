@@ -43,7 +43,7 @@ export function NewAnalysisForm({ projects, defaultProjectId }: { projects: { id
         <option value="">Choose a project…</option>
         {projects.map((p) => <option key={p.id} value={p.id}>{p.name}{p.client ? ` (${p.client})` : ""}</option>)}
       </SelectField>
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <div className="form-actions flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <CancelButton href="/tools/competitor-analyzer" />
         <SubmitButton pending={pending} pendingLabel="Creating…">Start analysis</SubmitButton>
       </div>

@@ -38,11 +38,11 @@ export function AppWindow({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-2xl border border-border-strong bg-card shadow-[0_2px_4px_-1px_#1010140f,0_18px_40px_-14px_#10101433]",
+        "overflow-hidden rounded-card border border-border-strong bg-card",
         className,
       )}
     >
-      <div className="flex items-center gap-2 border-b border-border bg-muted px-3.5 py-2.5">
+      <div className="flex items-center gap-2 border-b border-border bg-surface px-3.5 py-2.5">
         <LogoMark className="size-4" />
         <span className="truncate text-xs font-semibold text-foreground">{title}</span>
         <span className="ml-auto shrink-0 rounded-full bg-card px-2 py-0.5 whitespace-nowrap text-xs font-semibold text-muted-foreground ring-1 ring-border">
@@ -62,7 +62,7 @@ export function ObsChip({ id, hot, className }: { id: string; hot?: boolean; cla
   return (
     <span
       className={cn(
-        "inline-flex h-5 items-center rounded-md px-1.5 text-xs font-bold tabular-nums",
+        "inline-flex h-5 items-center rounded-full px-2 text-xs font-semibold tabular-nums",
         hot ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary-text",
         className,
       )}

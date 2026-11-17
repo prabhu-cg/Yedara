@@ -10,7 +10,7 @@ export function ToolCard({ tool, compact = false }: { tool: ResearchTool; compac
     <Link
       href={`/tools/${tool.slug}`}
       className={cn(
-        "group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 shadow-card transition-[border-color,box-shadow] hover:border-primary hover:shadow-raised outline-none focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-ring/50",
+        "group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-[border-color,box-shadow] hover:border-primary hover:shadow-raised outline-none focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-ring/50",
         compact && "p-4",
       )}
     >

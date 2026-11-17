@@ -9,7 +9,7 @@ import type { Project } from "@/lib/projects/queries";
 export function ProjectCard({ project }: { project: Project }) {
   const archived = project.status === "archived";
   return (
-    <article className="relative flex flex-col rounded-card border border-border bg-card shadow-card transition-[border-color,box-shadow] hover:border-primary hover:shadow-raised focus-within:border-primary focus-within:shadow-raised focus-within:ring-[3px] focus-within:ring-ring/50">
+    <article className="relative flex flex-col rounded-card border border-border bg-card transition-[border-color,box-shadow] hover:border-primary hover:shadow-raised focus-within:border-primary focus-within:shadow-raised focus-within:ring-[3px] focus-within:ring-ring/50">
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex items-start justify-between gap-2 pr-10">
           <StatusBadge status={project.status} />
